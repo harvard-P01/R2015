@@ -10,6 +10,8 @@ http://www.hsph.harvard.edu/statinformatics/soft/index.html
 
 ## Extensions
 
+- Literate programming, e.g. knitr (http://yihui.name/knitr/)
+
 - Stan
 
 - Bioconductor
