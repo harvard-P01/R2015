@@ -16,7 +16,7 @@ pagetitle: P01 - Statistical programming
 ### The data scientist’s toolbox
 
 - Python and Pandas
-- Julia, Hadoop
+- h2o, Julia, Spark
 
 ### Lab session
 
