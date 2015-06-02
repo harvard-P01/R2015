@@ -8,15 +8,14 @@ pagetitle: P01 - Statistical programming
 
 ### Improving performance
 
-- Profiling
+- Profiling: bottlenecks and time trade-off (e.g, pre Cooley–Tukey FFT)
 - Vectorizing
-- C++ and Rcpp
-- Parallel computing
+- C++ and Rcpp (direct interchange of R objects between R and C++): http://www.rcpp.org/
 
 ### The data scientist’s toolbox
 
 - Python and Pandas
-- h2o, Julia, Spark
+- h2o (http://0xdata.com/#/), Julia (http://julialang.org/), Spark (https://amplab-extras.github.io/SparkR-pkg/)
 
 ### Lab session
 

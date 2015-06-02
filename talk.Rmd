@@ -1,0 +1,15 @@
+---
+pagetitle: P01 - Talk
+---
+
+## Introduction
+
+http://www.hsph.harvard.edu/statinformatics/soft/index.html
+
+## Tentative program
+
+## Extensions
+
+- Stan
+
+- Bioconductor

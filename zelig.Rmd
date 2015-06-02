@@ -9,7 +9,7 @@ A simple unified framework that incorporates everyone else’s (R) code: http://
 ### Workflow
 
 - Amelia: multiple imputation of missing values
-- MatchIt / CEM: matching
+- MatchIt / CEM (Coarsened Exact Matching): matching
 - Zelig: estimation, simulation, plots
 - WhatIf: counterfactuals
 
