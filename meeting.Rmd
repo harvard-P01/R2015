@@ -1,8 +1,8 @@
 ---
-pagetitle: P01 - Talk
+pagetitle: P01 - Meeting
 ---
 
-## Introduction
+## Meeting
 
 http://www.hsph.harvard.edu/statinformatics/soft/index.html
 
