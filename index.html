@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+
+
+<title>P01 - Introduction</title>
+
+<script src="libs/jquery/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="libs/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+<script src="libs/bootstrap/js/bootstrap.min.js"></script>
+<script src="libs/bootstrap/shim/html5shiv.min.js"></script>
+<script src="libs/bootstrap/shim/respond.min.js"></script>
+<script src="libs/htmlwidgets/htmlwidgets.js"></script>
+<link href="libs/leaflet/leaflet.css" rel="stylesheet" />
+<script src="libs/leaflet/leaflet.js"></script>
+<link href="libs/leafletfix/leafletfix.css" rel="stylesheet" />
+<script src="libs/leaflet-binding/leaflet.js"></script>
+
+<style type="text/css">code{white-space: pre;}</style>
+<link rel="stylesheet"
+      href="libs/highlight/default.css"
+      type="text/css" />
+<script src="libs/highlight/highlight.js"></script>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+<script type="text/javascript">
+if (window.hljs && document.readyState && document.readyState === "complete") {
+   window.setTimeout(function() {
+      hljs.initHighlighting();
+   }, 0);
+}
+</script>
+
+
+
+</head>
+
+<body>
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img { 
+  max-width:100%; 
+  height: auto; 
+}
+</style>
+<div class="container-fluid main-container">
+
+<style type="text/css">
+  body {
+    padding-top: 20px;
+  }
+  .navbar-brand {
+    font-weight: bold;
+  }
+  footer {
+    border-top: 1px solid #CCC;
+    margin-top: 60px;
+    margin-bottom: 48px;
+    opacity: 0.75;
+  }
+  .content-body>:first-child, .content-body>:first-child>:first-child {
+    margin-top: 0 !important;
+  }
+  p code {
+    white-space: inherit;
+  }
+</style>
+
+<div class="fluid-row">
+  <div class="col-sm-12">
+    <nav class="navbar navbar-inverse">
+      <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+          <a class="navbar-brand" href="./">P01 - Advanced R</a>
+        </div>
+      </div>
+    </nav>
+  </div>
+</div>
+
+<div class="fluid-row">
+  <div class="col-sm-3">
+    <div class="list-group">
+      <a class="list-group-item" href="./">Introduction</a>
+      <a class="list-group-item" href="creating_r_packages.html">Creating R packages</a>
+      <a class="list-group-item" href="data_linkage.html">Data linkage</a>
+      <a class="list-group-item" href="data_visualization.html">Data visualization</a>
+      <a class="list-group-item" href="data_wrangling.html">Data wrangling</a>
+      <a class="list-group-item" href="statistical_programming.html">Statistical programming</a>
+      <a class="list-group-item" href="zelig.html">Zelig</a>
+      <!--<a class="list-group-item" href="raster.html">Raster Images</a>-->
+    </div>
+    <script>
+      // manage active state of toc based on current page
+      var href = window.location.pathname;
+      href = href.substr(href.lastIndexOf('/') + 1);
+      if (href === "" || href === "index.html")
+        href = "./";
+      $('a.list-group-item[href="' + href + '"]').addClass('active');
+    </script>
+  </div>
+  <div class="col-sm-9 content-body">
+
+
+
+<div id="introduction" class="section level2">
+<h2>Introduction</h2>
+<div id="learning-objectives" class="section level3">
+<h3>Learning objectives</h3>
+<p>The objective of this series of lectures is to provide you with the tools needed for turning your R code into an optimized R package ready to be released on CRAN. We will also provide recommendations about best practice in data science.</p>
+</div>
+<div id="overview" class="section level3">
+<h3>Overview</h3>
+<p>The classes will be organized in 6 sessions of 1:45 hours and 6 laboratory sessions of 1:30 hours.</p>
+<p>Every session will focus on a specific way of improving R code by:</p>
+<p>turning it into an R package, using efficient data manipulation grammars, linking data from difference sources, creating rich graphics, systemizing your workflow, adding new features via Zelig. The lab sessions will give you the opportunity to integrate these improvements into your own R code.</p>
+<p>Along the way, we will provide a bag of tricks, for example how to make this interactive map with 4 lines of code:</p>
+<pre class="r"><code>library(leaflet)
+leaflet() %&gt;%
+  addTiles() %&gt;%  # Add default OpenStreetMap map tiles
+  addMarkers(lng = -71.10272, lat = 42.33545,
+             popup = &quot;Harvard T.H. Chan School of Public Health&quot;)</code></pre>
+<p><div id="htmlwidget-5716" style="width:100%;height:216px;" class="leaflet"></div>
+<script type="application/json" data-for="htmlwidget-5716">{
+  "x": {
+    "calls": [
+      {
+        "method": "addTiles",
+        "args": [
+          "http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+          null,
+          {
+            "minZoom": 0,
+            "maxZoom": 18,
+            "maxNativeZoom": null,
+            "tileSize": 256,
+            "subdomains": "abc",
+            "errorTileUrl": "",
+            "tms": false,
+            "continuousWorld": false,
+            "noWrap": false,
+            "zoomOffset": 0,
+            "zoomReverse": false,
+            "opacity": 1,
+            "zIndex": null,
+            "unloadInvisibleTiles": null,
+            "updateWhenIdle": null,
+            "detectRetina": false,
+            "reuseTiles": false,
+            "attribution": "&copy; <a href=\"http://openstreetmap.org\">OpenStreetMap</a> contributors, <a href=\"http://creativecommons.org/licenses/by-sa/2.0/\">CC-BY-SA</a>"
+          }
+        ]
+      },
+      {
+        "method": "addMarkers",
+        "args": [
+          42.33545,
+          -71.10272,
+          null,
+          null,
+          {
+            "clickable": true,
+            "draggable": false,
+            "keyboard": true,
+            "title": "",
+            "alt": "",
+            "zIndexOffset": 0,
+            "opacity": 1,
+            "riseOnHover": false,
+            "riseOffset": 250
+          },
+          "Harvard T.H. Chan School of Public Health"
+        ]
+      }
+    ],
+    "limits": {
+      "lat": [42.33545, 42.33545],
+      "lng": [-71.10272, -71.10272]
+    }
+  },
+  "evals": []
+}</script></p>
+</div>
+<div id="prerequisites" class="section level3">
+<h3>Prerequisites</h3>
+<p>We assume some familiarity with the R statistical language (as in <a href="http://projects.iq.harvard.edu/rtc/event/introduction-r" class="uri">http://projects.iq.harvard.edu/rtc/event/introduction-r</a>).</p>
+</div>
+<div id="computational-tools" class="section level3">
+<h3>Computational tools</h3>
+<p>We will use free and preferably open-source tools (R, a C++ compiler, some Python via Pandas, Javascript libraries).</p>
+</div>
+</div>
+
+<footer>
+<p><small>Christine Choirat<br/>
+P01 - Advanced R<br/>
+Harvard T.H Chan School of Public Health <a>http://www.hsph.harvard.edu/</a>
+</small></p>
+</footer>
+
+  </div>
+</div>
+
+<a href="https://github.com/cchoirat"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://camo.githubusercontent.com/38ef81f8aca64bb9a64448d0d70f1308ef5341ab/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f6461726b626c75655f3132313632312e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png"></a>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+$(document).ready(function () {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+});
+
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

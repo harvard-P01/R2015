@@ -1,0 +1,16 @@
+---
+pagetitle: P01 - Creating R packages
+---
+
+## Creating R packages
+
+### Package structure
+
+### Workflow
+
+- devtools
+- ROxygen2
+
+### From GitHub to CRAN
+
+- Lab session

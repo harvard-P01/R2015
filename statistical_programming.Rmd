@@ -1,0 +1,29 @@
+---
+pagetitle: P01 - Statistical programming
+---
+
+## Statistical programming
+
+### Best practice in reproducible research
+
+### Workflow and file organization
+
+### Advanced R
+
+#### Debugging
+
+#### Improving performance
+
+- Profiling
+- Vectorizing
+- C++ and Rcpp
+- Parallel computing
+
+### The data scientist’s toolbox
+
+- Python and Pandas
+- Julia, Hadoop
+
+### Lab session
+
+- Optimize an R script

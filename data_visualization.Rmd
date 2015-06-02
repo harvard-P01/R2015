@@ -1,0 +1,54 @@
+---
+pagetitle: P01 - Data visualization
+---
+
+## Data visualization
+
+### Static
+
+```{r fig.width=6, fig.height=4}
+library(ggplot2)
+crimes <- data.frame(state = tolower(rownames(USArrests)), USArrests)
+library(reshape2) # for melt
+crimesm <- melt(crimes, id = 1)
+if (require(maps)) {
+  states_map <- map_data("state")
+  ggplot(crimes, aes(map_id = state)) + geom_map(aes(fill = Murder), map = states_map) + expand_limits(x = states_map$long, y = states_map$lat)
+  last_plot() + coord_map()
+  ggplot(crimesm, aes(map_id = state)) + geom_map(aes(fill = value), map = states_map) + expand_limits(x = states_map$long, y = states_map$lat) + facet_wrap( ~ variable)
+}
+```
+
+### Dynamic
+
+```{r}
+library(dygraphs)
+dygraph(nhtemp, main = "New Haven Temperatures") %>% 
+  dyRangeSelector(dateWindow = c("1920-01-01", "1960-01-01"))
+```
+
+
+```{r}
+library(DT)
+datatable(as.data.frame(nhtemp), options = list(pageLength = 5))
+```
+
+
+```{r}
+library(networkD3)
+data(MisLinks, MisNodes)
+forceNetwork(Links = MisLinks, Nodes = MisNodes, Source = "source",
+             Target = "target", Value = "value", NodeID = "name",
+             Group = "group", opacity = 0.6)
+```
+
+### Shiny
+
+http://shiny.rstudio.com/gallery/superzip-example.html
+http://shiny.rstudio.com/gallery/bus-dashboard.html
+
+### Lab session
+
+- Same map (e.g., county-level choropleth) with different libraries
+- Create similar interactive graphs with different libraries
+- Embed a Leaflet d3-map into an R Shiny application

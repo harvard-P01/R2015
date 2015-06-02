@@ -1,0 +1,25 @@
+---
+pagetitle: P01 - Zelig
+---
+
+## Zelig
+
+A simple unified framework that incorporates everyone else’s (R) code: http://zeligproject.org/
+
+### Workflow
+
+- Amelia: multiple imputation of missing values
+- MatchIt / CEM: matching
+- Zelig: estimation, simulation, plots
+- WhatIf: counterfactuals
+
+### Object-oriented programming in R
+
+- OO paradigm
+- A brief history of OO in R, from S3 to R6
+- OO in Zelig
+- Models as reference classes
+
+### Lab session¶
+
+- Create a Zelig model

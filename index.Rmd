@@ -1,0 +1,42 @@
+---
+pagetitle: P01 - Introduction
+---
+
+## Introduction
+
+### Learning objectives
+
+The objective of this series of lectures is to provide you with the tools needed for turning your R code into an optimized R package ready to be released on CRAN. We will also provide recommendations about best practice in data science.
+
+### Overview
+
+The classes will be organized in 6 sessions of 1:45 hours and 6 laboratory sessions of 1:30 hours.
+
+Every session will focus on a specific way of improving R code by:
+
+turning it into an R package,
+using efficient data manipulation grammars,
+linking data from difference sources,
+creating rich graphics,
+systemizing your workflow,
+adding new features via Zelig.
+The lab sessions will give you the opportunity to integrate these improvements into your own R code.
+
+Along the way, we will provide a bag of tricks, for example how to make this interactive map with 4 lines of code:
+
+```{r}
+library(leaflet)
+leaflet() %>%
+  addTiles() %>%  # Add default OpenStreetMap map tiles
+  addMarkers(lng = -71.10272, lat = 42.33545,
+             popup = "Harvard T.H. Chan School of Public Health")
+```
+
+### Prerequisites
+
+We assume some familiarity with the R statistical language (as in http://projects.iq.harvard.edu/rtc/event/introduction-r).
+
+### Computational tools
+
+We will use free and preferably open-source tools (R, a C++ compiler, some Python via Pandas, Javascript libraries).
+

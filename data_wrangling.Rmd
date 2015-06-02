@@ -1,0 +1,16 @@
+---
+pagetitle: P01 - Data wrangling
+---
+
+## Data wrangling
+
+### data.table
+
+### The Hadleyverse (dplyr, plyr, tidyr, ggplot2, ...)
+
+### Lab session
+
+- Grammars for data manipulation: link the same data with
+    - base R
+    - data.table, dplyr
+    - DB
