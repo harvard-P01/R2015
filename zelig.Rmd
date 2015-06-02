@@ -20,6 +20,6 @@ A simple unified framework that incorporates everyone else’s (R) code: http://
 - OO in Zelig
 - Models as reference classes
 
-### Lab session¶
+### Lab session
 
 - Create a Zelig model
