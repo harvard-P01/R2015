@@ -107,10 +107,6 @@ HTMLWidgets.widget({
       if (this.queryVar("viewer_pane") === "1")
         document.body.style.fontFamily = "Arial, sans-serif";
 
-      // add shiny input for date window
-      if (HTMLWidgets.shinyMode)
-        this.addDateWindowShinyInput(el.id, x);
-  
       // inject css if necessary
       if (x.css != null) {
         var style = document.createElement('style');
@@ -124,10 +120,12 @@ HTMLWidgets.widget({
       
     } else {
       
-        // retain the userDateWindow
-        if (instance.dygraph.userDateWindow != null)
+        // retain the userDateWindow if requested
+        if (instance.dygraph.userDateWindow != null
+            && attrs.retainDateWindow == true) {
           attrs.dateWindow = instance.dygraph.xAxisRange();
-      
+        }
+            
         // remove it from groups if it's there
         if (x.group != null && this.groups[x.group] != null) {
           var index = this.groups[x.group].indexOf(instance.dygraph);
@@ -139,6 +137,10 @@ HTMLWidgets.widget({
         instance.dygraph.destroy();
         instance.dygraph = null;
     }
+    
+    // add shiny input for date window
+    if (HTMLWidgets.shinyMode)
+      this.addDateWindowShinyInput(el.id, x);
     
     // create the instance and add it to it's group (if any)
     instance.dygraph = new Dygraph(el, attrs.file, attrs);
@@ -400,9 +402,14 @@ HTMLWidgets.widget({
       var range = me.xAxisRange();
       for (var j = 0; j < group.length; j++) {
         if (group[j] == me) continue;
-        group[j].updateOptions({
-          dateWindow: range
-        });
+        // update group range only if it's different (prevents
+        // infinite recursion in updateOptions)
+        var peerRange = group[j].xAxisRange();
+        if (peerRange[0] != range[0] || peerRange[1] != range[1]) {
+          group[j].updateOptions({
+            dateWindow: range
+          });
+        }
       }
       blockRedraw = false;
     };
@@ -432,13 +439,21 @@ HTMLWidgets.widget({
         
       for (var i = 0; i < x.shadings.length; i++) {
         var shading = x.shadings[i];
-        var x1 = thiz.normalizeDateValue(x.scale, shading.from, x.fixedtz).getTime();
-        var x2 = thiz.normalizeDateValue(x.scale, shading.to, x.fixedtz).getTime();
-        var left = g.toDomXCoord(x1);
-        var right = g.toDomXCoord(x2);
         canvas.save();
         canvas.fillStyle = shading.color;
-        canvas.fillRect(left, area.y, right - left, area.h);
+        if (shading.axis == "x") {
+          var x1 = thiz.normalizeDateValue(x.scale, shading.from, x.fixedtz).getTime();
+          var x2 = thiz.normalizeDateValue(x.scale, shading.to, x.fixedtz).getTime();
+          var left = g.toDomXCoord(x1);
+          var right = g.toDomXCoord(x2);
+          
+          canvas.fillRect(left, area.y, right - left, area.h);
+        } else if (shading.axis == "y") {
+          var bottom = g.toDomYCoord(shading.from);
+          var top = g.toDomYCoord(shading.to);
+
+          canvas.fillRect(area.x, bottom, area.w, top - bottom);
+        }
         canvas.restore();
       }
     };
@@ -470,18 +485,31 @@ HTMLWidgets.widget({
         
         // get event and x-coordinate
         var event = x.events[i];
-        var xPos = thiz.normalizeDateValue(x.scale, event.date, x.fixedtz).getTime();
-        xPos = g.toDomXCoord(xPos);
         
         // draw line
         canvas.save();
         canvas.strokeStyle = event.color;
-        thiz.dashedLine(canvas, 
-                        xPos, 
-                        area.y, 
-                        xPos, 
-                        area.y + area.h,
-                        event.strokePattern);
+        if (event.axis == "x") {
+          var xPos = thiz.normalizeDateValue(x.scale, event.pos, x.fixedtz).getTime();
+          xPos = g.toDomXCoord(xPos);
+          
+          // draw line
+          thiz.dashedLine(canvas, 
+                          xPos, 
+                          area.y, 
+                          xPos, 
+                          area.y + area.h,
+                          event.strokePattern);
+        } else if (event.axis == "y") {
+          yPos = g.toDomYCoord(event.pos);
+          
+          thiz.dashedLine(canvas, 
+                          area.x, 
+                          yPos, 
+                          area.x + area.w, 
+                          yPos,
+                          event.strokePattern);
+        }
         canvas.restore();
         
         // draw label
@@ -489,15 +517,24 @@ HTMLWidgets.widget({
           canvas.save();
           thiz.setFontSize(canvas, 12);
           var size = canvas.measureText(event.label);
-          var tx = xPos - 4;
-          var ty;
-          if (event.labelLoc == "top")
-            ty = area.y + size.width + 10;
-          else
-            ty = area.y + area.h - 10;
-          canvas.translate(tx,ty);
-          canvas.rotate(3 * Math.PI / 2);
-          canvas.translate(-tx,-ty);
+          if (event.axis == "x") {
+            var tx = xPos - 4;
+            var ty;
+            if (event.labelLoc == "top")
+              ty = area.y + size.width + 10;
+            else
+              ty = area.y + area.h - 10;
+            canvas.translate(tx, ty);
+            canvas.rotate(3 * Math.PI / 2);
+            canvas.translate(-tx,-ty);
+          } else if (event.axis == "y") {
+            var ty = yPos - 4;
+            var tx;
+            if (event.labelLoc == "right")
+              tx = area.x + area.w - size.width - 10;
+            else
+              tx = area.x + 10;
+          }
           canvas.fillText(event.label, tx, ty);
           canvas.restore();
         }

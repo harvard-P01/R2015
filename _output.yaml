@@ -1,4 +1,5 @@
 html_document:
+  toc: true
   self_contained: no
   lib_dir: libs
   fig_width: 5.5
