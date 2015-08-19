@@ -2,24 +2,117 @@
 pagetitle: P01 - Zelig
 ---
 
-## Zelig
+# Workflow
+-   Amelia: multiple imputation of missing values
+-   MatchIt / CEM (Coarsened Exact Matching): matching
+-   Zelig: estimation, simulation, plots
+-   WhatIf: counterfactuals
 
-A simple unified framework that incorporates everyone else’s (R) code: http://zeligproject.org/
+# OO programming
 
-### Workflow
+## Object-oriented paradigm
 
-- Amelia: multiple imputation of missing values
-- MatchIt / CEM (Coarsened Exact Matching): matching
-- Zelig: estimation, simulation, plots
-- WhatIf: counterfactuals
+## A brief history of OO in R, from S3 to R6
 
-### Object-oriented programming in R
+R has two major object systems:
 
-- OO paradigm
-- A brief history of OO in R, from S3 to R6
-- OO in Zelig
-- Models as reference classes
+-   Relatively informal "S3" classes
+-   Stricter, more formal "S4" classes
+-   We will cover only the S3 system, not the S4 system
+-   Basic idea: functions have different methods for different types of objects
 
-### Lab session
+## S3 classes
 
-- Create a Zelig model
+### Object class
+
+```{r}
+x <- 1:10
+class(x) 
+class(x) <- "foo"
+class(x)
+```
+
+Objects are not limited to a single class, and can have many classes:
+
+```{r}
+class(x) <- c("A", "B")
+class(x)
+```
+
+## Function methods
+
+-   Functions can have many methods, allowing us to have (e.g.) one plot() function that does different things depending on what is being plotted()
+-   Methods can only be defined for generic functions: \`plot\`, \`print\`,
+    \`summary\`, \`mean\`, and several others are already generic
+
+```{r}
+# see what methods have been defined for the mean function
+methods(mean)
+# which functions have methods for data.frames?
+methods(class="data.frame")[1:9]
+```
+
+## Creating new function methods
+
+To create a new method for a function that is already generic all you
+have to do is name your function \`function.class\`
+
+```{r}
+# create a mean() method for objects of class "foo":
+mean.foo <- function(x) { # mean method for "foo" class
+  if(is.numeric(x)) {
+    cat("The average is", mean.default(x))
+    return(invisible(mean.default(x))) #use mean.default for numeric
+    } else
+      cat("x is not numeric \n")} # otherwise say x not numeric
+
+x <- 1:10
+mean(x)
+class(x) <- "foo"
+mean(x)
+
+x <- as.character(x)
+class(x) <- "foo"
+mean(x)
+```
+
+
+## Creating generic functions
+
+S3 generics are most often used for print, summary, and plot methods,
+but sometimes you may want to create a new generic function
+
+```{r}
+# create a generic disp() function
+disp <- function(x, ...) {
+  UseMethod("disp")
+  }
+
+# create a disp method for class "matrix"
+disp.matrix <- function(x) {
+  print(round(x, digits=2))
+  }
+
+# test it out
+disp(matrix(runif(10), ncol=2))
+```
+
+
+
+## S4 classes
+
+<https://google-styleguide.googlecode.com/svn/trunk/Rguide.xml>:
+
+>  The S language has two object systems, S3 and S4, both of which are available in R. S3 methods are more interactive and flexible, whereas S4 methods are more formal and rigorous. (For an illustration of the two systems, see Thomas Lumley's "Programmer's Niche: A Simple Class, in S3 and S4" in R News 4/1, 2004, pgs. 33 - 36: <http://cran.r-project.org/doc/Rnews/Rnews_2004-1.pdf>.)
+>  
+>  Use S3 objects and methods unless there is a strong reason to use S4 objects or methods. A primary justification for an S4 object would be to use objects directly in C++ code. A primary justification for an S4 generic/method would be to dispatch on two arguments.
+>
+>  Avoid mixing S3 and S4: S4 methods ignore S3 inheritance and vice-versa.
+
+# OO in Zelig
+
+Models as reference classes
+
+# Lab session
+
+-   Create a Zelig model

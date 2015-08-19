@@ -2,21 +2,183 @@
 pagetitle: P01 - Statistical programming
 ---
 
-## Statistical programming
 
-### Debugging
+# Debugging
 
-### Improving performance
+## print("here!")
+
+## `debug` function
+
+## Debugging with RStudio
+
+<https://vimeo.com/99375765>
+
+# Improving performance
+
+- Festina lente
+
+- The real problem is that programmers have spent far too much time worrying about efficiency in the wrong places and at the wrong times; premature optimization is the root of all evil (or at least most of it) in programming (Donald Knuth)
+
+## Profiling
 
 - Profiling: bottlenecks and time trade-off (e.g, pre Cooley–Tukey FFT)
-- Vectorizing
+
+## Vectorizing
+
+-   How to avoid loops
+
+## C++
+
 - C++ and Rcpp (direct interchange of R objects between R and C++): http://www.rcpp.org/
+- Installation: platforms are not created equal
+- Linux: enjoy your package manager!
+- OS X
+    - install Xcode from Apple
+    - install the Command Line Tools
+    - `install.packages("Rcpp")`
+    - `install.packages("inline")`
+- Windows
+    - install Rtools: https://cran.rstudio.com/bin/windows/Rtools/
+    - `install.packages("Rcpp")`
+    - `install.packages("inline")`
+    
+## The inevitable rabbits
 
-### The data scientist’s toolbox
+- R does not handle recursive functions very well:
 
-- Python and Pandas
-- h2o (http://0xdata.com/#/), Julia (http://julialang.org/), Spark (https://amplab-extras.github.io/SparkR-pkg/)
+```{r}
+fibo <- function(n) {
+  if (n == 0)
+    return(0)
+  if (n == 1)
+    return(1)
+  return(fibo(n - 1) + fibo(n - 2))
+}
+```
 
-### Lab session
+```{r eval=FALSE}
+system.time(fibo(35))
+```
 
-- Optimize an R script
+`fibo(35)` takes 25 seconds on my laptop...
+
+- C++ is faster
+
+```{r}
+library(Rcpp)
+fibRcpp <- cppFunction( '
+int fibo(const int n) {
+   if (n == 0)
+      return(0);
+   if (n == 1)
+      return(1);
+   return (fibo(n - 1)) + fibo(n - 2);
+}
+' )
+```
+
+```{r}
+fibRcpp
+```
+
+Performance is much better:
+
+```{r}
+system.time(print(fibRcpp(35)))
+```
+
+## Using R in a smarter way
+
+### CRAN to the rescue
+
+```{r}
+library(numbers)
+system.time(print(fibonacci(35)))
+```
+
+### Memoization: refactoring (with globals... not there yet!)
+
+```{r}
+fibo_values <- rep(NA, 50)
+fibo_values[1] <- 0
+fibo_values[2] <- 1
+fibo_values
+```
+
+```{r}
+fibo <- function(n) {
+  if (is.na(fibo_values[n]))
+      fibo_values[n] <<- fibo(n - 1)
+  if (is.na(fibo_values[n - 1]))
+      fibo_values[n - 1] <<- fibo(n)
+  fibo_values[n + 1] <<- fibo_values[n] + fibo_values[n - 1]
+  return(fibo_values[n + 1])
+}
+```
+
+```{r}
+system.time(print(fibo(35)))
+fibo_values
+```
+
+### Hasten slowly, and without losing heart, Put your work twenty times upon the anvil (Boileau)
+
+- Remove globals (less efficient, but more manageable)
+
+```{r}
+fibo_memo <- function(n) {
+  fibo_values <- rep(NA, n)
+  fibo_values[1] <- 0
+  fibo_values[2] <- 1
+  fibo_values
+  fibo <- function(n) {
+    if (is.na(fibo_values[n]))
+      fibo_values[n] <<- fibo(n - 1)
+    if (is.na(fibo_values[n - 1]))
+      fibo_values[n - 1] <<- fibo(n)
+    fibo_values[n + 1] <<- fibo_values[n] + fibo_values[n - 1]
+    return(fibo_values[n + 1])
+    }
+  return(fibo(n))
+}
+```
+
+```{r}
+system.time(print(fibo_memo(35)))
+```
+
+## Basic type
+
+## The STL
+
+# Text processing
+
+## Regular expressions
+
+http://gastonsanchez.com/Handling_and_Processing_Strings_in_R.pdf
+
+# Data scientist’s toolbox
+
+## h2o
+
+- http://h2o.ai/
+
+- Installation: http://h2o-release.s3.amazonaws.com/h2o/rel-simons/4/index.html#R
+
+- Available models:
+
+- Illustration: GLM
+
+## SparkR
+
+- https://amplab-extras.github.io/SparkR-pkg/
+
+## AWS
+
+## Python and Pandas
+
+# Lab session
+
+## Your turn
+
+-   Optimize an R script

@@ -1,0 +1,894 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+
+
+<title>P01 - refresheR</title>
+
+<script src="libs/jquery-1.11.0/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="libs/bootstrap-3.3.1/css/bootstrap.min.css" rel="stylesheet" />
+<script src="libs/bootstrap-3.3.1/js/bootstrap.min.js"></script>
+<script src="libs/bootstrap-3.3.1/shim/html5shiv.min.js"></script>
+<script src="libs/bootstrap-3.3.1/shim/respond.min.js"></script>
+
+<style type="text/css">code{white-space: pre;}</style>
+<link rel="stylesheet"
+      href="libs/highlight/default.css"
+      type="text/css" />
+<script src="libs/highlight/highlight.js"></script>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+<script type="text/javascript">
+if (window.hljs && document.readyState && document.readyState === "complete") {
+   window.setTimeout(function() {
+      hljs.initHighlighting();
+   }, 0);
+}
+</script>
+
+
+
+</head>
+
+<body>
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img { 
+  max-width:100%; 
+  height: auto; 
+}
+</style>
+<div class="container-fluid main-container">
+
+<style type="text/css">
+  body {
+    padding-top: 20px;
+  }
+  .navbar-brand {
+    font-weight: bold;
+  }
+  footer {
+    border-top: 1px solid #CCC;
+    margin-top: 60px;
+    margin-bottom: 48px;
+    opacity: 0.75;
+  }
+  .content-body>:first-child, .content-body>:first-child>:first-child {
+    margin-top: 0 !important;
+  }
+  p code {
+    white-space: inherit;
+  }
+</style>
+
+<div class="fluid-row">
+  <div class="col-sm-12">
+    <nav class="navbar navbar-inverse">
+      <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+          <a class="navbar-brand" href="./">P01 - Advanced R</a>
+        </div>
+      </div>
+    </nav>
+  </div>
+</div>
+
+<div class="fluid-row">
+  <div class="col-sm-3">
+    <div class="list-group">
+      <a class="list-group-item" href="./">Introduction</a>
+      <a class="list-group-item" href="refresheR.html">refreshR</a>
+      <a class="list-group-item" href="creating_packages.html">Creating R packages</a>
+      <a class="list-group-item" href="data_linkage.html">Data linkage</a>
+      <a class="list-group-item" href="data_visualization.html">Data visualization</a>
+      <a class="list-group-item" href="data_wrangling.html">Data wrangling</a>
+      <a class="list-group-item" href="statistical_programming.html">Statistical programming</a>
+      <a class="list-group-item" href="zelig.html">Zelig</a>
+    </div>
+    <script>
+      // manage active state of toc based on current page
+      var href = window.location.pathname;
+      href = href.substr(href.lastIndexOf('/') + 1);
+      if (href === "" || href === "index.html")
+        href = "./";
+      $('a.list-group-item[href="' + href + '"]').addClass('active');
+    </script>
+  </div>
+  <div class="col-sm-9 content-body">
+
+
+<div id="TOC">
+<ul>
+<li><a href="#r">R</a><ul>
+<li><a href="#coming-to-r">Coming to R</a></li>
+<li><a href="#what-is-r">What is R?</a></li>
+<li><a href="#r-gui-alternatives-terminal-default">R GUI alternatives (terminal default)</a></li>
+<li><a href="#r-gui-alternatives-os-x-default">R GUI alternatives (OS X default)</a></li>
+<li><a href="#r-gui-alternatives-os-x-default-1">R GUI alternatives (OS X default)</a></li>
+<li><a href="#r-gui-alternatives-emacs-with-ess">R GUI Alternatives (Emacs with ESS)</a></li>
+<li><a href="#r-gui-alternatives-rstudio-on-mac">R GUI Alternatives (Rstudio on Mac)</a></li>
+<li><a href="#things-to-keep-in-mind">Things to keep in mind</a></li>
+</ul></li>
+<li><a href="#data-and-functions">Data and Functions</a><ul>
+<li><a href="#assignment">Assignment</a></li>
+<li><a href="#functions">Functions</a></li>
+</ul></li>
+<li><a href="#administration">Administration</a><ul>
+<li><a href="#asking-r-for-help">Asking R for help</a></li>
+<li><a href="#r-packages-and-libraries">R packages and libraries</a></li>
+</ul></li>
+<li><a href="#loading-data">Loading Data</a><ul>
+<li><a href="#the-gss-dataset">The gss dataset</a></li>
+<li><a href="#the-working-directory-and-listing-files">The “working directory” and listing files</a></li>
+<li><a href="#importing-data-from-files-the-hard-way">Importing data from files the hard way</a></li>
+<li><a href="#importing-data-from-files-the-hard-way-1">Importing data from files the hard way</a></li>
+<li><a href="#importing-data-from-files-the-easy-way">Importing data from files the easy way</a></li>
+<li><a href="#importing-data-from-files-the-easy-way-1">Importing data from files the easy way</a></li>
+<li><a href="#saving-and-loading-r-workspaces">Saving and loading R workspaces</a></li>
+</ul></li>
+<li><a href="#data-manipulation">Data Manipulation</a><ul>
+<li><a href="#data.frame-objects"><code>data.frame</code> objects</a></li>
+<li><a href="#extracting-subsets-of-data.frames">Extracting subsets of <code>data.frames</code></a></li>
+<li><a href="#extracting-subsets-of-data.frames-1">Extracting subsets of <code>data.frames</code></a></li>
+<li><a href="#transforming-data.frames">Transforming data.frames</a></li>
+<li><a href="#exporting-data">Exporting Data</a></li>
+</ul></li>
+<li><a href="#stats-and-graphs">Stats and Graphs</a><ul>
+<li><a href="#basic-statistics">Basic statistics</a></li>
+<li><a href="#counts-and-proportions">Counts and proportions</a></li>
+<li><a href="#statistics-by-classification-factors">Statistics by classification factors<a id="sec-6-3" name="sec-6-3"></a></a></li>
+<li><a href="#correlations">Correlations</a></li>
+<li><a href="#multiple-regression">Multiple regression</a></li>
+<li><a href="#save-r-output-to-a-file">Save R output to a file</a></li>
+<li><a href="#basic-graphics-frequency-bars">Basic graphics: Frequency bars</a></li>
+<li><a href="#basic-graphics-boxplots-by-group">Basic graphics: Boxplots by group</a></li>
+<li><a href="#basic-graphics-mosaic-chart">Basic graphics: Mosaic chart</a></li>
+</ul></li>
+<li><a href="#wrap-up">Wrap-up</a><ul>
+<li><a href="#additional-resources">Additional resources</a></li>
+</ul></li>
+</ul>
+</div>
+
+<div id="r" class="section level1">
+<h1>R</h1>
+<ul>
+<li><p>S statistical programming language developped by John Chambers, Rick Becker and Allan Wilks at Bell Labs in the 1970’s</p></li>
+<li>Same time, same place
+<ul>
+<li>the C programming language (Dennis Ritchie)</li>
+<li>the UNIX Operating system (Ken Thompson and Dennis Ritchie)</li>
+<li>AWK for text processing (Alfred Aho, Peter Weinberger, and Brian Kernighan)</li>
+</ul></li>
+<li>Several implementations
+<ul>
+<li>S-Plus</li>
+<li>R</li>
+</ul></li>
+</ul>
+<div id="coming-to-r" class="section level2">
+<h2>Coming to R</h2>
+<p>Coming from:</p>
+<ul>
+<li><strong>Stata:</strong> <a href="http://www.princeton.edu/~otorres/RStata.pdf" class="uri">http://www.princeton.edu/~otorres/RStata.pdf</a></li>
+<li><strong>SAS/SPSS:</strong> <a href="http://www.et.bs.ehu.es/~etptupaf/pub/R/RforSAS&amp;SPSSusers.pdf" class="uri">http://www.et.bs.ehu.es/~etptupaf/pub/R/RforSAS&amp;SPSSusers.pdf</a></li>
+<li><strong>matlab:</strong> <a href="http://www.math.umaine.edu/~hiebeler/comp/matlabR.pdf" class="uri">http://www.math.umaine.edu/~hiebeler/comp/matlabR.pdf</a></li>
+<li><strong>Python:</strong> <a href="http://mathesaurus.sourceforge.net/matlab-python-xref.pdf" class="uri">http://mathesaurus.sourceforge.net/matlab-python-xref.pdf</a></li>
+</ul>
+</div>
+<div id="what-is-r" class="section level2">
+<h2>What is R?</h2>
+<p>R is a programming language designed for statistical computing. Notable characteristics include:</p>
+<ul>
+<li>Vast capabilities, wide range of statistical and graphical techniques</li>
+<li>Very popular in academia, growing popularity in business: <a href="http://r4stats.com/articles/popularity/" class="uri">http://r4stats.com/articles/popularity/</a></li>
+<li>Written primarily by statisticians</li>
+<li>FREE (no cost, open source)</li>
+<li>Excellent community support: mailing list, blogs, tutorials</li>
+<li>Easy to extend by writing new functions</li>
+</ul>
+</div>
+<div id="r-gui-alternatives-terminal-default" class="section level2">
+<h2>R GUI alternatives (terminal default)</h2>
+<p><img src="images/Rgui.png" alt="img" /></p>
+</div>
+<div id="r-gui-alternatives-os-x-default" class="section level2">
+<h2>R GUI alternatives (OS X default)</h2>
+<p><img src="images/Rosx_main.png" alt="img" /></p>
+</div>
+<div id="r-gui-alternatives-os-x-default-1" class="section level2">
+<h2>R GUI alternatives (OS X default)</h2>
+<p><img src="images/Rosx_edit.png" alt="img" /></p>
+</div>
+<div id="r-gui-alternatives-emacs-with-ess" class="section level2">
+<h2>R GUI Alternatives (Emacs with ESS)</h2>
+<p><img src="images/emacs.png" alt="img" /></p>
+<p>Emacs + ESS is a very powerful combination, but can be difficult to set up</p>
+</div>
+<div id="r-gui-alternatives-rstudio-on-mac" class="section level2">
+<h2>R GUI Alternatives (Rstudio on Mac)</h2>
+<p><img src="images/Rstudio.png" alt="img" /></p>
+<p>Rstudio has many useful features, including parentheses matching and auto-completion</p>
+</div>
+<div id="things-to-keep-in-mind" class="section level2">
+<h2>Things to keep in mind</h2>
+<ul>
+<li>Case sensitive, like Stata (unlike SAS)</li>
+<li>Comments can be put almost anywhere, starting with a hash mark (‘<code>#</code>’); everything to the end of the line is a comment</li>
+<li>The command prompt “<code>&gt;</code>” indicates that R is ready to receive commands</li>
+<li>If a command is not complete at the end of a line, R will give a different prompt, ‘<code>+</code>’ by default</li>
+<li>Parentheses must always match (first thing to check if you get an error)</li>
+<li>R Does not care about spaces between commands or arguments</li>
+<li>Names should start with a letter and should not contain spaces</li>
+<li>Can use “.” in object names (e.g., “my.data”)</li>
+<li>Use forward slash (“/”) instead of backslash in path names, even on Windows</li>
+</ul>
+</div>
+</div>
+<div id="data-and-functions" class="section level1">
+<h1>Data and Functions</h1>
+<div id="assignment" class="section level2">
+<h2>Assignment</h2>
+<p>Values can be assigned names and used in subsequent operations</p>
+<ul>
+<li>The <code>&lt;-</code> operator (less than followed by a dash) is used to save values</li>
+<li>The name on the left gets the value on the right.</li>
+</ul>
+<pre class="r"><code>x &lt;- 10 # Assign the value 10 to a variable named x
+x + 1 # Add 1 to x</code></pre>
+<pre><code>## [1] 11</code></pre>
+<pre class="r"><code>y &lt;- x + 1 # Assign y the value x + 1
+y</code></pre>
+<pre><code>## [1] 11</code></pre>
+<p>Saved variables can be listed, overwritten and deleted</p>
+<pre class="r"><code>ls() # List variables in workspace</code></pre>
+<pre><code>## [1] &quot;x&quot; &quot;y&quot;</code></pre>
+<pre class="r"><code>x # Print the value of x</code></pre>
+<pre><code>## [1] 10</code></pre>
+<pre class="r"><code>x &lt;- 100 # Overwrite x. Note that no warning is given!
+x</code></pre>
+<pre><code>## [1] 100</code></pre>
+<pre class="r"><code>rm(x) # Delete x
+ls()</code></pre>
+<pre><code>## [1] &quot;y&quot;</code></pre>
+</div>
+<div id="functions" class="section level2">
+<h2>Functions</h2>
+<p>Using R is mostly about applying <strong>functions</strong> to <strong>variables</strong>. Functions</p>
+<ul>
+<li>take <strong>variable(s)</strong> as input <strong>argument(s)</strong></li>
+<li>perform operations</li>
+<li><strong>return</strong> values which can be <strong>assigned</strong></li>
+<li>optionally perform side-effects such as writing a file to disk or opening a graphics window</li>
+</ul>
+<p>The general form for calling R functions is</p>
+<pre><code>FunctionName(arg.1, arg.2, ... arg.n)</code></pre>
+<p>Arguments can be matched by position or name</p>
+<p>Examples:</p>
+<pre class="r"><code>#?sqrt
+a &lt;- sqrt(y) # Call the sqrt function with argument x=y
+round(a, digits = 2) # Call round() with arguments x=x and digits=2</code></pre>
+<pre><code>## [1] 3.32</code></pre>
+<pre class="r"><code># Functions can be nested so an alternative is
+round(sqrt(y), digits = 5) # Take sqrt of a and round</code></pre>
+<pre><code>## [1] 3.31662</code></pre>
+</div>
+</div>
+<div id="administration" class="section level1">
+<h1>Administration</h1>
+<div id="asking-r-for-help" class="section level2">
+<h2>Asking R for help</h2>
+<p>R has extensive built-in documentation that can be accessed through R commands or through the GUI.</p>
+<ul>
+<li>Start html help, search/browse using web browser
+<ul>
+<li><p>at the R console:</p>
+<pre><code>help.start()</code></pre></li>
+<li><p>or use the help menu from you GUI</p></li>
+</ul></li>
+<li><p>Look up the documentation for a function</p>
+<pre><code>help(plot)
+
+?kmeans</code></pre></li>
+<li><p>Look up documentation for a package</p>
+<pre><code>help(package=&quot;stats&quot;)</code></pre></li>
+<li><p>Search documentation from R (not always the best way… google often works better)</p>
+<pre><code>help.search(&quot;classification&quot;)</code></pre></li>
+</ul>
+</div>
+<div id="r-packages-and-libraries" class="section level2">
+<h2>R packages and libraries</h2>
+<p>There are thousands of R packages that extend R’s capabilities.</p>
+<ul>
+<li><p>To view available packages:</p>
+<pre><code>library()</code></pre></li>
+<li><p>To see what packages are loaded:</p>
+<pre><code>search()</code></pre></li>
+<li><p>To load a package:</p>
+<pre><code>library(&quot;car&quot;)</code></pre></li>
+<li><p>Install new package:</p>
+<pre><code>install.packages(&quot;stringdist&quot;)</code></pre></li>
+</ul>
+</div>
+</div>
+<div id="loading-data" class="section level1">
+<h1>Loading Data</h1>
+<div id="the-gss-dataset" class="section level2">
+<h2>The gss dataset</h2>
+<p>The next few examples use a subset of the General Social Survey data set. The variables in this subset include</p>
+<pre class="r"><code>head(read.csv(&quot;datasets/gssInfo.csv&quot;)) </code></pre>
+<pre><code>##       var                      description
+## 1 marital                   marital status
+## 2     age                age of respondent
+## 3    educ highest year of school completed
+## 4     sex                  respondents sex
+## 5     inc               respondents income
+## 6   happy                general happiness</code></pre>
+<pre class="r"><code>#see gssInfo.csv for rest of the variable descriptions</code></pre>
+</div>
+<div id="the-working-directory-and-listing-files" class="section level2">
+<h2>The “working directory” and listing files</h2>
+<p>R knows the directory it was started in, and refers to this as the “working directory”.</p>
+<pre class="r"><code>setwd(&quot;working_directory&quot;)</code></pre>
+<p>We can also set the working directory using paths relative to the current working directory:</p>
+<pre class="r"><code>getwd() # get the current working directory</code></pre>
+<pre><code>## [1] &quot;/Users/cchoirat/Documents/LocalGit/p01r&quot;</code></pre>
+<pre class="r"><code>setwd(&quot;dataSets&quot;) # set wd to the dataSets folder
+getwd()</code></pre>
+<pre><code>## [1] &quot;/Users/cchoirat/Documents/LocalGit/p01r/dataSets&quot;</code></pre>
+<pre class="r"><code>setwd(&quot;..&quot;) # set wd to enclosing folder (&quot;up&quot;)</code></pre>
+<p>It can be convenient to list files in a directory without leaving R</p>
+<pre class="r"><code>list.files(&quot;dataSets&quot;) # list files in the dataSets folder</code></pre>
+<pre><code>##  [1] &quot;CPIdata.csv&quot;         &quot;EconomistData.csv&quot;   &quot;gss.csv&quot;            
+##  [4] &quot;gss.dta&quot;             &quot;gss.rds&quot;             &quot;gss.sas7bdat&quot;       
+##  [7] &quot;gss.sav&quot;             &quot;gss.xlsx&quot;            &quot;gssInfo.csv&quot;        
+## [10] &quot;HDIdat.xls&quot;          &quot;HDIdata.csv&quot;         &quot;landdata-states.csv&quot;
+## [13] &quot;states.csv&quot;</code></pre>
+<pre class="r"><code># list.files(&quot;dataSets&quot;, pattern = &quot;.csv&quot;) # restrict to .csv files</code></pre>
+</div>
+<div id="importing-data-from-files-the-hard-way" class="section level2">
+<h2>Importing data from files the hard way</h2>
+<p>In order to read data from a file, you have to know what kind of file it is. The table below lists the functions needed to import data from common file formats.</p>
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+<colgroup>
+<col  class="left" />
+<col  class="left" />
+<col  class="left" />
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="left">
+data type
+</th>
+<th scope="col" class="left">
+function
+</th>
+<th scope="col" class="left">
+package
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="left">
+comma separated (.csv)
+</td>
+<td class="left">
+read.csv()
+</td>
+<td class="left">
+utils (default)
+</td>
+</tr>
+<tr>
+<td class="left">
+other delimited formats
+</td>
+<td class="left">
+read.table()
+</td>
+<td class="left">
+utils (default)
+</td>
+</tr>
+<tr>
+<td class="left">
+Stata version 7-12 (.dta)
+</td>
+<td class="left">
+read.dta()
+</td>
+<td class="left">
+foreign
+</td>
+</tr>
+<tr>
+<td class="left">
+Stata version 13-14 (.dta)
+</td>
+<td class="left">
+read<sub>dta</sub>()
+</td>
+<td class="left">
+haven
+</td>
+</tr>
+<tr>
+<td class="left">
+SPSS (.sav)
+</td>
+<td class="left">
+read.spss()
+</td>
+<td class="left">
+foreign
+</td>
+</tr>
+<tr>
+<td class="left">
+SAS (.sas7bdat)
+</td>
+<td class="left">
+read.sas7bdat()
+</td>
+<td class="left">
+sas7bdat
+</td>
+</tr>
+<tr>
+<td class="left">
+Excel (.xls, .xlsx)
+</td>
+<td class="left">
+readWorksheetFromFile()
+</td>
+<td class="left">
+XLConnect
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="importing-data-from-files-the-hard-way-1" class="section level2">
+<h2>Importing data from files the hard way</h2>
+<p>Examples:</p>
+<pre class="r"><code># read gss data from the gss.rds R file
+gss_rds &lt;- readRDS(&quot;dataSets/gss.rds&quot;)
+# read gss data from the gss.csv comma separated file
+gss_csv &lt;- read.csv(&quot;dataSets/gss.csv&quot;) # read gss data
+# read a Stata dataset from gss.dta 
+library(foreign) # load foreign data functions
+gss_dta &lt;- read.dta(file = &quot;dataSets/gss.dta&quot;)</code></pre>
+</div>
+<div id="importing-data-from-files-the-easy-way" class="section level2">
+<h2>Importing data from files the easy way</h2>
+<p>In order to read data from a file, you usually have to know what kind of file it is. The table below lists some common data types.</p>
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+<colgroup>
+<col  class="left" />
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="left">
+Common data types
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="left">
+comma separated (.csv)
+</td>
+</tr>
+<tr>
+<td class="left">
+Stata (.dta)
+</td>
+</tr>
+<tr>
+<td class="left">
+SPSS (.sav)
+</td>
+</tr>
+<tr>
+<td class="left">
+SAS (.sas7bdat)
+</td>
+</tr>
+<tr>
+<td class="left">
+Excel (.xls, .xlsx)
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="importing-data-from-files-the-easy-way-1" class="section level2">
+<h2>Importing data from files the easy way</h2>
+<p><code>rio</code> is smart enough to recognize most common file formats for us using the <code>import()</code> function.</p>
+<pre class="r"><code>## install and load the rio package
+# install.packages(&quot;rio&quot;)
+library(rio)
+## import data from a variety of formats
+# read gss data from the gss.rds R file
+gss &lt;- import(&quot;dataSets/gss.rds&quot;)
+# read gss data from the gss.csv comma separated file
+gss2 &lt;- import(&quot;dataSets/gss.csv&quot;)
+# read a Stata dataset from gss.dta 
+gss3 &lt;- import(&quot;dataSets/gss.dta&quot;)</code></pre>
+</div>
+<div id="saving-and-loading-r-workspaces" class="section level2">
+<h2>Saving and loading R workspaces</h2>
+<p>In addition to importing individual datasets, R can save and load entire workspaces</p>
+<ul>
+<li>Save our entire workspace</li>
+</ul>
+<pre class="r"><code>ls() # list objects in our workspace</code></pre>
+<pre><code>## [1] &quot;a&quot;       &quot;gss&quot;     &quot;gss_csv&quot; &quot;gss_dta&quot; &quot;gss_rds&quot; &quot;gss2&quot;    &quot;gss3&quot;   
+## [8] &quot;y&quot;</code></pre>
+<pre class="r"><code>save.image(file = &quot;myWorkspace.RData&quot;) # save workspace 
+rm(list=ls()) # remove all objects from our workspace 
+ls() # list stored objects to make sure they are deleted</code></pre>
+<pre><code>## character(0)</code></pre>
+<ul>
+<li>Load the “myWorkspace.RData” file and check that it is restored</li>
+</ul>
+<pre class="r"><code>load(&quot;myWorkspace.RData&quot;) # load myWorkspace.RData
+ls() # list objects</code></pre>
+<pre><code>## [1] &quot;a&quot;       &quot;gss&quot;     &quot;gss_csv&quot; &quot;gss_dta&quot; &quot;gss_rds&quot; &quot;gss2&quot;    &quot;gss3&quot;   
+## [8] &quot;y&quot;</code></pre>
+<p>When you close R you will be asked if you want to save your workspace – if you choose yes then your workspace will be restored next time you start R.</p>
+</div>
+</div>
+<div id="data-manipulation" class="section level1">
+<h1>Data Manipulation</h1>
+<div id="data.frame-objects" class="section level2">
+<h2><code>data.frame</code> objects</h2>
+<ul>
+<li><p>Usually data read into R will be stored as a <strong><code>data.frame</code></strong></p></li>
+<li>A <code>data.frame</code> is a list of vectors of equal length
+<ul>
+<li>Each vector in the list forms a column</li>
+<li>Each column can be a differnt type of vector</li>
+<li>Often the columns are variables and the rows are observations</li>
+</ul></li>
+<li><p>A data.frame has two dimensions corresponding the number of rows and the number of columns (in that order)</p></li>
+</ul>
+</div>
+<div id="extracting-subsets-of-data.frames" class="section level2">
+<h2>Extracting subsets of <code>data.frames</code></h2>
+<p>You can extract subsets of data.frames using the <code>subset()</code> function<sup><a id="fnr.1" name="fnr.1" class="footref" href="#fn.1">1</a></sup>. Use the <code>select</code> argument to select columns:</p>
+<pre class="r"><code># selecting specifig columns
+head(# first n rows
+  subset(gss,            
+         select = 1:4 # column 1 to 5
+         ),
+  n = 10 # show first 10 rows
+  )</code></pre>
+<pre><code>##    age agecat       degree educ
+## 1   69  60-89 Less than HS   12
+## 2   27  18-29 Less than HS   10
+## 3   19  18-29 Less than HS   11
+## 4   21  18-29 Less than HS    9
+## 5   19  18-29 Less than HS   11
+## 6   87  60-89 Less than HS    8
+## 7   42  40-49 Less than HS   11
+## 8   19  18-29 Less than HS   11
+## 9   78  60-89 Less than HS    7
+## 10  70  60-89 Less than HS    9</code></pre>
+<p>and the <code>subset</code> argument to select rows:</p>
+<pre class="r"><code>subset(gss,
+       # rows where age &gt; 90
+       subset = age &gt; 90,
+       ## sex and age columns
+       select = c(&quot;sex&quot;, &quot;age&quot;))</code></pre>
+<pre><code>##        sex age
+## 315 Female  99
+## 665   Male  99</code></pre>
+<pre class="r"><code>## the $ operator can be used to extract a single column
+str(gss$age)</code></pre>
+<pre><code>##  int [1:1419] 69 27 19 21 19 87 42 19 78 70 ...</code></pre>
+</div>
+<div id="extracting-subsets-of-data.frames-1" class="section level2">
+<h2>Extracting subsets of <code>data.frames</code></h2>
+<p>In the previous example we used <code>&gt;</code> to select rows where age was greater than 90. Other relational and logical operators are listed below.</p>
+<ul>
+<li><strong>==:</strong> equal to</li>
+<li><strong>!=:</strong> not equal to</li>
+<li><strong>&gt;:</strong> greater than</li>
+<li><strong>&lt;:</strong> less than</li>
+<li><strong>&gt;=:</strong> greater than or equal to</li>
+<li><strong>&lt;=:</strong> less than or equal to</li>
+<li><strong>&amp;:</strong> and</li>
+<li><strong>|:</strong> or</li>
+</ul>
+</div>
+<div id="transforming-data.frames" class="section level2">
+<h2>Transforming data.frames</h2>
+<p>You can modify data.frames using the <code>transform()</code> function.</p>
+<pre class="r"><code>## creating new variable mean centered age
+gss &lt;- transform(gss, ageC = age - mean(age))
+##education difference between wifes and husbands
+gss &lt;- transform(gss, educ.diff = wifeduc - husbeduc)
+gss$wifeduc_comp &lt;- ifelse(
+  is.na(gss$wifeduc), # condition
+  mean(gss$wifeduc, na.rm = TRUE), # value if condition met
+  gss$wifeduc) # value otherwise
+
+## examine our newly created variables
+head(subset(gss,
+            select = c(&quot;age&quot;, &quot;ageC&quot;, &quot;wifeduc&quot;, &quot;wifeduc_comp&quot;,
+                       &quot;husbeduc&quot;, &quot;educ.diff&quot;)), n = 8)</code></pre>
+<pre><code>##   age       ageC wifeduc wifeduc_comp husbeduc educ.diff
+## 1  69  22.363636      NA     13.28457       NA        NA
+## 2  27 -19.636364      13     13.00000       10         3
+## 3  19 -27.636364      NA     13.28457       NA        NA
+## 4  21 -25.636364      NA     13.28457       NA        NA
+## 5  19 -27.636364      NA     13.28457       NA        NA
+## 6  87  40.363636      NA     13.28457       NA        NA
+## 7  42  -4.636364      10     10.00000       11        -1
+## 8  19 -27.636364      NA     13.28457       NA        NA</code></pre>
+<p>Note that <code>transform</code> is a convenience function; see <code>?Extract</code> for a more powerful way to modify data.frames.</p>
+</div>
+<div id="exporting-data" class="section level2">
+<h2>Exporting Data</h2>
+<p>Now that we have made some changes to our GSS data set, we might want to save those changes to a file. Everything we have done so far has only modified the data in R; the files have remained unchanged.</p>
+<pre class="r"><code># write data to a .csv file
+write.csv(gss, file = &quot;gss.csv&quot;)
+# write data to a Stata file
+write.dta(gss, file = &quot;gss.dta&quot;)
+# write data to an R file
+saveRDS(gss, file = &quot;gss.rds&quot;)</code></pre>
+</div>
+</div>
+<div id="stats-and-graphs" class="section level1">
+<h1>Stats and Graphs</h1>
+<div id="basic-statistics" class="section level2">
+<h2>Basic statistics</h2>
+<p>Descriptive statistics of single variables are straightforward:</p>
+<pre class="r"><code>mean(gss$educ) # calculate mean value of education</code></pre>
+<pre><code>## [1] 13.47498</code></pre>
+<pre class="r"><code>sd(gss$educ) # calculate standard deviation of x</code></pre>
+<pre><code>## [1] 5.389476</code></pre>
+<pre class="r"><code>## Calculate min, max, quantiles, mean of educ, age, and ageC
+summary(subset(gss, select = c(&quot;educ&quot;, &quot;age&quot;, &quot;ageC&quot;)))</code></pre>
+<pre><code>##       educ            age             ageC        
+##  Min.   : 0.00   Min.   :18.00   Min.   :-28.636  
+##  1st Qu.:12.00   1st Qu.:32.00   1st Qu.:-14.636  
+##  Median :13.00   Median :44.00   Median : -2.636  
+##  Mean   :13.47   Mean   :46.64   Mean   :  0.000  
+##  3rd Qu.:16.00   3rd Qu.:59.00   3rd Qu.: 12.364  
+##  Max.   :99.00   Max.   :99.00   Max.   : 52.364</code></pre>
+<p>Some of these functions (e.g., <code>summary</code>) will also work with data.frames and other types of objects, others (such as <code>sd</code>) will not.</p>
+</div>
+<div id="counts-and-proportions" class="section level2">
+<h2>Counts and proportions</h2>
+<p>Start by using the <code>table()</code> function to tabulate counts, then perform additional computations if needed</p>
+<pre class="r"><code>sex.counts &lt;- table(gss$sex) # tabulate sex categories
+sex.counts</code></pre>
+<pre><code>## 
+## Female   Male 
+##    797    622</code></pre>
+<pre class="r"><code>## Convert to proportions
+prop.table(sex.counts)</code></pre>
+<pre><code>## 
+##    Female      Male 
+## 0.5616631 0.4383369</code></pre>
+<p>Add variables for crosstabs</p>
+<pre class="r"><code>table(subset(gss, select = c(&quot;sex&quot;, &quot;happy&quot;))) # crosstab marital X happy</code></pre>
+<pre><code>##         happy
+## sex       DK NOT TOO HAPPY PRETTY HAPPY VERY HAPPY
+##   Female   1            84          447        246
+##   Male     0            73          350        189</code></pre>
+</div>
+<div id="statistics-by-classification-factors" class="section level2">
+<h2>Statistics by classification factors<a id="sec-6-3" name="sec-6-3"></a></h2>
+<p>The <code>by()</code> function can be used to perform a calculation separately for each level of a classifying variable</p>
+<pre class="r"><code>by(subset(gss, select = c(&quot;income&quot;, &quot;educ&quot;)),
+   INDICES = gss[&quot;sex&quot;],
+   FUN = summary)</code></pre>
+<pre><code>## sex: Female
+##              income         educ      
+##  REFUSED        : 76   Min.   : 0.00  
+##  $60000 TO 74999: 62   1st Qu.:12.00  
+##  $40000 TO 49999: 60   Median :12.00  
+##  $50000 TO 59999: 52   Mean   :13.32  
+##  $30000 TO 34999: 49   3rd Qu.:15.00  
+##  (Other)        :490   Max.   :99.00  
+##  NA&#39;s           :  8                  
+## -------------------------------------------------------- 
+## sex: Male
+##              income         educ      
+##  $40000 TO 49999: 59   Min.   : 4.00  
+##  $50000 TO 59999: 56   1st Qu.:12.00  
+##  $60000 TO 74999: 49   Median :13.00  
+##  $35000 TO 39999: 48   Mean   :13.68  
+##  REFUSED        : 48   3rd Qu.:16.00  
+##  (Other)        :354   Max.   :99.00  
+##  NA&#39;s           :  8</code></pre>
+</div>
+<div id="correlations" class="section level2">
+<h2>Correlations</h2>
+<p>Let’s look at correlations among between age, income, and education</p>
+<pre class="r"><code>cor(subset(gss, select =  c(&quot;age&quot;, &quot;incomdol&quot;, &quot;educ&quot;)))</code></pre>
+<pre><code>##                  age   incomdol        educ
+## age       1.00000000 -0.1186564 -0.07362454
+## incomdol -0.11865641  1.0000000  0.21013267
+## educ     -0.07362454  0.2101327  1.00000000</code></pre>
+<p>For significance tests, use cor.test()</p>
+<pre class="r"><code>with(gss, cor.test(age, educ))</code></pre>
+<pre><code>## 
+##  Pearson&#39;s product-moment correlation
+## 
+## data:  age and educ
+## t = -2.779, df = 1417, p-value = 0.005525
+## alternative hypothesis: true correlation is not equal to 0
+## 95 percent confidence interval:
+##  -0.12518333 -0.02166916
+## sample estimates:
+##         cor 
+## -0.07362454</code></pre>
+</div>
+<div id="multiple-regression" class="section level2">
+<h2>Multiple regression</h2>
+<p>Modeling functions generally use the <em>formula</em> interface whith DV on left followed by “~” followed by predictors–for details see</p>
+<pre><code>help(&quot;formula&quot;)</code></pre>
+<ul>
+<li>Predict the number of hours individuals spend on email (<code>emailhrs</code>)</li>
+</ul>
+<pre class="r"><code>m1 &lt;- lm(educ ~ sex + age, data = gss)
+summary(m1)</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = educ ~ sex + age, data = gss)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -13.434  -1.785  -0.688   1.955  86.049 
+## 
+## Coefficients:
+##              Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept) 14.377467   0.440857  32.613  &lt; 2e-16 ***
+## sexMale      0.275235   0.289290   0.951  0.34156    
+## age         -0.021938   0.008238  -2.663  0.00783 ** 
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 5.377 on 1416 degrees of freedom
+## Multiple R-squared:  0.006056,   Adjusted R-squared:  0.004652 
+## F-statistic: 4.314 on 2 and 1416 DF,  p-value: 0.01356</code></pre>
+</div>
+<div id="save-r-output-to-a-file" class="section level2">
+<h2>Save R output to a file</h2>
+<p>Earlier we learned how to write a data set to a file. But what if we want to write something that isn’t in a nice rectangular format, like the results of our regression model? For that we can use the <code>sink()</code> function:</p>
+<pre class="r"><code>sink(file=&quot;output.txt&quot;, split = TRUE) # start logging
+print(&quot;This is the result from model 1\n&quot;)</code></pre>
+<pre><code>## [1] &quot;This is the result from model 1\n&quot;</code></pre>
+<pre class="r"><code>print(summary(m1))</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = educ ~ sex + age, data = gss)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -13.434  -1.785  -0.688   1.955  86.049 
+## 
+## Coefficients:
+##              Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept) 14.377467   0.440857  32.613  &lt; 2e-16 ***
+## sexMale      0.275235   0.289290   0.951  0.34156    
+## age         -0.021938   0.008238  -2.663  0.00783 ** 
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 5.377 on 1416 degrees of freedom
+## Multiple R-squared:  0.006056,   Adjusted R-squared:  0.004652 
+## F-statistic: 4.314 on 2 and 1416 DF,  p-value: 0.01356</code></pre>
+<pre class="r"><code>sink() # sink with no arguments turns logging off</code></pre>
+</div>
+<div id="basic-graphics-frequency-bars" class="section level2">
+<h2>Basic graphics: Frequency bars</h2>
+<p>Thanks to classes and methods, you can <code>plot()</code> many kinds of objects:</p>
+<pre class="r"><code>plot(gss$marital) # Plot a factor</code></pre>
+<p><img src="refresheR_files/figure-html/unnamed-chunk-24-1.png" /></p>
+</div>
+<div id="basic-graphics-boxplots-by-group" class="section level2">
+<h2>Basic graphics: Boxplots by group</h2>
+<p>Thanks to classes and methods, you can <code>plot()</code> many kinds of objects:</p>
+<pre class="r"><code>with(gss,
+     plot(marital, educ)) # Plot ordinal by numeric</code></pre>
+<p><img src="refresheR_files/figure-html/unnamed-chunk-25-1.png" /></p>
+</div>
+<div id="basic-graphics-mosaic-chart" class="section level2">
+<h2>Basic graphics: Mosaic chart</h2>
+<p>Thanks to classes and methods, you can <code>plot()</code> many kinds of objects:</p>
+<pre class="r"><code>with(gss, # Plot factor X factor
+     plot(marital, happy))</code></pre>
+<p><img src="refresheR_files/figure-html/unnamed-chunk-26-1.png" /></p>
+</div>
+</div>
+<div id="wrap-up" class="section level1">
+<h1>Wrap-up</h1>
+<div id="additional-resources" class="section level2">
+<h2>Additional resources</h2>
+<ul>
+<li><p>IQSS workshops: <a href="http://projects.iq.harvard.edu/rtc/filter_by/workshops" class="uri">http://projects.iq.harvard.edu/rtc/filter_by/workshops</a></p></li>
+<li><p>IQSS statistical consulting: <a href="http://rtc.iq.harvard.edu" class="uri">http://rtc.iq.harvard.edu</a></p></li>
+<li>Software (all free!):
+<ul>
+<li>R and R package download: <a href="http://cran.r-project.org" class="uri">http://cran.r-project.org</a></li>
+<li>Rstudio download: <a href="http://rstudio.org" class="uri">http://rstudio.org</a></li>
+<li>ESS (emacs R package): <a href="http://ess.r-project.org/" class="uri">http://ess.r-project.org/</a></li>
+</ul></li>
+<li>Online tutorials
+<ul>
+<li><a href="http://www.codeschool.com/courses/try-r" class="uri">http://www.codeschool.com/courses/try-r</a></li>
+<li><a href="http://www.datamind.org" class="uri">http://www.datamind.org</a></li>
+</ul></li>
+<li>Getting help:
+<ul>
+<li>Documentation and tutorials: <a href="http://cran.r-project.org/other-docs.html" class="uri">http://cran.r-project.org/other-docs.html</a></li>
+<li>Recommended R packages by topic: <a href="http://cran.r-project.org/web/views/" class="uri">http://cran.r-project.org/web/views/</a></li>
+<li>Mailing list: <a href="https://stat.ethz.ch/mailman/listinfo/r-help" class="uri">https://stat.ethz.ch/mailman/listinfo/r-help</a></li>
+<li>StackOverflow: <a href="http://stackoverflow.com/questions/tagged/r" class="uri">http://stackoverflow.com/questions/tagged/r</a></li>
+</ul></li>
+</ul>
+</div>
+</div>
+
+<footer>
+<p><small>Christine Choirat<br/>
+P01 - Advanced R<br/>
+Harvard T.H Chan School of Public Health <a>http://www.hsph.harvard.edu/</a>
+</small></p>
+</footer>
+
+  </div>
+</div>
+
+<a href="https://github.com/p01r/p01r"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://camo.githubusercontent.com/38ef81f8aca64bb9a64448d0d70f1308ef5341ab/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f6461726b626c75655f3132313632312e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png"></a>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+$(document).ready(function () {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+});
+
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

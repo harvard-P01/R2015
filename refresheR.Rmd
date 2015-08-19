@@ -1,0 +1,595 @@
+---
+pagetitle: P01 - refresheR
+---
+
+# R
+
+- S statistical programming language developped by John Chambers, Rick Becker and Allan Wilks at Bell Labs in the 1970's
+
+- Same time, same place
+    - the C programming language (Dennis Ritchie)
+    - the UNIX Operating system (Ken Thompson and Dennis Ritchie)
+    - AWK for text processing (Alfred Aho, Peter Weinberger, and Brian Kernighan)
+
+- Several implementations
+    - S-Plus
+    - R
+
+## Coming to R
+
+Coming from:
+
+-   **Stata:** <http://www.princeton.edu/~otorres/RStata.pdf>
+-   **SAS/SPSS:** <http://www.et.bs.ehu.es/~etptupaf/pub/R/RforSAS&SPSSusers.pdf>
+-   **matlab:** <http://www.math.umaine.edu/~hiebeler/comp/matlabR.pdf>
+-   **Python:** <http://mathesaurus.sourceforge.net/matlab-python-xref.pdf>
+
+## What is R?
+
+R is a programming language designed for statistical computing. Notable characteristics include:
+
+-   Vast capabilities, wide range of statistical and graphical techniques
+-   Very popular in academia, growing popularity in business: <http://r4stats.com/articles/popularity/>
+-   Written primarily by statisticians
+-   FREE (no cost, open source)
+-   Excellent community support: mailing list, blogs, tutorials
+-   Easy to extend by writing new functions
+
+## R GUI alternatives (terminal default)
+
+![img](images/Rgui.png)
+
+## R GUI alternatives (OS X default)
+
+![img](images/Rosx_main.png)
+
+## R GUI alternatives (OS X default)
+
+![img](images/Rosx_edit.png)
+
+## R GUI Alternatives (Emacs with ESS)
+
+![img](images/emacs.png)
+
+Emacs + ESS is a very powerful combination, but can be difficult to set up
+
+## R GUI Alternatives (Rstudio on Mac)
+
+![img](images/Rstudio.png)
+
+Rstudio has many useful features, including parentheses matching and auto-completion
+
+## Things to keep in mind
+
+-   Case sensitive, like Stata (unlike SAS)
+-   Comments can be put almost anywhere, starting with a hash mark ('`#`'); everything to the end of the line is a comment
+-   The command prompt "`>`" indicates that R is ready to receive commands
+-   If a command is not complete at the end of a line, R will give a different prompt, '`+`' by default
+-   Parentheses must always match (first thing to check if you get an error)
+-   R Does not care about spaces between commands or arguments
+-   Names should start with a letter and should not contain spaces
+-   Can use "." in object names (e.g., "my.data")
+-   Use forward slash ("/") instead of backslash in path names, even on Windows
+
+# Data and Functions
+
+## Assignment
+
+Values can be assigned names and used in subsequent operations
+
+-   The `<-` operator (less than followed by a dash) is used to save values
+-   The name on the left gets the value on the right.
+
+```{r}
+x <- 10 # Assign the value 10 to a variable named x
+x + 1 # Add 1 to x
+y <- x + 1 # Assign y the value x + 1
+y
+```
+
+Saved variables can be listed, overwritten and deleted
+
+```{r}
+ls() # List variables in workspace
+x # Print the value of x
+x <- 100 # Overwrite x. Note that no warning is given!
+x
+rm(x) # Delete x
+ls()
+```
+
+## Functions
+
+Using R is mostly about applying **functions** to **variables**. Functions
+
+-   take **variable(s)** as input **argument(s)**
+-   perform operations
+-   **return** values which can be **assigned**
+-   optionally perform side-effects such as writing a file to disk or opening a graphics window
+
+The general form for calling R functions is 
+
+    FunctionName(arg.1, arg.2, ... arg.n)
+
+Arguments can be matched by position or name
+
+Examples:
+
+```{r}
+#?sqrt
+a <- sqrt(y) # Call the sqrt function with argument x=y
+round(a, digits = 2) # Call round() with arguments x=x and digits=2
+# Functions can be nested so an alternative is
+round(sqrt(y), digits = 5) # Take sqrt of a and round
+```
+
+# Administration
+
+## Asking R for help
+
+R has extensive built-in documentation that can be accessed through R commands or through the GUI.
+
+-   Start html help, search/browse using web browser
+    -   at the R console:
+        
+            help.start()
+    
+    -   or use the help menu from you GUI
+
+-   Look up the documentation for a function
+    
+        help(plot)
+    
+        ?kmeans
+
+-   Look up documentation for a package
+    
+        help(package="stats")
+
+-   Search documentation from R (not always the best way&#x2026; google often works better)
+    
+        help.search("classification")
+
+## R packages and libraries
+
+There are thousands of R packages that extend R's capabilities.
+
+-   To view available packages: 
+    
+        library()
+
+-   To see what packages are loaded: 
+    
+        search()
+
+-   To load a package: 
+    
+        library("car")
+
+-   Install new package:
+    
+        install.packages("stringdist")
+
+# Loading Data
+
+## The gss dataset
+
+The next few examples use a subset of the General Social Survey data set. The variables in this subset include
+
+```{r}
+head(read.csv("datasets/gssInfo.csv")) 
+#see gssInfo.csv for rest of the variable descriptions
+```
+
+## The "working directory" and listing files
+
+R knows the directory it was started in, and refers to this as the "working directory".
+
+```{r eval=FALSE}
+setwd("working_directory")
+```
+
+We can also set the working directory using paths relative to the current working directory:
+
+```{r}
+getwd() # get the current working directory
+setwd("dataSets") # set wd to the dataSets folder
+getwd()
+setwd("..") # set wd to enclosing folder ("up")
+```
+
+It can be convenient to list files in a directory without leaving R
+
+```{r}
+list.files("dataSets") # list files in the dataSets folder
+# list.files("dataSets", pattern = ".csv") # restrict to .csv files
+```
+
+## Importing data from files the hard way
+
+In order to read data from a file, you have to know what kind of file
+it is.  The table below lists the functions needed to import data from common file formats.
+
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="left" />
+
+<col  class="left" />
+
+<col  class="left" />
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="left">data type</th>
+<th scope="col" class="left">function</th>
+<th scope="col" class="left">package</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td class="left">comma separated (.csv)</td>
+<td class="left">read.csv()</td>
+<td class="left">utils (default)</td>
+</tr>
+
+
+<tr>
+<td class="left">other delimited formats</td>
+<td class="left">read.table()</td>
+<td class="left">utils (default)</td>
+</tr>
+
+
+<tr>
+<td class="left">Stata version 7-12 (.dta)</td>
+<td class="left">read.dta()</td>
+<td class="left">foreign</td>
+</tr>
+
+
+<tr>
+<td class="left">Stata version 13-14 (.dta)</td>
+<td class="left">read<sub>dta</sub>()</td>
+<td class="left">haven</td>
+</tr>
+
+
+<tr>
+<td class="left">SPSS (.sav)</td>
+<td class="left">read.spss()</td>
+<td class="left">foreign</td>
+</tr>
+
+
+<tr>
+<td class="left">SAS (.sas7bdat)</td>
+<td class="left">read.sas7bdat()</td>
+<td class="left">sas7bdat</td>
+</tr>
+
+
+<tr>
+<td class="left">Excel (.xls, .xlsx)</td>
+<td class="left">readWorksheetFromFile()</td>
+<td class="left">XLConnect</td>
+</tr>
+</tbody>
+</table>
+
+## Importing data from files the hard way
+
+Examples:
+
+```{r}
+# read gss data from the gss.rds R file
+gss_rds <- readRDS("dataSets/gss.rds")
+# read gss data from the gss.csv comma separated file
+gss_csv <- read.csv("dataSets/gss.csv") # read gss data
+# read a Stata dataset from gss.dta 
+library(foreign) # load foreign data functions
+gss_dta <- read.dta(file = "dataSets/gss.dta")
+```
+
+## Importing data from files the easy way
+
+In order to read data from a file, you usually have to know what kind of file it is. The table below lists some common data types.
+
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="left" />
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="left">Common data types</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td class="left">comma separated (.csv)</td>
+</tr>
+
+
+<tr>
+<td class="left">Stata (.dta)</td>
+</tr>
+
+
+<tr>
+<td class="left">SPSS (.sav)</td>
+</tr>
+
+
+<tr>
+<td class="left">SAS (.sas7bdat)</td>
+</tr>
+
+
+<tr>
+<td class="left">Excel (.xls, .xlsx)</td>
+</tr>
+</tbody>
+</table>
+
+## Importing data from files the easy way
+
+`rio` is smart enough to recognize most common file formats for us using the `import()` function.
+
+```{r}
+## install and load the rio package
+# install.packages("rio")
+library(rio)
+## import data from a variety of formats
+# read gss data from the gss.rds R file
+gss <- import("dataSets/gss.rds")
+# read gss data from the gss.csv comma separated file
+gss2 <- import("dataSets/gss.csv")
+# read a Stata dataset from gss.dta 
+gss3 <- import("dataSets/gss.dta")
+```
+
+## Saving and loading R  workspaces
+
+In addition to importing individual datasets, R can save and load entire workspaces
+
+-   Save our entire workspace
+
+```{r}
+ls() # list objects in our workspace
+save.image(file = "myWorkspace.RData") # save workspace 
+rm(list=ls()) # remove all objects from our workspace 
+ls() # list stored objects to make sure they are deleted
+```
+
+-   Load the "myWorkspace.RData" file and check that it is restored
+
+```{r}
+load("myWorkspace.RData") # load myWorkspace.RData
+ls() # list objects
+```
+
+When you close R you will be asked if you want to save your workspace &#x2013; if you choose yes then your workspace will be restored next time you start R.
+
+# Data Manipulation
+
+## `data.frame` objects
+
+-   Usually data read into R will be stored as a **`data.frame`**
+
+-   A `data.frame` is a list of vectors of equal length
+    -   Each vector in the list forms a column
+    -   Each column can be a differnt type of vector
+    -   Often the columns are variables and the rows are observations
+
+-   A data.frame has two dimensions corresponding the number of rows and the number of columns (in that order)
+
+## Extracting subsets of `data.frames`
+
+You can extract subsets of data.frames using the `subset()` function<sup><a id="fnr.1" name="fnr.1" class="footref" href="#fn.1">1</a></sup>. Use the `select` argument to select columns:
+
+
+```{r}
+# selecting specifig columns
+head(# first n rows
+  subset(gss,            
+         select = 1:4 # column 1 to 5
+         ),
+  n = 10 # show first 10 rows
+  )
+```
+
+and the `subset` argument to select rows:
+
+```{r}
+subset(gss,
+       # rows where age > 90
+       subset = age > 90,
+       ## sex and age columns
+       select = c("sex", "age"))
+## the $ operator can be used to extract a single column
+str(gss$age)
+```
+
+## Extracting subsets of `data.frames`
+
+In the previous example we used `>` to select rows where age was greater than 90. Other relational and logical operators are listed below.
+
+-   **==:** equal to
+-   **!=:** not equal to
+-   **>:** greater than
+-   **<:** less than
+-   **>=:** greater than or equal to
+-   **<=:** less than or equal to
+-   **&:** and
+-   **|:** or
+
+## Transforming data.frames
+
+You can modify data.frames using the `transform()` function. 
+
+```{r}
+## creating new variable mean centered age
+gss <- transform(gss, ageC = age - mean(age))
+##education difference between wifes and husbands
+gss <- transform(gss, educ.diff = wifeduc - husbeduc)
+gss$wifeduc_comp <- ifelse(
+  is.na(gss$wifeduc), # condition
+  mean(gss$wifeduc, na.rm = TRUE), # value if condition met
+  gss$wifeduc) # value otherwise
+
+## examine our newly created variables
+head(subset(gss,
+            select = c("age", "ageC", "wifeduc", "wifeduc_comp",
+                       "husbeduc", "educ.diff")), n = 8)
+```
+
+Note that `transform` is a convenience function; see `?Extract` for a more powerful way to modify data.frames.
+
+## Exporting Data
+
+Now that we have made some changes to our GSS data set, we might want to save those changes to a file. Everything we have done so far has only modified the data in R; the files have remained unchanged. 
+
+```{r}
+# write data to a .csv file
+write.csv(gss, file = "gss.csv")
+# write data to a Stata file
+write.dta(gss, file = "gss.dta")
+# write data to an R file
+saveRDS(gss, file = "gss.rds")
+```
+
+# Stats and Graphs
+
+## Basic statistics
+
+Descriptive statistics of single variables are straightforward:
+
+```{r}
+mean(gss$educ) # calculate mean value of education
+sd(gss$educ) # calculate standard deviation of x
+## Calculate min, max, quantiles, mean of educ, age, and ageC
+summary(subset(gss, select = c("educ", "age", "ageC")))
+```
+
+Some of these functions (e.g., `summary`) will also work with data.frames and other types of objects, others (such as `sd`) will not.
+
+## Counts and proportions
+
+Start by using the `table()` function to tabulate counts, then perform additional computations if needed
+
+```{r}
+sex.counts <- table(gss$sex) # tabulate sex categories
+sex.counts
+## Convert to proportions
+prop.table(sex.counts)
+```
+
+Add variables for crosstabs
+
+```{r}
+table(subset(gss, select = c("sex", "happy"))) # crosstab marital X happy
+```
+
+## Statistics by classification factors<a id="sec-6-3" name="sec-6-3"></a>
+
+The `by()` function can be used to perform a calculation separately for each level of a classifying variable
+
+```{r}
+by(subset(gss, select = c("income", "educ")),
+   INDICES = gss["sex"],
+   FUN = summary)
+```
+
+## Correlations
+
+Let's look at correlations among between age, income, and education
+
+```{r}
+cor(subset(gss, select =  c("age", "incomdol", "educ")))
+```
+
+For significance tests, use cor.test()
+
+```{r}
+with(gss, cor.test(age, educ))
+```
+
+## Multiple regression
+
+Modeling functions generally use the *formula* interface whith DV on left followed by "~" followed by predictors&#x2013;for details see
+
+    help("formula")
+
+-   Predict the number of hours individuals spend on email (`emailhrs`)
+
+```{r}
+m1 <- lm(educ ~ sex + age, data = gss)
+summary(m1)
+```
+
+## Save R output to a file
+
+Earlier we learned how to write a data set to a file. But what if we want to write something that isn't in a nice rectangular format, like the results of our regression model? For that we can use the `sink()` function:
+
+
+```{r}
+sink(file="output.txt", split = TRUE) # start logging
+print("This is the result from model 1\n")
+print(summary(m1))
+sink() # sink with no arguments turns logging off
+```
+
+## Basic graphics: Frequency bars
+
+Thanks to classes and methods, you can `plot()` many  kinds of objects:
+
+```{r}
+plot(gss$marital) # Plot a factor
+```
+
+## Basic graphics: Boxplots by group
+
+Thanks to classes and methods, you can `plot()` many kinds of objects:
+
+```{r}
+with(gss,
+     plot(marital, educ)) # Plot ordinal by numeric
+```
+
+## Basic graphics: Mosaic chart
+
+Thanks to classes and methods, you can `plot()` many kinds of objects:
+
+```{r}
+with(gss, # Plot factor X factor
+     plot(marital, happy))
+```
+
+# Wrap-up
+
+## Additional resources
+
+-   IQSS workshops: <http://projects.iq.harvard.edu/rtc/filter_by/workshops>
+
+-   IQSS statistical consulting: <http://rtc.iq.harvard.edu>
+
+-   Software (all free!):
+    -   R and R package download: <http://cran.r-project.org>
+    -   Rstudio download: <http://rstudio.org>
+    -   ESS (emacs R package): <http://ess.r-project.org/>
+
+-   Online tutorials
+    -   <http://www.codeschool.com/courses/try-r>
+    -   <http://www.datamind.org>
+
+-   Getting help:
+    -   Documentation and tutorials: <http://cran.r-project.org/other-docs.html>
+    -   Recommended R packages by topic: <http://cran.r-project.org/web/views/>
+    -   Mailing list: <https://stat.ethz.ch/mailman/listinfo/r-help>
+    -   StackOverflow: <http://stackoverflow.com/questions/tagged/r>
+

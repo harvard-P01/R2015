@@ -2,16 +2,14 @@
 pagetitle: P01 - Data linkage
 ---
 
-## Data linkage
+# Merging
 
-### Merging with R
+# Working with databases
 
-### Working with databases
+# Working with geospatial data
 
-### Working with geospatial data
+# Cloud-computing
 
-### Cloud-computing
+# Lab session
 
-### Lab session
-
-- Select and implement the most efficient method to merge datasets of different scales
+-   Select and implement the most efficient method to merge datasets of different scales

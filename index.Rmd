@@ -14,12 +14,12 @@ The classes will be organized in 6 sessions of 1:45 hours and 6 laboratory sessi
 
 Every session will focus on a specific way of improving R code by:
 
-turning it into an R package,
-using efficient data manipulation grammars,
-linking data from difference sources,
-creating rich graphics,
-systemizing your workflow,
-adding new features via Zelig.
+- turning it into an R package,
+- using efficient data manipulation grammars,
+- linking data from difference sources,
+- creating rich graphics,
+- systemizing your workflow,
+- adding new features via Zelig.
 The lab sessions will give you the opportunity to integrate these improvements into your own R code.
 
 Along the way, we will provide a bag of tricks, for example how to make this interactive map with 4 lines of code:
