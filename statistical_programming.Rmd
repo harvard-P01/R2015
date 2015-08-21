@@ -147,7 +147,7 @@ fibo_memo <- function(n) {
 system.time(print(fibo_memo(35)))
 ```
 
-## Basic type
+## Basic types
 
 ## The STL
 
