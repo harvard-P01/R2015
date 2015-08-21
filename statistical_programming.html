@@ -12,12 +12,12 @@
 
 <title>P01 - Statistical programming</title>
 
-<script src="libs/jquery-1.11.0/jquery.min.js"></script>
+<script src="libs/jquery/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<link href="libs/bootstrap-3.3.1/css/bootstrap.min.css" rel="stylesheet" />
-<script src="libs/bootstrap-3.3.1/js/bootstrap.min.js"></script>
-<script src="libs/bootstrap-3.3.1/shim/html5shiv.min.js"></script>
-<script src="libs/bootstrap-3.3.1/shim/respond.min.js"></script>
+<link href="libs/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+<script src="libs/bootstrap/js/bootstrap.min.js"></script>
+<script src="libs/bootstrap/shim/html5shiv.min.js"></script>
+<script src="libs/bootstrap/shim/respond.min.js"></script>
 
 <style type="text/css">code{white-space: pre;}</style>
 <link rel="stylesheet"
@@ -100,9 +100,9 @@ img {
       <a class="list-group-item" href="./">Introduction</a>
       <a class="list-group-item" href="refresheR.html">refreshR</a>
       <a class="list-group-item" href="creating_packages.html">Creating R packages</a>
-      <a class="list-group-item" href="data_linkage.html">Data linkage</a>
       <a class="list-group-item" href="data_visualization.html">Data visualization</a>
       <a class="list-group-item" href="data_wrangling.html">Data wrangling</a>
+      <a class="list-group-item" href="data_linkage.html">Data linkage</a>
       <a class="list-group-item" href="statistical_programming.html">Statistical programming</a>
       <a class="list-group-item" href="zelig.html">Zelig</a>
     </div>
@@ -234,12 +234,12 @@ int fibo(const int n) {
 &#39; )</code></pre>
 <pre class="r"><code>fibRcpp</code></pre>
 <pre><code>## function (n) 
-## .Primitive(&quot;.Call&quot;)(&lt;pointer: 0x10d5dfbe0&gt;, n)</code></pre>
+## .Primitive(&quot;.Call&quot;)(&lt;pointer: 0x112e21be0&gt;, n)</code></pre>
 <p>Performance is much better:</p>
 <pre class="r"><code>system.time(print(fibRcpp(35)))</code></pre>
 <pre><code>## [1] 9227465</code></pre>
 <pre><code>##    user  system elapsed 
-##   0.063   0.000   0.062</code></pre>
+##   0.064   0.000   0.064</code></pre>
 </div>
 <div id="using-r-in-a-smarter-way" class="section level2">
 <h2>Using R in a smarter way</h2>
@@ -249,7 +249,7 @@ int fibo(const int n) {
 system.time(print(fibonacci(35)))</code></pre>
 <pre><code>## [1] 9227465</code></pre>
 <pre><code>##    user  system elapsed 
-##   0.001   0.000   0.001</code></pre>
+##   0.000   0.000   0.001</code></pre>
 </div>
 <div id="memoization-refactoring-with-globals-not-there-yet" class="section level3">
 <h3>Memoization: refactoring (with globals… not there yet!)</h3>

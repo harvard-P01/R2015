@@ -100,9 +100,9 @@ img {
       <a class="list-group-item" href="./">Introduction</a>
       <a class="list-group-item" href="refresheR.html">refreshR</a>
       <a class="list-group-item" href="creating_packages.html">Creating R packages</a>
-      <a class="list-group-item" href="data_linkage.html">Data linkage</a>
       <a class="list-group-item" href="data_visualization.html">Data visualization</a>
       <a class="list-group-item" href="data_wrangling.html">Data wrangling</a>
+      <a class="list-group-item" href="data_linkage.html">Data linkage</a>
       <a class="list-group-item" href="statistical_programming.html">Statistical programming</a>
       <a class="list-group-item" href="zelig.html">Zelig</a>
     </div>
@@ -424,13 +424,13 @@ dt_flights[order(-arr_delay)]</code></pre>
 <h2>Performance (TBC)</h2>
 <pre class="r"><code>system.time(with(df_flights, df_flights[order(-arr_delay), ]))</code></pre>
 <pre><code>##    user  system elapsed 
-##   0.223   0.011   0.234</code></pre>
+##   0.217   0.012   0.229</code></pre>
 <pre class="r"><code>system.time(arrange(flights, desc(arr_delay)))</code></pre>
 <pre><code>##    user  system elapsed 
-##   0.151   0.004   0.154</code></pre>
+##   0.152   0.004   0.156</code></pre>
 <pre class="r"><code>system.time(dt_flights[order(-arr_delay)])</code></pre>
 <pre><code>##    user  system elapsed 
-##   0.088   0.002   0.090</code></pre>
+##   0.078   0.001   0.080</code></pre>
 </div>
 <div id="select-columns" class="section level2">
 <h2>Select columns</h2>

@@ -12,12 +12,12 @@
 
 <title>P01 - refresheR</title>
 
-<script src="libs/jquery-1.11.0/jquery.min.js"></script>
+<script src="libs/jquery/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<link href="libs/bootstrap-3.3.1/css/bootstrap.min.css" rel="stylesheet" />
-<script src="libs/bootstrap-3.3.1/js/bootstrap.min.js"></script>
-<script src="libs/bootstrap-3.3.1/shim/html5shiv.min.js"></script>
-<script src="libs/bootstrap-3.3.1/shim/respond.min.js"></script>
+<link href="libs/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+<script src="libs/bootstrap/js/bootstrap.min.js"></script>
+<script src="libs/bootstrap/shim/html5shiv.min.js"></script>
+<script src="libs/bootstrap/shim/respond.min.js"></script>
 
 <style type="text/css">code{white-space: pre;}</style>
 <link rel="stylesheet"
@@ -100,9 +100,9 @@ img {
       <a class="list-group-item" href="./">Introduction</a>
       <a class="list-group-item" href="refresheR.html">refreshR</a>
       <a class="list-group-item" href="creating_packages.html">Creating R packages</a>
-      <a class="list-group-item" href="data_linkage.html">Data linkage</a>
       <a class="list-group-item" href="data_visualization.html">Data visualization</a>
       <a class="list-group-item" href="data_wrangling.html">Data wrangling</a>
+      <a class="list-group-item" href="data_linkage.html">Data linkage</a>
       <a class="list-group-item" href="statistical_programming.html">Statistical programming</a>
       <a class="list-group-item" href="zelig.html">Zelig</a>
     </div>
@@ -811,21 +811,21 @@ print(&quot;This is the result from model 1\n&quot;)</code></pre>
 <h2>Basic graphics: Frequency bars</h2>
 <p>Thanks to classes and methods, you can <code>plot()</code> many kinds of objects:</p>
 <pre class="r"><code>plot(gss$marital) # Plot a factor</code></pre>
-<p><img src="refresheR_files/figure-html/unnamed-chunk-24-1.png" /></p>
+<p><img src="refresheR_files/figure-html/unnamed-chunk-24-1.png" title="" alt="" width="100%" /></p>
 </div>
 <div id="basic-graphics-boxplots-by-group" class="section level2">
 <h2>Basic graphics: Boxplots by group</h2>
 <p>Thanks to classes and methods, you can <code>plot()</code> many kinds of objects:</p>
 <pre class="r"><code>with(gss,
      plot(marital, educ)) # Plot ordinal by numeric</code></pre>
-<p><img src="refresheR_files/figure-html/unnamed-chunk-25-1.png" /></p>
+<p><img src="refresheR_files/figure-html/unnamed-chunk-25-1.png" title="" alt="" width="100%" /></p>
 </div>
 <div id="basic-graphics-mosaic-chart" class="section level2">
 <h2>Basic graphics: Mosaic chart</h2>
 <p>Thanks to classes and methods, you can <code>plot()</code> many kinds of objects:</p>
 <pre class="r"><code>with(gss, # Plot factor X factor
      plot(marital, happy))</code></pre>
-<p><img src="refresheR_files/figure-html/unnamed-chunk-26-1.png" /></p>
+<p><img src="refresheR_files/figure-html/unnamed-chunk-26-1.png" title="" alt="" width="100%" /></p>
 </div>
 </div>
 <div id="wrap-up" class="section level1">
