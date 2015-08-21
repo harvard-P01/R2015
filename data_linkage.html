@@ -12,12 +12,12 @@
 
 <title>P01 - Data linkage</title>
 
-<script src="libs/jquery/jquery.min.js"></script>
+<script src="libs/jquery-1.11.0/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<link href="libs/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
-<script src="libs/bootstrap/js/bootstrap.min.js"></script>
-<script src="libs/bootstrap/shim/html5shiv.min.js"></script>
-<script src="libs/bootstrap/shim/respond.min.js"></script>
+<link href="libs/bootstrap-3.3.1/css/bootstrap.min.css" rel="stylesheet" />
+<script src="libs/bootstrap-3.3.1/js/bootstrap.min.js"></script>
+<script src="libs/bootstrap-3.3.1/shim/html5shiv.min.js"></script>
+<script src="libs/bootstrap-3.3.1/shim/respond.min.js"></script>
 
 <style type="text/css">code{white-space: pre;}</style>
 <link rel="stylesheet"
@@ -120,9 +120,22 @@ img {
 
 <div id="TOC">
 <ul>
-<li><a href="#merging">Merging</a></li>
-<li><a href="#working-with-databases">Working with databases</a></li>
-<li><a href="#working-with-geospatial-data">Working with geospatial data</a></li>
+<li><a href="#merging">Merging</a><ul>
+<li><a href="#base-r">Base R</a></li>
+<li><a href="#dplyr"><code>dplyr</code></a></li>
+<li><a href="#data.table"><code>data.table</code></a></li>
+</ul></li>
+<li><a href="#working-with-databases">Working with databases</a><ul>
+<li><a href="#rdbms">RDBMS</a></li>
+<li><a href="#sql">SQL</a></li>
+<li><a href="#sqlite">sqlite</a></li>
+<li><a href="#postgresql">PostGresql</a></li>
+<li><a href="#nodb">NoDB</a></li>
+</ul></li>
+<li><a href="#working-with-geospatial-data">Working with geospatial data</a><ul>
+<li><a href="#sp-package"><code>sp</code> package</a></li>
+<li><a href="#postgis">PostGIS</a></li>
+</ul></li>
 <li><a href="#cloud-computing">Cloud-computing</a></li>
 <li><a href="#lab-session">Lab session</a></li>
 </ul>
@@ -130,15 +143,281 @@ img {
 
 <div id="merging" class="section level1">
 <h1>Merging</h1>
+<div id="base-r" class="section level2">
+<h2>Base R</h2>
+<pre class="r"><code>authors &lt;- data.frame(
+  surname = I(c(&quot;Tukey&quot;, &quot;Venables&quot;, &quot;Tierney&quot;, &quot;Ripley&quot;, &quot;McNeil&quot;)),
+  nationality = c(&quot;US&quot;, &quot;Australia&quot;, &quot;US&quot;, &quot;UK&quot;, &quot;Australia&quot;),
+  deceased = c(&quot;yes&quot;, rep(&quot;no&quot;, 4)))
+books &lt;- data.frame(
+  name = I(c(&quot;Tukey&quot;, &quot;Venables&quot;, &quot;Tierney&quot;,
+             &quot;Ripley&quot;, &quot;Ripley&quot;, &quot;McNeil&quot;, &quot;R Core&quot;)),
+  title = c(&quot;Exploratory Data Analysis&quot;,
+            &quot;Modern Applied Statistics ...&quot;,
+            &quot;LISP-STAT&quot;,
+            &quot;Spatial Statistics&quot;, &quot;Stochastic Simulation&quot;,
+            &quot;Interactive Data Analysis&quot;,
+            &quot;An Introduction to R&quot;),
+  other.author = c(NA, &quot;Ripley&quot;, NA, NA, NA, NA,
+                   &quot;Venables &amp; Smith&quot;))</code></pre>
+<pre class="r"><code>authors</code></pre>
+<pre><code>##    surname nationality deceased
+## 1    Tukey          US      yes
+## 2 Venables   Australia       no
+## 3  Tierney          US       no
+## 4   Ripley          UK       no
+## 5   McNeil   Australia       no</code></pre>
+<pre class="r"><code>books</code></pre>
+<pre><code>##       name                         title     other.author
+## 1    Tukey     Exploratory Data Analysis             &lt;NA&gt;
+## 2 Venables Modern Applied Statistics ...           Ripley
+## 3  Tierney                     LISP-STAT             &lt;NA&gt;
+## 4   Ripley            Spatial Statistics             &lt;NA&gt;
+## 5   Ripley         Stochastic Simulation             &lt;NA&gt;
+## 6   McNeil     Interactive Data Analysis             &lt;NA&gt;
+## 7   R Core          An Introduction to R Venables &amp; Smith</code></pre>
+<pre class="r"><code>merge(authors, books, by.x = &quot;surname&quot;, by.y = &quot;name&quot;)</code></pre>
+<pre><code>##    surname nationality deceased                         title other.author
+## 1   McNeil   Australia       no     Interactive Data Analysis         &lt;NA&gt;
+## 2   Ripley          UK       no            Spatial Statistics         &lt;NA&gt;
+## 3   Ripley          UK       no         Stochastic Simulation         &lt;NA&gt;
+## 4  Tierney          US       no                     LISP-STAT         &lt;NA&gt;
+## 5    Tukey          US      yes     Exploratory Data Analysis         &lt;NA&gt;
+## 6 Venables   Australia       no Modern Applied Statistics ...       Ripley</code></pre>
+<pre class="r"><code>merge(books, authors, by.x = &quot;name&quot;, by.y = &quot;surname&quot;)</code></pre>
+<pre><code>##       name                         title other.author nationality deceased
+## 1   McNeil     Interactive Data Analysis         &lt;NA&gt;   Australia       no
+## 2   Ripley            Spatial Statistics         &lt;NA&gt;          UK       no
+## 3   Ripley         Stochastic Simulation         &lt;NA&gt;          UK       no
+## 4  Tierney                     LISP-STAT         &lt;NA&gt;          US       no
+## 5    Tukey     Exploratory Data Analysis         &lt;NA&gt;          US      yes
+## 6 Venables Modern Applied Statistics ...       Ripley   Australia       no</code></pre>
+<pre class="r"><code>merge(authors, books, by.x = &quot;surname&quot;, by.y = &quot;name&quot;, all = TRUE)</code></pre>
+<pre><code>##    surname nationality deceased                         title
+## 1   McNeil   Australia       no     Interactive Data Analysis
+## 2   R Core        &lt;NA&gt;     &lt;NA&gt;          An Introduction to R
+## 3   Ripley          UK       no            Spatial Statistics
+## 4   Ripley          UK       no         Stochastic Simulation
+## 5  Tierney          US       no                     LISP-STAT
+## 6    Tukey          US      yes     Exploratory Data Analysis
+## 7 Venables   Australia       no Modern Applied Statistics ...
+##       other.author
+## 1             &lt;NA&gt;
+## 2 Venables &amp; Smith
+## 3             &lt;NA&gt;
+## 4             &lt;NA&gt;
+## 5             &lt;NA&gt;
+## 6             &lt;NA&gt;
+## 7           Ripley</code></pre>
+<pre class="r"><code>merge(authors, books, by.x = &quot;surname&quot;, by.y = &quot;name&quot;, all.x = TRUE)</code></pre>
+<pre><code>##    surname nationality deceased                         title other.author
+## 1   McNeil   Australia       no     Interactive Data Analysis         &lt;NA&gt;
+## 2   Ripley          UK       no            Spatial Statistics         &lt;NA&gt;
+## 3   Ripley          UK       no         Stochastic Simulation         &lt;NA&gt;
+## 4  Tierney          US       no                     LISP-STAT         &lt;NA&gt;
+## 5    Tukey          US      yes     Exploratory Data Analysis         &lt;NA&gt;
+## 6 Venables   Australia       no Modern Applied Statistics ...       Ripley</code></pre>
+<pre class="r"><code>merge(authors, books, by.x = &quot;surname&quot;, by.y = &quot;name&quot;, all.y = TRUE)</code></pre>
+<pre><code>##    surname nationality deceased                         title
+## 1   McNeil   Australia       no     Interactive Data Analysis
+## 2   R Core        &lt;NA&gt;     &lt;NA&gt;          An Introduction to R
+## 3   Ripley          UK       no            Spatial Statistics
+## 4   Ripley          UK       no         Stochastic Simulation
+## 5  Tierney          US       no                     LISP-STAT
+## 6    Tukey          US      yes     Exploratory Data Analysis
+## 7 Venables   Australia       no Modern Applied Statistics ...
+##       other.author
+## 1             &lt;NA&gt;
+## 2 Venables &amp; Smith
+## 3             &lt;NA&gt;
+## 4             &lt;NA&gt;
+## 5             &lt;NA&gt;
+## 6             &lt;NA&gt;
+## 7           Ripley</code></pre>
+</div>
+<div id="dplyr" class="section level2">
+<h2><code>dplyr</code></h2>
+<pre class="r"><code>library(dplyr)</code></pre>
+<pre><code>## 
+## Attaching package: &#39;dplyr&#39;
+## 
+## The following objects are masked from &#39;package:stats&#39;:
+## 
+##     filter, lag
+## 
+## The following objects are masked from &#39;package:base&#39;:
+## 
+##     intersect, setdiff, setequal, union</code></pre>
+<pre class="r"><code>dp_authors &lt;- tbl_df(authors)
+dp_books &lt;- tbl_df((books))
+inner_join(dp_books, dp_authors, by = c(&quot;name&quot; = &quot;surname&quot;))</code></pre>
+<pre><code>## Source: local data frame [6 x 5]
+## 
+##       name                         title other.author nationality deceased
+## 1    Tukey     Exploratory Data Analysis           NA          US      yes
+## 2 Venables Modern Applied Statistics ...       Ripley   Australia       no
+## 3  Tierney                     LISP-STAT           NA          US       no
+## 4   Ripley            Spatial Statistics           NA          UK       no
+## 5   Ripley         Stochastic Simulation           NA          UK       no
+## 6   McNeil     Interactive Data Analysis           NA   Australia       no</code></pre>
+<pre class="r"><code>right_join(dp_books, dp_authors, by = c(&quot;name&quot; = &quot;surname&quot;))</code></pre>
+<pre><code>## Source: local data frame [6 x 5]
+## 
+##       name                         title other.author nationality deceased
+## 1    Tukey     Exploratory Data Analysis           NA          US      yes
+## 2 Venables Modern Applied Statistics ...       Ripley   Australia       no
+## 3  Tierney                     LISP-STAT           NA          US       no
+## 4   Ripley            Spatial Statistics           NA          UK       no
+## 5   Ripley         Stochastic Simulation           NA          UK       no
+## 6   McNeil     Interactive Data Analysis           NA   Australia       no</code></pre>
+<pre class="r"><code>left_join(dp_books, dp_authors, by = c(&quot;name&quot; = &quot;surname&quot;))</code></pre>
+<pre><code>## Source: local data frame [7 x 5]
+## 
+##       name                         title     other.author nationality
+## 1    Tukey     Exploratory Data Analysis               NA          US
+## 2 Venables Modern Applied Statistics ...           Ripley   Australia
+## 3  Tierney                     LISP-STAT               NA          US
+## 4   Ripley            Spatial Statistics               NA          UK
+## 5   Ripley         Stochastic Simulation               NA          UK
+## 6   McNeil     Interactive Data Analysis               NA   Australia
+## 7   R Core          An Introduction to R Venables &amp; Smith          NA
+## Variables not shown: deceased (fctr)</code></pre>
+</div>
+<div id="data.table" class="section level2">
+<h2><code>data.table</code></h2>
+<ul>
+<li>Same as base, but <em>faster</em></li>
+<li>Keys can be used</li>
+</ul>
+<pre class="r"><code>library(data.table)</code></pre>
+<pre><code>## 
+## Attaching package: &#39;data.table&#39;
+## 
+## The following objects are masked from &#39;package:dplyr&#39;:
+## 
+##     between, last</code></pre>
+<pre class="r"><code>dt_authors &lt;- data.table(authors)
+dt_books &lt;- data.table((books))
+setkey(dt_authors, surname)
+setkey(dt_books, name)</code></pre>
+<pre class="r"><code>dt_authors[dt_books]</code></pre>
+<pre><code>##     surname nationality deceased                         title
+## 1:   McNeil   Australia       no     Interactive Data Analysis
+## 2:   R Core          NA       NA          An Introduction to R
+## 3:   Ripley          UK       no            Spatial Statistics
+## 4:   Ripley          UK       no         Stochastic Simulation
+## 5:  Tierney          US       no                     LISP-STAT
+## 6:    Tukey          US      yes     Exploratory Data Analysis
+## 7: Venables   Australia       no Modern Applied Statistics ...
+##        other.author
+## 1:               NA
+## 2: Venables &amp; Smith
+## 3:               NA
+## 4:               NA
+## 5:               NA
+## 6:               NA
+## 7:           Ripley</code></pre>
+<pre class="r"><code>dt_books[dt_authors]</code></pre>
+<pre><code>##        name                         title other.author nationality
+## 1:   McNeil     Interactive Data Analysis           NA   Australia
+## 2:   Ripley            Spatial Statistics           NA          UK
+## 3:   Ripley         Stochastic Simulation           NA          UK
+## 4:  Tierney                     LISP-STAT           NA          US
+## 5:    Tukey     Exploratory Data Analysis           NA          US
+## 6: Venables Modern Applied Statistics ...       Ripley   Australia
+##    deceased
+## 1:       no
+## 2:       no
+## 3:       no
+## 4:       no
+## 5:      yes
+## 6:       no</code></pre>
+</div>
 </div>
 <div id="working-with-databases" class="section level1">
 <h1>Working with databases</h1>
+<div id="rdbms" class="section level2">
+<h2>RDBMS</h2>
+<ul>
+<li>Relational database management system</li>
+<li>IBM, early 1970’s</li>
+</ul>
+</div>
+<div id="sql" class="section level2">
+<h2>SQL</h2>
+<ul>
+<li>Structured Query Language</li>
+</ul>
+<iframe src="https://en.wikipedia.org/wiki/SQL#Operators" width="100%" height="400px" ;">
+</iframe>
+<pre class="r"><code>library(rvest)
+html(&quot;https://en.wikipedia.org/wiki/SQL&quot;) %&gt;%
+  html_node(&quot;.wikitable&quot;) %&gt;% 
+  html_table()</code></pre>
+<pre><code>##                Operator
+## 1                     =
+## 2                    &lt;&gt;
+## 3                     &gt;
+## 4                     &lt;
+## 5                    &gt;=
+## 6                    &lt;=
+## 7               BETWEEN
+## 8                  LIKE
+## 9                    IN
+## 10         IS or IS NOT
+## 11 IS NOT DISTINCT FROM
+## 12                   AS
+##                                              Description
+## 1                                               Equal to
+## 2  Not equal to (many DBMSs accept != in addition to &lt;&gt;)
+## 3                                           Greater than
+## 4                                              Less than
+## 5                                  Greater than or equal
+## 6                                     Less than or equal
+## 7                             Between an inclusive range
+## 8                              Match a character pattern
+## 9               Equal to one of multiple possible values
+## 10                        Compare to null (missing data)
+## 11    Is equal to value or both are nulls (missing data)
+## 12      Used to change a field name when viewing results
+##                                    Example
+## 1                        Author = &#39;Alcott&#39;
+## 2                          Dept &lt;&gt; &#39;Sales&#39;
+## 3                 Hire_Date &gt; &#39;2012-01-31&#39;
+## 4                         Bonus &lt; 50000.00
+## 5                          Dependents &gt;= 2
+## 6                             Rate &lt;= 0.05
+## 7           Cost BETWEEN 100.00 AND 500.00
+## 8                  First_Name LIKE &#39;Will%&#39;
+## 9              DeptCode IN (101, 103, 209)
+## 10                     Address IS NOT NULL
+## 11 Debt IS NOT DISTINCT FROM - Receivables
+## 12        SELECT employee AS &#39;department1&#39;</code></pre>
+</div>
+<div id="sqlite" class="section level2">
+<h2>sqlite</h2>
+</div>
+<div id="postgresql" class="section level2">
+<h2>PostGresql</h2>
+</div>
+<div id="nodb" class="section level2">
+<h2>NoDB</h2>
+</div>
 </div>
 <div id="working-with-geospatial-data" class="section level1">
 <h1>Working with geospatial data</h1>
+<div id="sp-package" class="section level2">
+<h2><code>sp</code> package</h2>
+</div>
+<div id="postgis" class="section level2">
+<h2>PostGIS</h2>
+</div>
 </div>
 <div id="cloud-computing" class="section level1">
 <h1>Cloud-computing</h1>
+<ul>
+<li>AWS</li>
+</ul>
 </div>
 <div id="lab-session" class="section level1">
 <h1>Lab session</h1>

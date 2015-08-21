@@ -450,8 +450,4 @@ Compare with
 dt_mtcars[, list(6, 4)]
 ```
 
-# Databases
-
-## Supported databases
-
 # Wrap-up

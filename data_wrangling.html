@@ -148,9 +148,6 @@ img {
 </ul></li>
 <li><a href="#not-always-as-expected">Not always as expected…</a></li>
 <li><a href="#data.table-tricks"><code>data.table</code> tricks</a></li>
-<li><a href="#databases">Databases</a><ul>
-<li><a href="#supported-databases">Supported databases</a></li>
-</ul></li>
 <li><a href="#wrap-up">Wrap-up</a></li>
 </ul>
 </div>
@@ -424,13 +421,13 @@ dt_flights[order(-arr_delay)]</code></pre>
 <h2>Performance (TBC)</h2>
 <pre class="r"><code>system.time(with(df_flights, df_flights[order(-arr_delay), ]))</code></pre>
 <pre><code>##    user  system elapsed 
-##   0.217   0.012   0.229</code></pre>
+##   0.346   0.017   0.366</code></pre>
 <pre class="r"><code>system.time(arrange(flights, desc(arr_delay)))</code></pre>
 <pre><code>##    user  system elapsed 
-##   0.152   0.004   0.156</code></pre>
+##   0.171   0.004   0.175</code></pre>
 <pre class="r"><code>system.time(dt_flights[order(-arr_delay)])</code></pre>
 <pre><code>##    user  system elapsed 
-##   0.078   0.001   0.080</code></pre>
+##   0.080   0.002   0.081</code></pre>
 </div>
 <div id="select-columns" class="section level2">
 <h2>Select columns</h2>
@@ -1164,12 +1161,6 @@ dt_mtcars</code></pre>
 <pre class="r"><code>dt_mtcars[, list(6, 4)]</code></pre>
 <pre><code>##    V1 V2
 ## 1:  6  4</code></pre>
-</div>
-<div id="databases" class="section level1">
-<h1>Databases</h1>
-<div id="supported-databases" class="section level2">
-<h2>Supported databases</h2>
-</div>
 </div>
 <div id="wrap-up" class="section level1">
 <h1>Wrap-up</h1>
