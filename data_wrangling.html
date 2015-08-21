@@ -173,13 +173,18 @@ movie %&gt;%
 ## [13] &quot;Riccardo Garrone&quot;     &quot;Ida Galli&quot;            &quot;Audrey McDonald&quot;</code></pre>
 <div id="more" class="section level2">
 <h2>More ?</h2>
-<iframe src="https://en.wikipedia.org/wiki/List_of_highest-grossing_films" width="100%" height="800px" ;">
+<iframe src="https://en.wikipedia.org/wiki/List_of_highest-grossing_films" width="100%" height="400px" ;">
 </iframe>
 <pre class="r"><code>library(rvest)
 d &lt;- html(&quot;https://en.wikipedia.org/wiki/List_of_highest-grossing_films&quot;) %&gt;%
   html_node(&quot;.wikitable&quot;) %&gt;% 
   html_table() %&gt;%
   head()</code></pre>
+</div>
+<div id="the-xml-way" class="section level2">
+<h2>The XML way</h2>
+<iframe src="http://energyalmanac.ca.gov/electricity/web_qfer/Heat_Rates.php" width="100%" height="400px" ;">
+</iframe>
 <pre class="r"><code>library(XML)</code></pre>
 <pre><code>## 
 ## Attaching package: &#39;XML&#39;
@@ -188,35 +193,6 @@ d &lt;- html(&quot;https://en.wikipedia.org/wiki/List_of_highest-grossing_films&
 ## 
 ##     xml</code></pre>
 <pre class="r"><code>d &lt;- readHTMLTable(&quot;http://energyalmanac.ca.gov/electricity/web_qfer/Heat_Rates.php&quot;, which = 1)
-head(d)</code></pre>
-<pre><code>##   Category v 2014 Â                                    Company Name
-## 1        C     2014                             ACE Cogeneration Co
-## 2        C     2014                        Karnavati Holdings, Inc.
-## 3        C     2014 Los Angeles Department of Water &amp; Power (LADWP)
-## 4        C     2014                                       Rio Bravo
-## 5        C     2014                                       Rio Bravo
-## 6        C     2014         Tesoro Refining &amp; Marketing Company LLC
-##   Plant ID                                                Plant Name
-## 1    C0001 ACE Cogeneration (ACE is Argus Cogen Expansion - Retired)
-## 2    C0017                                         Argus Cogen Plant
-## 3    C0023                          Intermountain Power Project (UT)
-## 4    C0018                                          Rio Bravo Jasmin
-## 5    C0022                                            Rio Bravo Poso
-## 6    C0002                           Los Angeles Refinery - Calciner
-##         Net MWh Main MMBTU        Heat Rate
-## 1        333205    4596520 13.7948710253448
-## 2        257374   13830280 53.7361194215422
-## 3      12369820  115061800 9.30181684131216
-## 4 72667.1015625     847439 11.6619347927498
-## 5        116102    1334220 11.4917917004014
-## 6        208442    3007930 14.4305370318842</code></pre>
-</div>
-<div id="the-xml-way" class="section level2">
-<h2>The XML way</h2>
-<iframe src="http://energyalmanac.ca.gov/electricity/web_qfer/Heat_Rates.php" width="100%" height="800px" ;">
-</iframe>
-<pre class="r"><code>library(XML)
-d &lt;- readHTMLTable(&quot;http://energyalmanac.ca.gov/electricity/web_qfer/Heat_Rates.php&quot;, which = 1)
 head(d)</code></pre>
 <pre><code>##   Category v 2014 Â                                    Company Name
 ## 1        C     2014                             ACE Cogeneration Co
@@ -448,13 +424,13 @@ dt_flights[order(-arr_delay)]</code></pre>
 <h2>Performance (TBC)</h2>
 <pre class="r"><code>system.time(with(df_flights, df_flights[order(-arr_delay), ]))</code></pre>
 <pre><code>##    user  system elapsed 
-##   0.210   0.012   0.222</code></pre>
+##   0.223   0.011   0.234</code></pre>
 <pre class="r"><code>system.time(arrange(flights, desc(arr_delay)))</code></pre>
 <pre><code>##    user  system elapsed 
-##   0.151   0.009   0.160</code></pre>
+##   0.151   0.004   0.154</code></pre>
 <pre class="r"><code>system.time(dt_flights[order(-arr_delay)])</code></pre>
 <pre><code>##    user  system elapsed 
-##   0.079   0.004   0.082</code></pre>
+##   0.088   0.002   0.090</code></pre>
 </div>
 <div id="select-columns" class="section level2">
 <h2>Select columns</h2>

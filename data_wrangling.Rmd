@@ -21,7 +21,7 @@ movie %>%
 
 ## More ?
 
-<iframe src = "https://en.wikipedia.org/wiki/List_of_highest-grossing_films" width = "100%" height = "800px";"></iframe>
+<iframe src = "https://en.wikipedia.org/wiki/List_of_highest-grossing_films" width = "100%" height = "400px";"></iframe>
 
 ```{r}
 library(rvest)
@@ -31,15 +31,9 @@ d <- html("https://en.wikipedia.org/wiki/List_of_highest-grossing_films") %>%
   head()
 ```
 
-```{r}
-library(XML)
-d <- readHTMLTable("http://energyalmanac.ca.gov/electricity/web_qfer/Heat_Rates.php", which = 1)
-head(d)
-```
-
 ## The XML way
 
-<iframe src = "http://energyalmanac.ca.gov/electricity/web_qfer/Heat_Rates.php" width = "100%" height = "800px";"></iframe>
+<iframe src = "http://energyalmanac.ca.gov/electricity/web_qfer/Heat_Rates.php" width = "100%" height = "400px";"></iframe>
 
 ```{r}
 library(XML)
