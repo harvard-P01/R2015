@@ -2,6 +2,14 @@
 pagetitle: P01 - Introduction
 ---
 
-## Lecture 01
+## Lectures
+
+### Lecture 01
 
 Introduction (October 19, 2015): [HTML](slides/01-introduction.html)
+
+### Lecture 02
+
+Creating R packages (October 26, 2015)
+
+## Labs
