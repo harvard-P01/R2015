@@ -118,9 +118,25 @@ Limited to 10 P01 participants:
 
 - Code: Script / Software
 - Data
-- Best practices / Workflows: __reproducibility__ (more next week)
+- Best practices / Workflows: __reproducibility__
 
 <img src="01_introduction/script_vs_software.png" width="700px"/>
+
+## Reproducibility
+
+<img src="01_introduction/reproducibility.png" width="700px"/>
+
+## Code quality
+
+_Poor code quality is endemic, and not just in scientific computation. It is always tempting to build something 'quick and dirty', under the assumption that it can be cleaned up later. This is especially true at the cutting edge of a field — why invest time writing beautifully engineered code from the outset, if you're not sure that what you're trying to do is even possible?_
+
+- Science / Research
+    - Open Science
+- Business
+    - Reliability, Reusability, Regulation
+- It’s efficient!
+    - No immediate reward
+    - But no __technical debt__
 
 # GitHub
 
@@ -136,9 +152,17 @@ Limited to 10 P01 participants:
 
 <iframe src="https://www.plasticscm.com/version-control-history.html"></iframe>
 
+## Linus strikes again
+
+- Linus Torvalds
+    - MINIX and Linux
+    - [BitKeeper and Git](http://www.linux.com/news/featured-blogs/185-jennifer-cloer/821541-10-years-of-git-an-interview-with-git-creator-linus-torvalds)
+ 
+ <iframe src="http://www.linux.com/news/featured-blogs/185-jennifer-cloer/821541-10-years-of-git-an-interview-with-git-creator-linus-torvalds"></iframe>   
+
 ## Git
 
-- Desing principle: _take Concurrent Versions System (CVS) as an example of what not to do; if in doubt, make the exact opposite decision_
+- Design principle: _take Concurrent Versions System (CVS) as an example of what not to do; if in doubt, make the exact opposite decision_
 
 - https://git-scm.com/
     - https://git-scm.com/doc
@@ -177,9 +201,14 @@ digest::digest("P01.", algo = "sha1")
 
 <img src="https://illustrated-git.readthedocs.org/en/latest/_images/git-flows.svg" width="800px"/>
 
-## GitHub
+## GitHub: social coding
 
 <img src="01_introduction/github.png" width="800px"/>
+
+- source code
+- documentation, wikis
+- websites
+- issues and task lists
 
 ## Even [without the command line](https://desktop.github.com/)
 
