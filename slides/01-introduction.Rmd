@@ -6,6 +6,18 @@ date: "October 19, 2015"
 output: ioslides_presentation
 ---
 
+## About the slides: [display modes](http://rmarkdown.rstudio.com/ioslides_presentation_format.html)
+
+`f` enable fullscreen mode
+
+`w` toggle widescreen mode
+
+`o` enable overview mode
+
+`h` enable code highlight mode
+
+`p` show presenter notes
+
 # Course presentation
 
 ## This is not...
