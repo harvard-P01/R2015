@@ -10,7 +10,7 @@ The objective of this series of lectures is to provide you with the tools needed
 
 ### Overview
 
-The classes will be organized in 6 sessions of 1:45 hours and 6 laboratory sessions of 1:30 hours.
+The classes will be organized in 8 sessions of 1 hour and 5 laboratory sessions of 2 hours.
 
 Every session will focus on a specific way of improving R code by:
 
@@ -39,4 +39,10 @@ We assume some familiarity with the R statistical language (as in http://project
 ### Computational tools
 
 We will use free and preferably open-source tools (R, a C++ compiler, some Python via Pandas, Javascript libraries).
+
+### Useful links
+
+- https://github.com/harvard-P01
+
+- https://groups.google.com/forum/#!forum/harvard-P01
 
