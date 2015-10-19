@@ -118,9 +118,9 @@ Limited to 10 P01 participants:
 
 - Code: Script / Software
 - Data
-- Best practices / Workflows
+- Best practices / Workflows: __reproducibility__ (more next week)
 
-- data
+<img src="01_introduction/script_vs_software.png" width="700px"/>
 
 # GitHub
 
@@ -164,7 +164,6 @@ cos(1)
 cos(1.01)
 ```
 
-
 ```{r}
 digest::digest("P01", algo = "sha1")
 digest::digest("P01.", algo = "sha1")
@@ -185,6 +184,10 @@ digest::digest("P01.", algo = "sha1")
 ## Even [without the command line](https://desktop.github.com/)
 
 <iframe src="https://desktop.github.com/"></iframe>
+
+## From the web interface
+
+- Let's create a `sandbox` repository.
 
 # Choosing an editor / IDE
 
@@ -241,7 +244,7 @@ digest::digest("P01.", algo = "sha1")
 
 - Create a GitHub account
 
-- Enjoy the P01 sandbox
+- Play wih the P01 sandbox
 
 ## For the labs
 
@@ -249,4 +252,6 @@ _Participation will be decided by a P01 committee based on a short description (
 
 - Send me a short email: 1/2 page project description with package name, intended audience, number of developers / users, planned developments
 
-- If accepted: November 6 and 11 (TBC), 20 minute presentation of your project (stats background, walkthrough code review)
+- If accepted
+    - November 6 and 11 (TBC), 20 minute presentation of your project (stats background, walkthrough code review)
+    - Create your package repository on https://github.com/harvard-P01 (even if empty for the moment)
