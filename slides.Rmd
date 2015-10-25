@@ -10,6 +10,6 @@ Introduction (October 19, 2015): [HTML](slides/01-introduction.html)
 
 ### Lecture 02
 
-Creating R packages (October 26, 2015)
+Creating R packages (October 26, 2015): [HTML](slides/02-packages.html)
 
 ## Labs
