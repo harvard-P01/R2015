@@ -10,20 +10,72 @@ output: ioslides_presentation
 
 ## Why?
 
+- Organize your code
+
+- Distribute your code
+
+- Version your code
+
 ## Structure
 
 - Folder hierarchy
-    - `NAMESPACE`
-    - `DESCRIPTION`
-    - `R/`
-    - `man/`
+    - `NAMESPACE`: package import / export
+    - `DESCRIPTION`: metadata
+    - `R/`: R code
+    - `man/`: object documentation (with short examples)
     - `tests/`
     - `data/`
-    - `src/`
-    - `vignettes/`
-    - `inst/`
+    - `src/`: compiled code
+    - `vignettes/`: manual-like documentation
+    - `inst/`: installed files
+    - `demo/`: longer examples
+    - `exec`, `po`, `tools`
 
 ## Building steps
+
+- `R CMD build`
+
+- `R CMD INSTALL`
+
+- `R CMD check`
+
+## `R CMD build`
+
+```{r eval=FALSE}
+R CMD build --help
+```
+
+_Build R packages from package sources in the directories specified by ‘pkgdirs’_
+
+## `R CMD INSTALL`
+
+```{r eval=FALSE}
+R CMD INSTALL --help
+```
+
+_Install the add-on packages specified by pkgs.  The elements of pkgs can be relative or absolute paths to directories with the package sources, or to gzipped package 'tar' archives.  The library tree to install to can be specified via '--library'.  By default, packages are installed in the library tree rooted at the first directory in .libPaths() for an R session run in the current environment._
+
+## `R CMD check`
+
+```{r eval=FALSE}
+R CMD check --help
+```
+
+http://r-pkgs.had.co.nz/check.html
+
+_Check R packages from package sources, which can be directories or package 'tar' archives with extension '.tar.gz', '.tar.bz2', '.tar.xz' or '.tgz'._
+
+_A variety of diagnostic checks on directory structure, index and control files are performed.  The package is installed into the log directory and production of the package PDF manual is tested. All examples and tests provided by the package are tested to see if they run successfully.  By default code in the vignettes is tested, as is re-building the vignette PDFs._
+
+## Building steps with `devtools`
+
+- `devtools::build`
+
+- `devtools::install`
+
+- `devtools::check`
+
+- and many others: `load_all`, `document`, `test`, `run_examples`, ...
 
 ## Creating an R package
 
@@ -46,6 +98,14 @@ package.skeleton(list = c("f","g","d","e"), name = "pkgname")
 ```{r eval=FALSE}
 devtools::create("path/to/package/pkgname")
 ```
+
+## Submitting to CRAN
+
+<div class="centered">
+<img src="http://etc.ancient.eu/wp-content/uploads/2014/12/Hydra-1024x521.jpg" width="600px"/>
+</div>
+
+http://r-pkgs.had.co.nz/release.html
 
 ## Using GitHub
 
@@ -141,7 +201,7 @@ vignettes/*.pdf
 
 - A project has its own:
     - R session
-    - .Rprofile (_e.g._, to customize startup environement)
+    - .Rprofile (_e.g._, to customize startup environment)
     - .Rhistory
 
 - Default working directory is project directory
@@ -179,20 +239,57 @@ PackageInstallArgs: --no-multiarch --with-keep.source
 
 - Vignettes
     - PDF
-    - `knitr`, `Sweave`
+    - `knitr` (or `Sweave`)
 
-## Adding R code
+## Process example
 
-- In `R/` directory
+Creating R Packages: A Tutorial (Friedrich Leisch, 2009 )
 
-- File `linreg.R`
+- https://cran.r-project.org/doc/contrib/Leisch-CreatingPackages.pdf
 
-```{r eval=FALSE}
-linreg <- function(y, X) {
-  X <- cbind(1, X) # add intercept
-  beta_hat <- solve(t(X) %*% X) %*% t(X) %*% y
-  return(beta_hat)
+## Adding `linreg.R` in `R/` directory
+
+```{r eval=TRUE}
+linmodEst <- function(x, y) {
+  ## compute QR-decomposition of x
+  qx <- qr(x)
+  ## compute (x’x)^(-1) x’y
+  coef <- solve.qr(qx, y)
+  ## degrees of freedom and standard deviation of residuals
+  df <- nrow(x) - ncol(x)
+  sigma2 <- sum((y - x %*% coef) ^ 2) / df
+  ## compute sigma^2 * (x’x)^-1
+  vcov <- sigma2 * chol2inv(qx$qr)
+  colnames(vcov) <- rownames(vcov) <- colnames(x)
+  list(
+    coefficients = coef,
+    vcov = vcov,
+    sigma = sqrt(sigma2),
+    df = df
+  )
 }
+```
+
+## Running our function
+
+```{r}
+data(cats, package = "MASS")
+linmodEst(cbind(1, cats$Bwt), cats$Hwt)
+```
+
+## And compare with `lm` (1 / 2)
+
+```{r}
+lm1 <- lm(Hwt ~ Bwt, data=cats)
+lm1
+coef(lm1)
+```
+
+## And compare with `lm` (2 / 2)
+
+```{r}
+vcov(lm1)
+summary(lm1)$sigma
 ```
 
 ## Adding ROxygen2 documentation
@@ -205,7 +302,7 @@ linreg <- function(y, X) {
 #' @param y response vector (1 x n)
 #' @param X covariate matrix (p x n) with no intercept
 #'
-#' @return A (p x 1) matrix of estimated parameters
+#' @return A list with 4 elements: coefficients, vcov, sigma, df
 #'
 #' @examples
 #' data(mtcars)
@@ -215,10 +312,23 @@ linreg <- function(y, X) {
 #'
 #' @export
 #'
-linreg <- function(y, X) {
-  X <- cbind(1, X) # add intercept
-  beta_hat <- solve(t(X) %*% X) %*% t(X) %*% y
-  return(beta_hat)
+linmodEst <- function(x, y) {
+  ## compute QR-decomposition of x
+  qx <- qr(x)
+  ## compute (x’x)^(-1) x’y
+  coef <- solve.qr(qx, y)
+  ## degrees of freedom and standard deviation of residuals
+  df <- nrow(x) - ncol(x)
+  sigma2 <- sum((y - x %*% coef) ^ 2) / df
+  ## compute sigma^2 * (x’x)^-1
+  vcov <- sigma2 * chol2inv(qx$qr)
+  colnames(vcov) <- rownames(vcov) <- colnames(x)
+  list(
+    coefficients = coef,
+    vcov = vcov,
+    sigma = sqrt(sigma2),
+    df = df
+  )
 }
 ```
 
@@ -228,14 +338,16 @@ linreg <- function(y, X) {
 <img src="02_packages/configure_build_tools.png" width="400px"/>
 </div>
 
-## `man/linreg.Rd`
+## `man/linmodEst.Rd`
 
 ```{r eval=FALSE}
-\name{linreg}
-\alias{linreg}
+% Generated by roxygen2 (4.1.1): do not edit by hand
+% Please edit documentation in R/linmodEst.R
+\name{linmodEst}
+\alias{linmodEst}
 \title{Linear regression}
 \usage{
-linreg(y, X)
+linmodEst(x, y)
 }
 \arguments{
 \item{y}{response vector (1 x n)}
@@ -243,7 +355,7 @@ linreg(y, X)
 \item{X}{covariate matrix (p x n) with no intercept}
 }
 \value{
-A (p x 1) matrix of estimated parameters
+A list with 4 elements: coefficients, vcov, sigma, df
 }
 \description{
 Runs an OLS regression not unlike \code{\link{lm}}
@@ -252,7 +364,7 @@ Runs an OLS regression not unlike \code{\link{lm}}
 data(mtcars)
 X <- as.matrix(mtcars[, c("cyl", "disp", "hp")])
 y <- mtcars[, "mpg"]
-linreg(y, X)
+linmodEst(y, X)
 }
 ```
 
@@ -261,7 +373,6 @@ linreg(y, X)
 <div class="centered">
 <img src="02_packages/formatted_help.png" width="400px"/>
 </div>
-
 
 ## `DESCRIPTION`
 
@@ -280,18 +391,114 @@ LazyData: TRUE
 
 ## `NAMESPACE`
 
+`export`'s automatically generated when parsing ROxygens2 snippets
+
 ```{r eval=FALSE}
-export(linreg)
+export(linmodEst)
 ```
 
 ## S3 and S4 generics
 
-## Workflow
+```{r}
+linmod <- function(x, ...)
+  UseMethod("linmod")
+```
 
-- devtools
-- ROxygen2
+
+```{r}
+linmod.default <- function(x, y, ...) {
+  x <- as.matrix(x)
+  y <- as.numeric(y)
+  est <- linmodEst(x, y)
+  est$fitted.values <- as.vector(x %*% est$coefficients)
+  est$residuals <- y - est$fitted.values
+  est$call <- match.call()
+  class(est) <- "linmod"
+  return(est)
+}
+```
+
+## `print`
+
+```{r}
+print.linmod <- function(x, ...) {
+  cat("Call:\n")
+  print(x$call)
+  cat("\nCoefficients:\n")
+  print(x$coefficients)
+}
+```
+
+## `print`
+
+```{r}
+x <- cbind(Const = 1, Bwt = cats$Bwt)
+y <- cats$Hw
+mod1 <- linmod(x, y)
+mod1
+```
+
+## Other methods
+
+- `summary.linmod`
+
+- `print.summary.linmod`
+
+- `predict.linmod`
+
+- `plot.linmod`
+
+- `coef.linmod`, `vcov.linmod`, ...
+
+## Formulas and model frames
+
+```{r eval=FALSE}
+linmod.formula <- function(formula, data = list(), ...) {
+  mf <- model.frame(formula = formula, data = data)
+  x <- model.matrix(attr(mf, "terms"), data = mf)
+  y <- model.response(mf)
+  est <- linmod.default(x, y, ...)
+  est$call <- match.call()
+  est$formula <- formula
+  return(est)
+}
+```
 
 ## Unit tests and `testthat`
+
+http://r-pkgs.had.co.nz/tests.html
+
+In package directory:
+
+```{r eval=FALSE}
+devtools::use_testthat()
+```
+
+pre-populates `test/testthat/`
+
+Test files should start with `test` to be processed.
+
+## `test_coef.R`
+
+```{r eval=FALSE}
+data(cats, package = "MASS")
+l1 <- linmod(Hwt ~ Bwt * Sex, data = cats)
+l2 <- lm(Hwt ~ Bwt * Sex, data = cats)
+
+test_that("same estimated coefficients as lm function", {
+  expect_equal(l1$coefficients, l2$coefficients)
+})
+```
+
+```{r eval=FALSE}
+==> devtools::test()
+
+Loading pkgtemplate
+Loading required package: testthat
+Testing pkgtemplate
+.
+Woot! 
+```
 
 ## Makefiles and `make`
 
@@ -371,3 +578,24 @@ system.time(print(fibRcpp(35)))
 `RcppArmadillo`
 
 > 'Armadillo' is a templated C++ linear algebra library (by Conrad Sanderson) that aims towards a good balance between speed and ease of use. Integer, floating point and complex numbers are supported, as well as a subset of trigonometric and statistics functions. Various matrix decompositions are provided through optional integration with LAPACK and ATLAS libraries. The 'RcppArmadillo' package includes the header files from the templated 'Armadillo' library.
+
+## Adding `Rcpp` code to a package
+
+```{r eval=FALSE}
+devtools::use_rcpp()
+```
+
+Or when creating a package
+
+```{r eval=FALSE}
+Rcpp::Rcpp.package.skeleton("pkg")
+RcppArmadillo::RcppArmadillo.package.skeleton("pkg")
+```
+
+## Homework
+
+- https://cran.r-project.org/doc/contrib/Leisch-CreatingPackages.pdf
+
+- http://kbroman.org/minimal_make/
+
+<iframe src="http://kbroman.org/minimal_make/"></iframe>
