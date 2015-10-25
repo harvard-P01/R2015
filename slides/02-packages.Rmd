@@ -12,6 +12,19 @@ output: ioslides_presentation
 
 ## Structure
 
+- Folder hierarchy
+    - `NAMESPACE`
+    - `DESCRIPTION`
+    - `R/`
+    - `man/`
+    - `tests/`
+    - `data/`
+    - `src/`
+    - `vignettes/`
+    - `inst/`
+
+## Building steps
+
 ## Creating an R package
 
 ### `utils::package.skeleton`
@@ -34,22 +47,77 @@ package.skeleton(list = c("f","g","d","e"), name = "pkgname")
 devtools::create("path/to/package/pkgname")
 ```
 
-## RStudio and GitHub integration
+## Using GitHub
+
+<iframe src="http://r-pkgs.had.co.nz/git.html"></iframe>
+
+## RStudio and GitHub integration (1 / 7)
 
 <div class="centered">
-<img src="02_packages/create_repo.png" width="400px"/>
+<img src="02_packages/create_git_package_1.png" width="600px"/>
 </div>
 
-- package name
-- .gitignore
-- README
+## RStudio and GitHub integration (2 / 7)
+
+<div class="centered">
+<img src="02_packages/create_git_package_2.png" width="600px"/>
+</div>
+
+## RStudio and GitHub integration (3 / 7)
+
+<div class="centered">
+<img src="02_packages/create_git_package_3.png" width="600px"/>
+</div>
+
+## RStudio and GitHub integration (4 / 7)
+
+<div class="centered">
+<img src="02_packages/create_git_package_4.png" width="600px"/>
+</div>
+
+## RStudio and GitHub integration (5 / 7)
+
+<div class="centered">
+<img src="02_packages/create_git_package_5.png" width="600px"/>
+</div>
+
+## Command line
+
+```{r eval=FALSE}
+git init
+git add *
+git commit -m "First commit"
+git remote add origin git@github.com:harvard-P01/pkgtemplate.git
+git push -u origin master
+```
+
+## RStudio and GitHub integration (6 / 7)
+
+<div class="centered">
+<img src="02_packages/create_git_package_6.png" width="600px"/>
+</div>
+
+## RStudio and GitHub integration (7 / 7)
+
+<div class="centered">
+<img src="02_packages/create_git_package_7.png" width="600px"/>
+</div>
+
 ## Installing from GitHub
 
 ```{r eval=FALSE}
 devtools::install_github("harvard-P01/pkgtemplate")
 ```
 
-## `.gitignore`
+## `.gitignore` (RStudio default)
+
+```{r eval=FALSE}
+.Rproj.user
+.Rhistory
+.RData
+```
+
+## `.gitignore` (GitHub default)
 
 ```{r eval=FALSE}
 # History files
@@ -67,55 +135,43 @@ vignettes/*.html
 vignettes/*.pdf
 ```
 
-## Clone
+## RStudio projects
 
-<div class="centered">
-<img src="02_packages/empty_repo.png" width="400px"/>
-</div>
+- `.Rproj` file extension, in our example `pkgtemplate.Rproj`
 
-<div class="centered">
-<img src="02_packages/github_gui_clone.png" width="400px"/>
-</div>
+- A project has its own:
+    - R session
+    - .Rprofile (_e.g._, to customize startup environement)
+    - .Rhistory
 
-then populate and push
+- Default working directory is project directory
 
-## RStudio alternative
+- Keeps track of project-specific recent files
 
-<div class="centered">
-<img src="02_packages/github_gui_clone.png" width="400px"/>
-</div>
+## Project options
 
-## RStudio alternative
+```{r eval=FALSE}
+Version: 1.0
 
-<div class="centered">
-<img src="02_packages/rstudio_git_1.png" width="600px"/>
-</div>
+RestoreWorkspace: Default
+SaveWorkspace: Default
+AlwaysSaveHistory: Default
 
-## RStudio alternative
+EnableCodeIndexing: Yes
+UseSpacesForTab: Yes
+NumSpacesForTab: 2
+Encoding: UTF-8
 
-<div class="centered">
-<img src="02_packages/rstudio_git_2.png" width="600px"/>
-</div>
+RnwWeave: knitr
+LaTeX: pdfLaTeX
 
-## RStudio alternative
+AutoAppendNewline: Yes
+StripTrailingWhitespace: Yes
 
-<div class="centered">
-<img src="02_packages/rstudio_git_3.png" width="600px"/>
-</div>
-
-## RStudio alternative
-
-<div class="centered">
-<img src="02_packages/rstudio_git_4.png" width="600px"/>
-</div>
-
-## RStudio alternative
-
-<div class="centered">
-<img src="02_packages/rstudio_git_5.png" width="600px"/>
-</div>
-
-## `.Rproj`
+BuildType: Package
+PackageUseDevtools: Yes
+PackageInstallArgs: --no-multiarch --with-keep.source
+```
 
 ## Package documentation
 
@@ -123,7 +179,110 @@ then populate and push
 
 - Vignettes
     - PDF
-    - `knitr`
+    - `knitr`, `Sweave`
+
+## Adding R code
+
+- In `R/` directory
+
+- File `linreg.R`
+
+```{r eval=FALSE}
+linreg <- function(y, X) {
+  X <- cbind(1, X) # add intercept
+  beta_hat <- solve(t(X) %*% X) %*% t(X) %*% y
+  return(beta_hat)
+}
+```
+
+## Adding ROxygen2 documentation
+
+```{r eval=FALSE}
+#' Linear regression
+#'
+#' Runs an OLS regression not unlike \code{\link{lm}}
+#'
+#' @param y response vector (1 x n)
+#' @param X covariate matrix (p x n) with no intercept
+#'
+#' @return A (p x 1) matrix of estimated parameters
+#'
+#' @examples
+#' data(mtcars)
+#' X <- as.matrix(mtcars[, c("cyl", "disp", "hp")])
+#' y <- mtcars[, "mpg"]
+#' linreg(y, X)
+#'
+#' @export
+#'
+linreg <- function(y, X) {
+  X <- cbind(1, X) # add intercept
+  beta_hat <- solve(t(X) %*% X) %*% t(X) %*% y
+  return(beta_hat)
+}
+```
+
+## Configure Build Tools
+
+<div class="centered">
+<img src="02_packages/configure_build_tools.png" width="400px"/>
+</div>
+
+## `man/linreg.Rd`
+
+```{r eval=FALSE}
+\name{linreg}
+\alias{linreg}
+\title{Linear regression}
+\usage{
+linreg(y, X)
+}
+\arguments{
+\item{y}{response vector (1 x n)}
+
+\item{X}{covariate matrix (p x n) with no intercept}
+}
+\value{
+A (p x 1) matrix of estimated parameters
+}
+\description{
+Runs an OLS regression not unlike \code{\link{lm}}
+}
+\examples{
+data(mtcars)
+X <- as.matrix(mtcars[, c("cyl", "disp", "hp")])
+y <- mtcars[, "mpg"]
+linreg(y, X)
+}
+```
+
+## Formatted output
+
+<div class="centered">
+<img src="02_packages/formatted_help.png" width="400px"/>
+</div>
+
+
+## `DESCRIPTION`
+
+```{r eval=FALSE}
+Package: pkgtemplate
+Type: Package
+Title: What the Package Does (Title Case)
+Version: 0.1
+Date: 2015-10-24
+Author: Who wrote it
+Maintainer: Who to complain to <yourfault@somewhere.net>
+Description: More about what it does (maybe more than one line)
+License: What license is it under?
+LazyData: TRUE
+```
+
+## `NAMESPACE`
+
+```{r eval=FALSE}
+export(linreg)
+```
 
 ## S3 and S4 generics
 
@@ -137,6 +296,8 @@ then populate and push
 ## Makefiles and `make`
 
 ## Freezing package repositories
+
+- https://rstudio.github.io/packrat/
 
 - MCRAN (???)
 
