@@ -650,6 +650,8 @@ summary(lm(y ~ x - 1))
 
 - https://cran.r-project.org/doc/contrib/Leisch-CreatingPackages.pdf
 
+- http://kbroman.org/Tools4RR/assets/lectures/08_rpack_withnotes.pdf
+
 - http://kbroman.org/minimal_make/
 
 <iframe src="http://kbroman.org/minimal_make/"></iframe>
