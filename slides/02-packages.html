@@ -241,6 +241,8 @@ git push -u origin master</pre>
 
 <pre class = 'prettyprint lang-r'>devtools::install_github(&quot;harvard-P01/pkgtemplate&quot;)</pre>
 
+<pre class = 'prettyprint lang-r'>devtools::install_github(&quot;harvard-P01/pkgtemplate&quot;, build_vignettes = TRUE)</pre>
+
 </article></slide><slide class=''><hgroup><h2><code>.gitignore</code> (RStudio default)</h2></hgroup><article  id="gitignore-rstudio-default">
 
 <pre class = 'prettyprint lang-r'>.Rproj.user
@@ -577,6 +579,12 @@ Testing pkgtemplate
 .
 Woot! </pre>
 
+</article></slide><slide class=''><hgroup><h2>Vignettes</h2></hgroup><article  id="vignettes">
+
+<p><a href='http://r-pkgs.had.co.nz/vignettes.html' title=''>http://r-pkgs.had.co.nz/vignettes.html</a></p>
+
+<pre class = 'prettyprint lang-r'>devtools::use_vignette(&quot;linmod&quot;)</pre>
+
 </article></slide><slide class='segue dark nobackground'><hgroup class = 'auto-fadein'><h2><a href='http://www.rcpp.org/' title=''>Rcpp</a></h2></hgroup><article  id="rcpp">
 
 </article></slide><slide class=''><hgroup><h2>C/C++ ressources</h2></hgroup><article  id="cc-ressources">
@@ -642,7 +650,7 @@ int fibo(const int n) {
 <pre class = 'prettyprint lang-r'>fibRcpp</pre>
 
 <pre >## function (n) 
-## .Primitive(&quot;.Call&quot;)(&lt;pointer: 0x10759ecc0&gt;, n)</pre>
+## .Primitive(&quot;.Call&quot;)(&lt;pointer: 0x10c5cacc0&gt;, n)</pre>
 
 <p>Performance is much better:</p>
 

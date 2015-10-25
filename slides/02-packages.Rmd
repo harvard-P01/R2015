@@ -169,6 +169,10 @@ git push -u origin master
 devtools::install_github("harvard-P01/pkgtemplate")
 ```
 
+```{r eval=FALSE}
+devtools::install_github("harvard-P01/pkgtemplate", build_vignettes = TRUE)
+```
+
 ## `.gitignore` (RStudio default)
 
 ```{r eval=FALSE}
@@ -500,6 +504,13 @@ Testing pkgtemplate
 Woot! 
 ```
 
+## Vignettes
+
+http://r-pkgs.had.co.nz/vignettes.html
+
+```{r eval=FALSE}
+devtools::use_vignette("linmod")
+```
 
 # [Rcpp](http://www.rcpp.org/)
 
