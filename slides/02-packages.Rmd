@@ -14,7 +14,7 @@ output: ioslides_presentation
 
 - Distribute your code
 
-- Version your code
+- Keep versions of your code
 
 ## Structure
 
@@ -109,6 +109,8 @@ http://r-pkgs.had.co.nz/release.html
 
 ## Using GitHub
 
+http://r-pkgs.had.co.nz/git.html
+
 <iframe src="http://r-pkgs.had.co.nz/git.html"></iframe>
 
 ## RStudio and GitHub integration (1 / 7)
@@ -170,7 +172,8 @@ devtools::install_github("harvard-P01/pkgtemplate")
 ```
 
 ```{r eval=FALSE}
-devtools::install_github("harvard-P01/pkgtemplate", build_vignettes = TRUE)
+devtools::install_github("harvard-P01/pkgtemplate",
+                         build_vignettes = TRUE)
 ```
 
 ## `.gitignore` (RStudio default)
@@ -401,6 +404,28 @@ LazyData: TRUE
 export(linmodEst)
 ```
 
+## S3 basics
+
+```{r}
+hello <- function() {
+ s <- "Hello World!"
+ class(s) <- "hi"
+ return(s)
+}
+
+hello()
+```
+
+## S3 basics
+
+```{r}
+print.hi <- function(...) {
+  print("Surprise!")
+}
+
+hello()
+```
+
 ## S3 and S4 generics
 
 ```{r}
@@ -511,6 +536,8 @@ http://r-pkgs.had.co.nz/vignettes.html
 ```{r eval=FALSE}
 devtools::use_vignette("linmod")
 ```
+
+https://github.com/harvard-P01/pkgtemplate/blob/master/vignettes/linmod.Rmd
 
 # [Rcpp](http://www.rcpp.org/)
 

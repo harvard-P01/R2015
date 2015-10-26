@@ -101,7 +101,7 @@
 <ul>
 <li><p>Organize your code</p></li>
 <li><p>Distribute your code</p></li>
-<li><p>Version your code</p></li>
+<li><p>Keep versions of your code</p></li>
 </ul>
 
 </article></slide><slide class=''><hgroup><h2>Structure</h2></hgroup><article  id="structure">
@@ -190,6 +190,8 @@ package.skeleton(list = c(&quot;f&quot;,&quot;g&quot;,&quot;d&quot;,&quot;e&quot
 
 </article></slide><slide class=''><hgroup><h2>Using GitHub</h2></hgroup><article  id="using-github">
 
+<p><a href='http://r-pkgs.had.co.nz/git.html' title=''>http://r-pkgs.had.co.nz/git.html</a></p>
+
 <iframe src="http://r-pkgs.had.co.nz/git.html">
 
 </iframe>
@@ -241,7 +243,8 @@ git push -u origin master</pre>
 
 <pre class = 'prettyprint lang-r'>devtools::install_github(&quot;harvard-P01/pkgtemplate&quot;)</pre>
 
-<pre class = 'prettyprint lang-r'>devtools::install_github(&quot;harvard-P01/pkgtemplate&quot;, build_vignettes = TRUE)</pre>
+<pre class = 'prettyprint lang-r'>devtools::install_github(&quot;harvard-P01/pkgtemplate&quot;,
+                         build_vignettes = TRUE)</pre>
 
 </article></slide><slide class=''><hgroup><h2><code>.gitignore</code> (RStudio default)</h2></hgroup><article  id="gitignore-rstudio-default">
 
@@ -488,6 +491,30 @@ LazyData: TRUE</pre>
 
 <pre class = 'prettyprint lang-r'>export(linmodEst)</pre>
 
+</article></slide><slide class=''><hgroup><h2>S3 basics</h2></hgroup><article  id="s3-basics">
+
+<pre class = 'prettyprint lang-r'>hello &lt;- function() {
+ s &lt;- &quot;Hello World!&quot;
+ class(s) &lt;- &quot;hi&quot;
+ return(s)
+}
+
+hello()</pre>
+
+<pre >## [1] &quot;Hello World!&quot;
+## attr(,&quot;class&quot;)
+## [1] &quot;hi&quot;</pre>
+
+</article></slide><slide class=''><hgroup><h2>S3 basics</h2></hgroup><article  id="s3-basics-1">
+
+<pre class = 'prettyprint lang-r'>print.hi &lt;- function(...) {
+  print(&quot;Surprise!&quot;)
+}
+
+hello()</pre>
+
+<pre >## [1] &quot;Surprise!&quot;</pre>
+
 </article></slide><slide class=''><hgroup><h2>S3 and S4 generics</h2></hgroup><article  id="s3-and-s4-generics">
 
 <pre class = 'prettyprint lang-r'>linmod &lt;- function(x, ...)
@@ -585,6 +612,8 @@ Woot! </pre>
 
 <pre class = 'prettyprint lang-r'>devtools::use_vignette(&quot;linmod&quot;)</pre>
 
+<p><a href='https://github.com/harvard-P01/pkgtemplate/blob/master/vignettes/linmod.Rmd' title=''>https://github.com/harvard-P01/pkgtemplate/blob/master/vignettes/linmod.Rmd</a></p>
+
 </article></slide><slide class='segue dark nobackground'><hgroup class = 'auto-fadein'><h2><a href='http://www.rcpp.org/' title=''>Rcpp</a></h2></hgroup><article  id="rcpp">
 
 </article></slide><slide class=''><hgroup><h2>C/C++ ressources</h2></hgroup><article  id="cc-ressources">
@@ -650,7 +679,7 @@ int fibo(const int n) {
 <pre class = 'prettyprint lang-r'>fibRcpp</pre>
 
 <pre >## function (n) 
-## .Primitive(&quot;.Call&quot;)(&lt;pointer: 0x10c5cacc0&gt;, n)</pre>
+## .Primitive(&quot;.Call&quot;)(&lt;pointer: 0x10f8bbcc0&gt;, n)</pre>
 
 <p>Performance is much better:</p>
 
@@ -659,7 +688,7 @@ int fibo(const int n) {
 <pre >## [1] 9227465</pre>
 
 <pre >##    user  system elapsed 
-##   0.068   0.000   0.069</pre>
+##   0.066   0.001   0.067</pre>
 
 </article></slide><slide class=''><hgroup><h2><code>Rcpp</code> family</h2></hgroup><article  id="rcpp-family">
 
@@ -761,6 +790,7 @@ y &lt;- as.vector(mtcars[, 1])</pre>
 
 <ul>
 <li><p><a href='https://cran.r-project.org/doc/contrib/Leisch-CreatingPackages.pdf' title=''>https://cran.r-project.org/doc/contrib/Leisch-CreatingPackages.pdf</a></p></li>
+<li><p><a href='http://kbroman.org/Tools4RR/assets/lectures/08_rpack_withnotes.pdf' title=''>http://kbroman.org/Tools4RR/assets/lectures/08_rpack_withnotes.pdf</a></p></li>
 <li><p><a href='http://kbroman.org/minimal_make/' title=''>http://kbroman.org/minimal_make/</a></p></li>
 </ul>
 
