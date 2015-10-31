@@ -1,0 +1,206 @@
+---
+title: "Data Science with R"
+subtitle: "Lecture 03: Data manipulation grammars"
+author: "Christine Choirat, cchoirat@gmail.com"
+date: "November 02, 2015"
+output: ioslides_presentation
+---
+
+# S3 and S4 follow-up
+
+## Built-in `lm`
+
+```{r}
+data(mtcars)
+head(mtcars)
+```
+
+## `mtcars`
+
+<div class="columns-2">
+
+> [, 1]	mpg	Miles/(US) gallon
+>
+> [, 2]	cyl	Number of cylinders
+>
+> [, 3]	disp	Displacement (cu.in.)
+>
+> [, 4]	hp	Gross horsepower
+>
+> [, 5]	drat	Rear axle ratio
+>
+> [, 6]	wt	Weight (lb/1000)
+>
+> [, 7]	qsec	1/4 mile time
+>
+> [, 8]	vs	V/S
+>
+> [, 9]	am	Transmission (0 = automatic, 1 = manual)
+>
+> [,10]	gear	Number of forward gears
+>
+> [,11]	carb	Number of carburetors
+
+</div>
+
+## `lm`
+
+```{r}
+summary(fit <- lm(mpg ~ cyl + disp + hp, data = mtcars))
+```
+
+## Behind-the-scenes S3 methods
+
+```{r}
+formula(fit)
+```
+
+## Behind-the-scenes S3 methods
+
+```{r}
+head(model.frame(fit))
+head(model.response(model.frame(fit)))
+```
+
+## Behind-the-scenes S3 methods
+
+```{r}
+head(model.matrix(fit))
+```
+
+## Behind-the-scenes S3 methods
+
+```{r}
+summary(update(fit, mpg ~ . - 1 - hp))
+```
+
+## Our version
+
+```{r}
+linmodEst <- function(x, y) {
+  ## compute QR-decomposition of x
+  qx <- qr(x)
+  ## compute (x’x)^(-1) x’y
+  coef <- solve.qr(qx, y)
+  ## degrees of freedom and standard deviation of residuals
+  df <- nrow(x) - ncol(x)
+  sigma2 <- sum((y - x %*% coef) ^ 2) / df
+  ## compute sigma^2 * (x’x)^-1
+  vcov <- sigma2 * chol2inv(qx$qr)
+  colnames(vcov) <- rownames(vcov) <- colnames(x)
+  list(
+    coefficients = coef,
+    vcov = vcov,
+    sigma = sqrt(sigma2),
+    df = df
+  )
+}
+```
+
+## Our version
+
+```{r}
+data(mtcars)
+X <- as.matrix(mtcars[, c("cyl", "disp", "hp")])
+y <- as.matrix(mtcars[, "mpg"])
+linmodEst(y, cbind(1, X))
+```
+
+## S3 and S4 methods
+
+```{r}
+linmod <- function(x, ...)
+  UseMethod("linmod")
+
+linmod.default <- function(x, y, ...) {
+  x <- as.matrix(x)
+  y <- as.numeric(y)
+  est <- linmodEst(x, y)
+  est$fitted.values <- as.vector(x %*% est$coefficients)
+  est$residuals <- y - est$fitted.values
+  est$call <- match.call()
+  class(est) <- "linmod"
+  return(est)
+}
+```
+
+## Example
+
+```{r}
+X <- mtcars[, c("cyl", "disp", "hp")]
+y <- mtcars[, "mpg"]
+fit2 <- linmod(cbind(1, X), y)
+fit2$call
+```
+
+But errors with:
+
+```{r eval=FALSE}
+formula(fit2)
+model.frame(fit2)
+model.matrix(fit2)
+```
+
+## `print`
+
+```{r}
+print.linmod <- function(x, ...) {
+  cat("Call:\n")
+  print(x$call)
+  cat("\nCoefficients:\n")
+  print(x$coefficients)
+}
+```
+
+```{r}
+fit2
+```
+
+## Putting it all together
+
+```{r}
+linmod.formula <- function(formula, data = list(), ...) {
+  mf <- model.frame(formula = formula, data = data)
+  x <- model.matrix(attr(mf, "terms"), data = mf)
+  y <- model.response(mf)
+  est <- linmod.default(x, y, ...)
+  est$call <- match.call()
+  est$formula <- formula
+  return(est)
+}
+```
+
+## Example
+
+```{r}
+X <- mtcars[, c("cyl", "disp", "hp")]
+y <- mtcars[, "mpg"]
+fit3 <- linmod(mpg ~ 1 + disp + cyl, data = mtcars)
+fit3
+formula(fit3)
+```
+
+## Example
+
+```{r}
+update(fit3, mpg ~ 1 + disp) # Intercept to be dealt with
+model.frame(fit3, data = mtcars)
+```
+
+## Example
+
+```{r}
+attr(model.frame(fit3, data = mtcars), "terms")
+```
+
+## Example
+
+```{r}
+model.matrix(attr(model.frame(fit3, data = mtcars), "terms"), data = mtcars)
+```
+
+# Makefile
+
+# Data tables
+
+# Homework
