@@ -199,8 +199,599 @@ attr(model.frame(fit3, data = mtcars), "terms")
 model.matrix(attr(model.frame(fit3, data = mtcars), "terms"), data = mtcars)
 ```
 
-# Makefile
+## Example
 
-# Data tables
+```{r}
+linmod(mpg ~ ., data = mtcars)
+```
+
+# Data manipulation grammars
+
+## 3 approaches
+
+1. base R
+
+2. `dplyr` (and `plyr`)
+
+3. `data.tables`
+
+possibly combined with a SQL backend
+
+## RDBMS
+
+- Relational database management system
+
+- IBM, early 1970's
+
+- SQL (Structured Query Language)
+
+<iframe src = "https://en.wikipedia.org/wiki/SQL#Operators" width = "100%" height = "400px";"></iframe>
+
+## SQL joins
+
+- http://www.w3schools.com/sql/sql_join.asp
+    - inner join
+    - left join
+    - right join
+    - full join
+
+## Base R
+
+```{r}
+authors <- data.frame(
+  surname = I(c("Tukey", "Venables", "Tierney", "Ripley", "McNeil")),
+  nationality = c("US", "Australia", "US", "UK", "Australia"),
+  deceased = c("yes", rep("no", 4)))
+books <- data.frame(
+  name = I(c("Tukey", "Venables", "Tierney",
+             "Ripley", "Ripley", "McNeil", "R Core")),
+  title = c("Exploratory Data Analysis",
+            "Modern Applied Statistics ...",
+            "LISP-STAT",
+            "Spatial Statistics", "Stochastic Simulation",
+            "Interactive Data Analysis",
+            "An Introduction to R"),
+  other.author = c(NA, "Ripley", NA, NA, NA, NA,
+                   "Venables & Smith"))
+```
+
+## Base R
+
+```{r}
+authors
+```
+
+## Base R
+
+```{r}
+books
+```
+
+## Base R
+
+```{r}
+merge(authors, books, by.x = "surname", by.y = "name")
+```
+
+## Base R
+
+```{r}
+merge(books, authors, by.x = "name", by.y = "surname")
+```
+
+## Base R
+
+```{r}
+merge(authors, books, by.x = "surname", by.y = "name", all = TRUE)
+merge(authors, books, by.x = "surname", by.y = "name", all.x = TRUE)
+merge(authors, books, by.x = "surname", by.y = "name", all.y = TRUE)
+```
+
+## `dplyr`
+
+```{r}
+library(dplyr)
+dp_authors <- tbl_df(authors)
+dp_books <- tbl_df((books))
+```
+
+## `dplyr`
+
+```{r}
+inner_join(dp_books, dp_authors, by = c("name" = "surname"))
+```
+
+
+## `dplyr`
+
+```{r}
+right_join(dp_books, dp_authors, by = c("name" = "surname"))
+```
+
+## `dplyr`
+
+```{r}
+left_join(dp_books, dp_authors, by = c("name" = "surname"))
+```
+
+## `data.table`
+
+- Same as base, but *faster*
+- Keys can be used
+- Very fast `fread` (instead of `read.csv`)
+
+```{r}
+library(data.table)
+dt_authors <- setDT(authors)
+dt_books <- data.table((books)) # same as 'setDT'
+```
+
+## `data.table`
+
+```{r}
+dt_authors
+dt_books
+```
+
+## `data.table`
+
+```{r}
+setkey(dt_authors, surname); dt_authors
+setkey(dt_books, name); dt_books
+```
+
+## `data.table`
+
+```{r}
+dt_authors[dt_books]
+dt_books[dt_authors]
+```
+
+## SQL
+
+# Example `nycflights13`
+
+## `nycflights13` dataset
+
+- We are going to compare 3 approaches to manipulate the same dataset
+    1.  `data.frame`
+    2.  `data.table
+    3.  `dplyr` table (extension of `data.frame`, `data.table`-aware)
+
+- There is __no best approach__ and these data classes can be combined.
+
+## Load data
+
+-   Pre-packaged dataset:
+
+```{r}
+library(nycflights13)
+head(flights)
+```
+
+## Create datasets
+
+```{r}
+library(dplyr)
+library(data.table)
+
+## Default is dplyr table
+dp_flights <- flights
+## Explicit conversion
+## dp_flights <- tbl_df(flights)
+## Base data frame
+df_flights <- data.frame(flights)
+## Data table
+dt_flights <- data.table(flights)
+```
+
+## Pretty-print
+
+```{r}
+head(df_flights)
+```
+
+## Pretty-print
+
+```{r}
+dp_flights # Note column types
+```
+
+## Pretty-print
+
+```{r}
+dt_flights
+```
+
+## Filter rows
+
+```{r}
+head(df_flights[df_flights$month == 1 & df_flights$day == 1, ])
+head(subset(df_flights, month == 1 & day ==1))
+```
+
+## Filter rows
+
+```{r}
+head(df_flights[1:10, ])
+```
+
+## Filter rows
+
+```{r eval=FALSE}
+head(df_flights[1:10, ])
+slice(dp_flights, 1:10)
+dt_flights[1:10]
+```
+
+## Arrange rows
+
+```{r}
+head(with(df_flights, df_flights[order(year, month, day), ]))
+```
+
+```{r eval=FALSE}
+head(with(df_flights, df_flights[order(year, month, day), ]))
+arrange(dp_flights, year, month, day)
+dt_flights[order(year, month, day)]
+```
+
+```{r}
+head(with(df_flights, df_flights[order(-arr_delay), ]))
+```
+
+```{r eval=FALSE}
+head(with(df_flights, df_flights[order(-arr_delay), ]))
+arrange(flights, desc(arr_delay))
+dt_flights[order(-arr_delay)]
+```
+
+## Select columns
+
+```{r}
+head(select(df_flights, year, month, day))
+```
+
+## Select columns
+
+```{r eval=FALSE}
+head(select(df_flights, year, month, day))
+select(dp_flights, year, month, day)
+dt_flights[, .(year, month, day)]
+dt_flights[, list(year, month, day)]
+```
+
+## Select columns
+
+```{r}
+## Not as expected!
+dt_flights[, c("year", "month", "day")]
+dt_flights[, c("year", "month", "day"), with = FALSE]
+```
+
+## Extract distinct (unique) rows
+
+```{r}
+head(unique(df_flights, by = "tailnum"))
+```
+
+## Extract distinct (unique) rows
+
+```{r eval=FALSE}
+head(unique(df_flights, by = "tailnum"))
+distinct(select(flights, tailnum))
+unique(dt_flights, by = "tailnum")
+```
+
+## Add new columns
+
+```{r}
+## Copy
+df_flights$gain <-
+  df_flights$arr_delay - df_flights$dep_delay
+df_flights$speed <-
+  df_flights$distance / df_flights$air_time * 60
+```
+
+## Add new columns
+
+```{r}
+## Copy
+mutate(dp_flights,
+       gain = arr_delay - dep_delay,
+       speed = distance / air_time * 60)
+```
+
+## Add new columns
+
+```{r}
+## In-place
+dt_flights[, gain := arr_delay - dep_delay]
+dt_flights[, speed := arr_delay - dep_delay,
+           distance / air_time * 60]
+```
+
+## Create new dataset from columns
+
+```{r}
+df_flights_2 <- data.frame(gain = df_flights$arr_delay - df_flights$dep_delay,
+                           speed = df_flights$distance / df_flights$air_time * 60)
+head(df_flights_2)
+```
+
+## Create new dataset from columns
+
+```{r}
+transmute(dp_flights,
+          gain = arr_delay - dep_delay,
+          speed = distance / air_time * 60)
+```
+
+## Create new dataset from columns
+
+```{r}
+dt_flights[, .(gain = arr_delay - dep_delay,
+               gain_per_hour = gain / (air_time / 60))]
+```
+
+## Summarize values
+
+```{r}
+mean(df_flights$dep_delay, na.rm = TRUE)
+```
+
+## Summarize values
+
+```{r eval=FALSE}
+summarise(dp_flights,
+          delay = mean(dep_delay, na.rm = TRUE))
+```
+
+## Summarize values
+
+```{r eval=FALSE}
+dt_flights[, .(delay = mean(dep_delay, na.rm = TRUE))]
+```
+
+## Randomly sample rows
+
+```{r eval=FALSE}
+set.seed(1234)
+head(df_flights[sample(nrow(df_flights), 10), ])
+sample_n(dp_flights, 10)
+dt_flights[sample(.N, 10)]
+```
+
+```{r eval=FALSE}
+head(df_flights[sample(round(.N * 0.01)), ])
+sample_frac(dp_flights, 0.01)
+dt_flights[sample(round(.N * 0.01))]
+```
+
+## Grouped operations (`dplyr` and `data.table`)
+
+```{r}
+by_tailnum <- group_by(dp_flights, tailnum)
+dp_delay <- summarise(by_tailnum,
+                      count = n(),
+                      dist = mean(distance, na.rm = TRUE),
+                      delay = mean(arr_delay, na.rm = TRUE))
+dp_delay <- filter(dp_delay, count > 20, dist < 2000)
+dp_delay
+```
+
+## Grouped operations 
+
+```{r}
+dt_delay <-
+  dt_flights[, .(count = .N,
+                 dist = mean(distance, na.rm = TRUE),
+                 delay = mean(arr_delay, na.rm = TRUE)),
+             by = list(tailnum)][count > 20 &  dist < 2000]
+dt_delay
+```
+
+## Chaining
+
+```{r}
+a1 <- group_by(flights, year, month, day)
+a2 <- select(a1, arr_delay, dep_delay)
+a3 <- summarise(a2,
+                arr = mean(arr_delay, na.rm = TRUE),
+                dep = mean(dep_delay, na.rm = TRUE))
+a4 <- filter(a3, arr > 30 | dep > 30)
+a4
+```
+
+```{r}
+filter(
+  summarise(
+    select(
+      group_by(flights, year, month, day),
+      arr_delay, dep_delay
+      ),
+    arr = mean(arr_delay, na.rm = TRUE),
+    dep = mean(dep_delay, na.rm = TRUE)
+    ),
+  arr > 30 | dep > 30
+  )
+```
+
+## Ceci n'est pas une pipe (Magritte)
+
+<div class="centered">
+<img src="https://upload.wikimedia.org/wikipedia/en/b/b9/MagrittePipe.jpg" width="50%"/>
+</div>
+
+## Ceci n'est pas un pipe (`magrittr`)
+
+_To be pronounced with a sophisticated French accent..._
+
+<iframe src="https://cran.r-project.org/web/packages/magrittr/vignettes/magrittr.html"></iframe>
+
+## Chaining
+
+```{r}
+flights %>%
+  group_by(year, month, day) %>%
+  select(arr_delay, dep_delay) %>%
+  summarise(
+    arr = mean(arr_delay, na.rm = TRUE),
+    dep = mean(dep_delay, na.rm = TRUE)
+    ) %>%
+  filter(arr > 30 | dep > 30)
+```
+
+```{r}
+dt_delay <- dt_flights[, .(count = .N,
+                           dist = mean(distance, na.rm = TRUE),
+                           delay = mean(arr_delay, na.rm = TRUE)),
+                       by = list(tailnum)][count > 20 &  dist < 2000]
+dt_delay
+```
+
+## Pipes???
+
+`magrittr` [vignette](https://cran.r-project.org/web/packages/magrittr/vignettes/magrittr.html):
+
+> We start with a value, here mtcars (a data.frame). Based on this, we
+> first extract a subset,  then we aggregate the information based on
+> the number of cylinders,  and then we transform the dataset by adding
+> a variable for kilometers  per liter as supplement to miles per
+> gallon. Finally  we print the result before assigning it. Note how the
+> code is  arranged in the logical order of how you think about the
+> task:  data->transform->aggregate, which is also the same order as the
+> code will execute. It's like a recipe – easy to read, easy to follow!
+
+## Pipes???
+
+```{r}
+library(magrittr)
+car_data <- 
+  mtcars %>%
+  subset(hp > 100) %>%
+  aggregate(. ~ cyl, data = ., FUN = . %>% mean %>% round(2)) %>%
+  transform(kpl = mpg %>% multiply_by(0.4251)) %>%
+  print
+```
+
+## Pipes???
+
+```{r}
+dt_mtcars <- data.table(mtcars)
+dt_car_data <- dt_mtcars[hp > 100][, lapply(.SD, function(x) round(mean(x), 2)),
+                                   by = "cyl"][, kpl := mpg * 0.4251]
+print(dt_car_data)
+```
+
+## Not always as expected...
+
+No...
+
+```{r}
+dt_mtcars <- data.table(mtcars)
+names(dt_mtcars)
+
+f <- function(dt, selected_variables = c("gear", "carb")) {
+  return(dt[, selected_variables])
+}
+
+f(dt_mtcars)
+```
+
+## Not always as expected...
+
+Yes!
+
+```{r}
+f <- function(dt, selected_variables = c("gear", "carb")) {
+  return(dt[get(selected_variables)])
+}
+
+f(dt_mtcars)
+```
+
+## `data.table` tricks
+
+- very fast `fread`
+- very fast `merge`
+
+Number of elements in a group:
+
+```{r}
+dt_mtcars[, .N, by = "cyl"]
+```
+
+## `data.table` tricks
+
+All columns:
+
+```{r}
+dt_mtcars[, .SD]
+```
+
+## `data.table` tricks
+
+Using keys:
+
+```{r}
+setkey(dt_mtcars, "cyl")
+dt_mtcars
+```
+
+## `data.table` tricks
+
+```{r}
+setkeyv(dt_mtcars, c("cyl", "gear"))
+dt_mtcars
+```
+
+Using keys:
+
+## `data.table` tricks
+
+All tables:
+
+```{r}
+tables()
+```
+
+## `data.table` tricks
+
+Row-wise sum
+
+```{r}
+dt_mtcars[, sum(disp)]
+```
+
+Column-wise sum
+
+```{r}
+dt_mtcars[, lapply(.SD, sum), .SDcols = names(dt_mtcars)]
+```
+
+## `data.table` tricks
+
+Fast row-selection on keyed data
+
+```{r}
+dt_mtcars[list(6, 4)] # on 'cyl' and 'gear' resp.
+```
+
+Compare with
+
+```{r}
+dt_mtcars[, list(6, 4)]
+```
 
 # Homework
+
+## Homework
+
+- Doodle documents for labs
+
+- 1/2 page project description
+
+- Makefile if you haven't already: http://kbroman.org/minimal_make/
+
+- `dplyr` and databases: https://cran.r-project.org/web/packages/dplyr/vignettes/databases.html

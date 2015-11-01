@@ -457,11 +457,1230 @@ fit3</pre>
 ## attr(,&quot;assign&quot;)
 ## [1] 0 1 2</pre>
 
-</article></slide><slide class='segue dark nobackground'><hgroup class = 'auto-fadein'><h2>Makefile</h2></hgroup><article  id="makefile">
+</article></slide><slide class=''><hgroup><h2>Example</h2></hgroup><article  id="example-5">
 
-</article></slide><slide class='segue dark nobackground'><hgroup class = 'auto-fadein'><h2>Data tables</h2></hgroup><article  id="data-tables">
+<pre class = 'prettyprint lang-r'>linmod(mpg ~ ., data = mtcars)</pre>
 
-</article></slide><slide class='segue dark nobackground'><hgroup class = 'auto-fadein'><h2>Homework</h2></hgroup><article  id="homework"></article></slide>
+<pre >## Call:
+## linmod.formula(formula = mpg ~ ., data = mtcars)
+## 
+## Coefficients:
+## (Intercept)         cyl        disp          hp        drat          wt 
+## 12.30337416 -0.11144048  0.01333524 -0.02148212  0.78711097 -3.71530393 
+##        qsec          vs          am        gear        carb 
+##  0.82104075  0.31776281  2.52022689  0.65541302 -0.19941925</pre>
+
+</article></slide><slide class='segue dark nobackground'><hgroup class = 'auto-fadein'><h2>Data manipulation grammars</h2></hgroup><article  id="data-manipulation-grammars">
+
+</article></slide><slide class=''><hgroup><h2>3 approaches</h2></hgroup><article  id="approaches">
+
+<ol>
+<li><p>base R</p></li>
+<li><p><code>dplyr</code> (and <code>plyr</code>)</p></li>
+<li><p><code>data.tables</code></p></li>
+</ol>
+
+<p>possibly combined with a SQL backend</p>
+
+</article></slide><slide class=''><hgroup><h2>RDBMS</h2></hgroup><article  id="rdbms">
+
+<ul>
+<li><p>Relational database management system</p></li>
+<li><p>IBM, early 1970&#39;s</p></li>
+<li><p>SQL (Structured Query Language)</p></li>
+</ul>
+
+<p>&lt;iframe src = &quot;<a href='https://en.wikipedia.org/wiki/SQL#Operators' title=''>https://en.wikipedia.org/wiki/SQL#Operators</a>&quot; width = &quot;100%&quot; height = &quot;400px&quot;;&quot;&gt;</iframe></p>
+
+</article></slide><slide class=''><hgroup><h2>SQL joins</h2></hgroup><article  id="sql-joins">
+
+<ul>
+<li><a href='http://www.w3schools.com/sql/sql_join.asp' title=''>http://www.w3schools.com/sql/sql_join.asp</a>
+
+<ul>
+<li>inner join</li>
+<li>left join</li>
+<li>right join</li>
+<li>full join</li>
+</ul></li>
+</ul>
+
+</article></slide><slide class=''><hgroup><h2>Base R</h2></hgroup><article  id="base-r">
+
+<pre class = 'prettyprint lang-r'>authors &lt;- data.frame(
+  surname = I(c(&quot;Tukey&quot;, &quot;Venables&quot;, &quot;Tierney&quot;, &quot;Ripley&quot;, &quot;McNeil&quot;)),
+  nationality = c(&quot;US&quot;, &quot;Australia&quot;, &quot;US&quot;, &quot;UK&quot;, &quot;Australia&quot;),
+  deceased = c(&quot;yes&quot;, rep(&quot;no&quot;, 4)))
+books &lt;- data.frame(
+  name = I(c(&quot;Tukey&quot;, &quot;Venables&quot;, &quot;Tierney&quot;,
+             &quot;Ripley&quot;, &quot;Ripley&quot;, &quot;McNeil&quot;, &quot;R Core&quot;)),
+  title = c(&quot;Exploratory Data Analysis&quot;,
+            &quot;Modern Applied Statistics ...&quot;,
+            &quot;LISP-STAT&quot;,
+            &quot;Spatial Statistics&quot;, &quot;Stochastic Simulation&quot;,
+            &quot;Interactive Data Analysis&quot;,
+            &quot;An Introduction to R&quot;),
+  other.author = c(NA, &quot;Ripley&quot;, NA, NA, NA, NA,
+                   &quot;Venables &amp; Smith&quot;))</pre>
+
+</article></slide><slide class=''><hgroup><h2>Base R</h2></hgroup><article  id="base-r-1">
+
+<pre class = 'prettyprint lang-r'>authors</pre>
+
+<pre >##    surname nationality deceased
+## 1    Tukey          US      yes
+## 2 Venables   Australia       no
+## 3  Tierney          US       no
+## 4   Ripley          UK       no
+## 5   McNeil   Australia       no</pre>
+
+</article></slide><slide class=''><hgroup><h2>Base R</h2></hgroup><article  id="base-r-2">
+
+<pre class = 'prettyprint lang-r'>books</pre>
+
+<pre >##       name                         title     other.author
+## 1    Tukey     Exploratory Data Analysis             &lt;NA&gt;
+## 2 Venables Modern Applied Statistics ...           Ripley
+## 3  Tierney                     LISP-STAT             &lt;NA&gt;
+## 4   Ripley            Spatial Statistics             &lt;NA&gt;
+## 5   Ripley         Stochastic Simulation             &lt;NA&gt;
+## 6   McNeil     Interactive Data Analysis             &lt;NA&gt;
+## 7   R Core          An Introduction to R Venables &amp; Smith</pre>
+
+</article></slide><slide class=''><hgroup><h2>Base R</h2></hgroup><article  id="base-r-3">
+
+<pre class = 'prettyprint lang-r'>merge(authors, books, by.x = &quot;surname&quot;, by.y = &quot;name&quot;)</pre>
+
+<pre >##    surname nationality deceased                         title other.author
+## 1   McNeil   Australia       no     Interactive Data Analysis         &lt;NA&gt;
+## 2   Ripley          UK       no            Spatial Statistics         &lt;NA&gt;
+## 3   Ripley          UK       no         Stochastic Simulation         &lt;NA&gt;
+## 4  Tierney          US       no                     LISP-STAT         &lt;NA&gt;
+## 5    Tukey          US      yes     Exploratory Data Analysis         &lt;NA&gt;
+## 6 Venables   Australia       no Modern Applied Statistics ...       Ripley</pre>
+
+</article></slide><slide class=''><hgroup><h2>Base R</h2></hgroup><article  id="base-r-4">
+
+<pre class = 'prettyprint lang-r'>merge(books, authors, by.x = &quot;name&quot;, by.y = &quot;surname&quot;)</pre>
+
+<pre >##       name                         title other.author nationality deceased
+## 1   McNeil     Interactive Data Analysis         &lt;NA&gt;   Australia       no
+## 2   Ripley            Spatial Statistics         &lt;NA&gt;          UK       no
+## 3   Ripley         Stochastic Simulation         &lt;NA&gt;          UK       no
+## 4  Tierney                     LISP-STAT         &lt;NA&gt;          US       no
+## 5    Tukey     Exploratory Data Analysis         &lt;NA&gt;          US      yes
+## 6 Venables Modern Applied Statistics ...       Ripley   Australia       no</pre>
+
+</article></slide><slide class=''><hgroup><h2>Base R</h2></hgroup><article  id="base-r-5">
+
+<pre class = 'prettyprint lang-r'>merge(authors, books, by.x = &quot;surname&quot;, by.y = &quot;name&quot;, all = TRUE)</pre>
+
+<pre >##    surname nationality deceased                         title
+## 1   McNeil   Australia       no     Interactive Data Analysis
+## 2   R Core        &lt;NA&gt;     &lt;NA&gt;          An Introduction to R
+## 3   Ripley          UK       no            Spatial Statistics
+## 4   Ripley          UK       no         Stochastic Simulation
+## 5  Tierney          US       no                     LISP-STAT
+## 6    Tukey          US      yes     Exploratory Data Analysis
+## 7 Venables   Australia       no Modern Applied Statistics ...
+##       other.author
+## 1             &lt;NA&gt;
+## 2 Venables &amp; Smith
+## 3             &lt;NA&gt;
+## 4             &lt;NA&gt;
+## 5             &lt;NA&gt;
+## 6             &lt;NA&gt;
+## 7           Ripley</pre>
+
+<pre class = 'prettyprint lang-r'>merge(authors, books, by.x = &quot;surname&quot;, by.y = &quot;name&quot;, all.x = TRUE)</pre>
+
+<pre >##    surname nationality deceased                         title other.author
+## 1   McNeil   Australia       no     Interactive Data Analysis         &lt;NA&gt;
+## 2   Ripley          UK       no            Spatial Statistics         &lt;NA&gt;
+## 3   Ripley          UK       no         Stochastic Simulation         &lt;NA&gt;
+## 4  Tierney          US       no                     LISP-STAT         &lt;NA&gt;
+## 5    Tukey          US      yes     Exploratory Data Analysis         &lt;NA&gt;
+## 6 Venables   Australia       no Modern Applied Statistics ...       Ripley</pre>
+
+<pre class = 'prettyprint lang-r'>merge(authors, books, by.x = &quot;surname&quot;, by.y = &quot;name&quot;, all.y = TRUE)</pre>
+
+<pre >##    surname nationality deceased                         title
+## 1   McNeil   Australia       no     Interactive Data Analysis
+## 2   R Core        &lt;NA&gt;     &lt;NA&gt;          An Introduction to R
+## 3   Ripley          UK       no            Spatial Statistics
+## 4   Ripley          UK       no         Stochastic Simulation
+## 5  Tierney          US       no                     LISP-STAT
+## 6    Tukey          US      yes     Exploratory Data Analysis
+## 7 Venables   Australia       no Modern Applied Statistics ...
+##       other.author
+## 1             &lt;NA&gt;
+## 2 Venables &amp; Smith
+## 3             &lt;NA&gt;
+## 4             &lt;NA&gt;
+## 5             &lt;NA&gt;
+## 6             &lt;NA&gt;
+## 7           Ripley</pre>
+
+</article></slide><slide class=''><hgroup><h2><code>dplyr</code></h2></hgroup><article  id="dplyr">
+
+<pre class = 'prettyprint lang-r'>library(dplyr)</pre>
+
+<pre >## 
+## Attaching package: &#39;dplyr&#39;
+## 
+## The following objects are masked from &#39;package:stats&#39;:
+## 
+##     filter, lag
+## 
+## The following objects are masked from &#39;package:base&#39;:
+## 
+##     intersect, setdiff, setequal, union</pre>
+
+<pre class = 'prettyprint lang-r'>dp_authors &lt;- tbl_df(authors)
+dp_books &lt;- tbl_df((books))</pre>
+
+</article></slide><slide class=''><hgroup><h2><code>dplyr</code></h2></hgroup><article  id="dplyr-1">
+
+<pre class = 'prettyprint lang-r'>inner_join(dp_books, dp_authors, by = c(&quot;name&quot; = &quot;surname&quot;))</pre>
+
+<pre >## Source: local data frame [6 x 5]
+## 
+##       name                         title other.author nationality deceased
+##      (chr)                        (fctr)       (fctr)      (fctr)   (fctr)
+## 1    Tukey     Exploratory Data Analysis           NA          US      yes
+## 2 Venables Modern Applied Statistics ...       Ripley   Australia       no
+## 3  Tierney                     LISP-STAT           NA          US       no
+## 4   Ripley            Spatial Statistics           NA          UK       no
+## 5   Ripley         Stochastic Simulation           NA          UK       no
+## 6   McNeil     Interactive Data Analysis           NA   Australia       no</pre>
+
+</article></slide><slide class=''><hgroup><h2><code>dplyr</code></h2></hgroup><article  id="dplyr-2">
+
+<pre class = 'prettyprint lang-r'>right_join(dp_books, dp_authors, by = c(&quot;name&quot; = &quot;surname&quot;))</pre>
+
+<pre >## Source: local data frame [6 x 5]
+## 
+##       name                         title other.author nationality deceased
+##      (chr)                        (fctr)       (fctr)      (fctr)   (fctr)
+## 1    Tukey     Exploratory Data Analysis           NA          US      yes
+## 2 Venables Modern Applied Statistics ...       Ripley   Australia       no
+## 3  Tierney                     LISP-STAT           NA          US       no
+## 4   Ripley            Spatial Statistics           NA          UK       no
+## 5   Ripley         Stochastic Simulation           NA          UK       no
+## 6   McNeil     Interactive Data Analysis           NA   Australia       no</pre>
+
+</article></slide><slide class=''><hgroup><h2><code>dplyr</code></h2></hgroup><article  id="dplyr-3">
+
+<pre class = 'prettyprint lang-r'>left_join(dp_books, dp_authors, by = c(&quot;name&quot; = &quot;surname&quot;))</pre>
+
+<pre >## Source: local data frame [7 x 5]
+## 
+##       name                         title     other.author nationality
+##      (chr)                        (fctr)           (fctr)      (fctr)
+## 1    Tukey     Exploratory Data Analysis               NA          US
+## 2 Venables Modern Applied Statistics ...           Ripley   Australia
+## 3  Tierney                     LISP-STAT               NA          US
+## 4   Ripley            Spatial Statistics               NA          UK
+## 5   Ripley         Stochastic Simulation               NA          UK
+## 6   McNeil     Interactive Data Analysis               NA   Australia
+## 7   R Core          An Introduction to R Venables &amp; Smith          NA
+## Variables not shown: deceased (fctr)</pre>
+
+</article></slide><slide class=''><hgroup><h2><code>data.table</code></h2></hgroup><article  id="data.table">
+
+<ul>
+<li>Same as base, but <em>faster</em></li>
+<li>Keys can be used</li>
+<li>Very fast <code>fread</code> (instead of <code>read.csv</code>)</li>
+</ul>
+
+<pre class = 'prettyprint lang-r'>library(data.table)</pre>
+
+<pre >## 
+## Attaching package: &#39;data.table&#39;
+## 
+## The following objects are masked from &#39;package:dplyr&#39;:
+## 
+##     between, last</pre>
+
+<pre class = 'prettyprint lang-r'>dt_authors &lt;- setDT(authors)
+dt_books &lt;- data.table((books)) # same as &#39;setDT&#39;</pre>
+
+</article></slide><slide class=''><hgroup><h2><code>data.table</code></h2></hgroup><article  id="data.table-1">
+
+<pre class = 'prettyprint lang-r'>dt_authors</pre>
+
+<pre >##     surname nationality deceased
+## 1:    Tukey          US      yes
+## 2: Venables   Australia       no
+## 3:  Tierney          US       no
+## 4:   Ripley          UK       no
+## 5:   McNeil   Australia       no</pre>
+
+<pre class = 'prettyprint lang-r'>dt_books</pre>
+
+<pre >##        name                         title     other.author
+## 1:    Tukey     Exploratory Data Analysis               NA
+## 2: Venables Modern Applied Statistics ...           Ripley
+## 3:  Tierney                     LISP-STAT               NA
+## 4:   Ripley            Spatial Statistics               NA
+## 5:   Ripley         Stochastic Simulation               NA
+## 6:   McNeil     Interactive Data Analysis               NA
+## 7:   R Core          An Introduction to R Venables &amp; Smith</pre>
+
+</article></slide><slide class=''><hgroup><h2><code>data.table</code></h2></hgroup><article  id="data.table-2">
+
+<pre class = 'prettyprint lang-r'>setkey(dt_authors, surname); dt_authors</pre>
+
+<pre >##     surname nationality deceased
+## 1:   McNeil   Australia       no
+## 2:   Ripley          UK       no
+## 3:  Tierney          US       no
+## 4:    Tukey          US      yes
+## 5: Venables   Australia       no</pre>
+
+<pre class = 'prettyprint lang-r'>setkey(dt_books, name); dt_books</pre>
+
+<pre >##        name                         title     other.author
+## 1:   McNeil     Interactive Data Analysis               NA
+## 2:   R Core          An Introduction to R Venables &amp; Smith
+## 3:   Ripley            Spatial Statistics               NA
+## 4:   Ripley         Stochastic Simulation               NA
+## 5:  Tierney                     LISP-STAT               NA
+## 6:    Tukey     Exploratory Data Analysis               NA
+## 7: Venables Modern Applied Statistics ...           Ripley</pre>
+
+</article></slide><slide class=''><hgroup><h2><code>data.table</code></h2></hgroup><article  id="data.table-3">
+
+<pre class = 'prettyprint lang-r'>dt_authors[dt_books]</pre>
+
+<pre >##     surname nationality deceased                         title
+## 1:   McNeil   Australia       no     Interactive Data Analysis
+## 2:   R Core          NA       NA          An Introduction to R
+## 3:   Ripley          UK       no            Spatial Statistics
+## 4:   Ripley          UK       no         Stochastic Simulation
+## 5:  Tierney          US       no                     LISP-STAT
+## 6:    Tukey          US      yes     Exploratory Data Analysis
+## 7: Venables   Australia       no Modern Applied Statistics ...
+##        other.author
+## 1:               NA
+## 2: Venables &amp; Smith
+## 3:               NA
+## 4:               NA
+## 5:               NA
+## 6:               NA
+## 7:           Ripley</pre>
+
+<pre class = 'prettyprint lang-r'>dt_books[dt_authors]</pre>
+
+<pre >##        name                         title other.author nationality
+## 1:   McNeil     Interactive Data Analysis           NA   Australia
+## 2:   Ripley            Spatial Statistics           NA          UK
+## 3:   Ripley         Stochastic Simulation           NA          UK
+## 4:  Tierney                     LISP-STAT           NA          US
+## 5:    Tukey     Exploratory Data Analysis           NA          US
+## 6: Venables Modern Applied Statistics ...       Ripley   Australia
+##    deceased
+## 1:       no
+## 2:       no
+## 3:       no
+## 4:       no
+## 5:      yes
+## 6:       no</pre>
+
+</article></slide><slide class=''><hgroup><h2>SQL</h2></hgroup><article  id="sql">
+
+</article></slide><slide class='segue dark nobackground'><hgroup class = 'auto-fadein'><h2>Example <code>nycflights13</code></h2></hgroup><article  id="example-nycflights13">
+
+</article></slide><slide class=''><hgroup><h2><code>nycflights13</code> dataset</h2></hgroup><article  id="nycflights13-dataset">
+
+<ul>
+<li>We are going to compare 3 approaches to manipulate the same dataset
+
+<ol>
+<li><code>data.frame</code></li>
+<li>`data.table</li>
+<li><code>dplyr</code> table (extension of <code>data.frame</code>, <code>data.table</code>-aware)</li>
+</ol></li>
+<li>There is <strong>no best approach</strong> and these data classes can be combined.</li>
+</ul>
+
+</article></slide><slide class=''><hgroup><h2>Load data</h2></hgroup><article  id="load-data">
+
+<ul>
+<li>Pre-packaged dataset:</li>
+</ul>
+
+<pre class = 'prettyprint lang-r'>library(nycflights13)
+head(flights)</pre>
+
+<pre >## Source: local data frame [6 x 16]
+## 
+##    year month   day dep_time dep_delay arr_time arr_delay carrier tailnum
+##   (int) (int) (int)    (int)     (dbl)    (int)     (dbl)   (chr)   (chr)
+## 1  2013     1     1      517         2      830        11      UA  N14228
+## 2  2013     1     1      533         4      850        20      UA  N24211
+## 3  2013     1     1      542         2      923        33      AA  N619AA
+## 4  2013     1     1      544        -1     1004       -18      B6  N804JB
+## 5  2013     1     1      554        -6      812       -25      DL  N668DN
+## 6  2013     1     1      554        -4      740        12      UA  N39463
+## Variables not shown: flight (int), origin (chr), dest (chr), air_time
+##   (dbl), distance (dbl), hour (dbl), minute (dbl)</pre>
+
+</article></slide><slide class=''><hgroup><h2>Create datasets</h2></hgroup><article  id="create-datasets">
+
+<pre class = 'prettyprint lang-r'>library(dplyr)
+library(data.table)
+
+## Default is dplyr table
+dp_flights &lt;- flights
+## Explicit conversion
+## dp_flights &lt;- tbl_df(flights)
+## Base data frame
+df_flights &lt;- data.frame(flights)
+## Data table
+dt_flights &lt;- data.table(flights)</pre>
+
+</article></slide><slide class=''><hgroup><h2>Pretty-print</h2></hgroup><article  id="pretty-print">
+
+<pre class = 'prettyprint lang-r'>head(df_flights)</pre>
+
+<pre >##   year month day dep_time dep_delay arr_time arr_delay carrier tailnum
+## 1 2013     1   1      517         2      830        11      UA  N14228
+## 2 2013     1   1      533         4      850        20      UA  N24211
+## 3 2013     1   1      542         2      923        33      AA  N619AA
+## 4 2013     1   1      544        -1     1004       -18      B6  N804JB
+## 5 2013     1   1      554        -6      812       -25      DL  N668DN
+## 6 2013     1   1      554        -4      740        12      UA  N39463
+##   flight origin dest air_time distance hour minute
+## 1   1545    EWR  IAH      227     1400    5     17
+## 2   1714    LGA  IAH      227     1416    5     33
+## 3   1141    JFK  MIA      160     1089    5     42
+## 4    725    JFK  BQN      183     1576    5     44
+## 5    461    LGA  ATL      116      762    5     54
+## 6   1696    EWR  ORD      150      719    5     54</pre>
+
+</article></slide><slide class=''><hgroup><h2>Pretty-print</h2></hgroup><article  id="pretty-print-1">
+
+<pre class = 'prettyprint lang-r'>dp_flights # Note column types</pre>
+
+<pre >## Source: local data frame [336,776 x 16]
+## 
+##     year month   day dep_time dep_delay arr_time arr_delay carrier tailnum
+##    (int) (int) (int)    (int)     (dbl)    (int)     (dbl)   (chr)   (chr)
+## 1   2013     1     1      517         2      830        11      UA  N14228
+## 2   2013     1     1      533         4      850        20      UA  N24211
+## 3   2013     1     1      542         2      923        33      AA  N619AA
+## 4   2013     1     1      544        -1     1004       -18      B6  N804JB
+## 5   2013     1     1      554        -6      812       -25      DL  N668DN
+## 6   2013     1     1      554        -4      740        12      UA  N39463
+## 7   2013     1     1      555        -5      913        19      B6  N516JB
+## 8   2013     1     1      557        -3      709       -14      EV  N829AS
+## 9   2013     1     1      557        -3      838        -8      B6  N593JB
+## 10  2013     1     1      558        -2      753         8      AA  N3ALAA
+## ..   ...   ...   ...      ...       ...      ...       ...     ...     ...
+## Variables not shown: flight (int), origin (chr), dest (chr), air_time
+##   (dbl), distance (dbl), hour (dbl), minute (dbl)</pre>
+
+</article></slide><slide class=''><hgroup><h2>Pretty-print</h2></hgroup><article  id="pretty-print-2">
+
+<pre class = 'prettyprint lang-r'>dt_flights</pre>
+
+<pre >##         year month day dep_time dep_delay arr_time arr_delay carrier
+##      1: 2013     1   1      517         2      830        11      UA
+##      2: 2013     1   1      533         4      850        20      UA
+##      3: 2013     1   1      542         2      923        33      AA
+##      4: 2013     1   1      544        -1     1004       -18      B6
+##      5: 2013     1   1      554        -6      812       -25      DL
+##     ---                                                             
+## 336772: 2013     9  30       NA        NA       NA        NA      9E
+## 336773: 2013     9  30       NA        NA       NA        NA      9E
+## 336774: 2013     9  30       NA        NA       NA        NA      MQ
+## 336775: 2013     9  30       NA        NA       NA        NA      MQ
+## 336776: 2013     9  30       NA        NA       NA        NA      MQ
+##         tailnum flight origin dest air_time distance hour minute
+##      1:  N14228   1545    EWR  IAH      227     1400    5     17
+##      2:  N24211   1714    LGA  IAH      227     1416    5     33
+##      3:  N619AA   1141    JFK  MIA      160     1089    5     42
+##      4:  N804JB    725    JFK  BQN      183     1576    5     44
+##      5:  N668DN    461    LGA  ATL      116      762    5     54
+##     ---                                                         
+## 336772:           3393    JFK  DCA       NA      213   NA     NA
+## 336773:           3525    LGA  SYR       NA      198   NA     NA
+## 336774:  N535MQ   3461    LGA  BNA       NA      764   NA     NA
+## 336775:  N511MQ   3572    LGA  CLE       NA      419   NA     NA
+## 336776:  N839MQ   3531    LGA  RDU       NA      431   NA     NA</pre>
+
+</article></slide><slide class=''><hgroup><h2>Filter rows</h2></hgroup><article  id="filter-rows">
+
+<pre class = 'prettyprint lang-r'>head(df_flights[df_flights$month == 1 &amp; df_flights$day == 1, ])</pre>
+
+<pre >##   year month day dep_time dep_delay arr_time arr_delay carrier tailnum
+## 1 2013     1   1      517         2      830        11      UA  N14228
+## 2 2013     1   1      533         4      850        20      UA  N24211
+## 3 2013     1   1      542         2      923        33      AA  N619AA
+## 4 2013     1   1      544        -1     1004       -18      B6  N804JB
+## 5 2013     1   1      554        -6      812       -25      DL  N668DN
+## 6 2013     1   1      554        -4      740        12      UA  N39463
+##   flight origin dest air_time distance hour minute
+## 1   1545    EWR  IAH      227     1400    5     17
+## 2   1714    LGA  IAH      227     1416    5     33
+## 3   1141    JFK  MIA      160     1089    5     42
+## 4    725    JFK  BQN      183     1576    5     44
+## 5    461    LGA  ATL      116      762    5     54
+## 6   1696    EWR  ORD      150      719    5     54</pre>
+
+<pre class = 'prettyprint lang-r'>head(subset(df_flights, month == 1 &amp; day ==1))</pre>
+
+<pre >##   year month day dep_time dep_delay arr_time arr_delay carrier tailnum
+## 1 2013     1   1      517         2      830        11      UA  N14228
+## 2 2013     1   1      533         4      850        20      UA  N24211
+## 3 2013     1   1      542         2      923        33      AA  N619AA
+## 4 2013     1   1      544        -1     1004       -18      B6  N804JB
+## 5 2013     1   1      554        -6      812       -25      DL  N668DN
+## 6 2013     1   1      554        -4      740        12      UA  N39463
+##   flight origin dest air_time distance hour minute
+## 1   1545    EWR  IAH      227     1400    5     17
+## 2   1714    LGA  IAH      227     1416    5     33
+## 3   1141    JFK  MIA      160     1089    5     42
+## 4    725    JFK  BQN      183     1576    5     44
+## 5    461    LGA  ATL      116      762    5     54
+## 6   1696    EWR  ORD      150      719    5     54</pre>
+
+</article></slide><slide class=''><hgroup><h2>Filter rows</h2></hgroup><article  id="filter-rows-1">
+
+<pre class = 'prettyprint lang-r'>head(df_flights[1:10, ])</pre>
+
+<pre >##   year month day dep_time dep_delay arr_time arr_delay carrier tailnum
+## 1 2013     1   1      517         2      830        11      UA  N14228
+## 2 2013     1   1      533         4      850        20      UA  N24211
+## 3 2013     1   1      542         2      923        33      AA  N619AA
+## 4 2013     1   1      544        -1     1004       -18      B6  N804JB
+## 5 2013     1   1      554        -6      812       -25      DL  N668DN
+## 6 2013     1   1      554        -4      740        12      UA  N39463
+##   flight origin dest air_time distance hour minute
+## 1   1545    EWR  IAH      227     1400    5     17
+## 2   1714    LGA  IAH      227     1416    5     33
+## 3   1141    JFK  MIA      160     1089    5     42
+## 4    725    JFK  BQN      183     1576    5     44
+## 5    461    LGA  ATL      116      762    5     54
+## 6   1696    EWR  ORD      150      719    5     54</pre>
+
+</article></slide><slide class=''><hgroup><h2>Filter rows</h2></hgroup><article  id="filter-rows-2">
+
+<pre class = 'prettyprint lang-r'>head(df_flights[1:10, ])
+slice(dp_flights, 1:10)
+dt_flights[1:10]</pre>
+
+</article></slide><slide class=''><hgroup><h2>Arrange rows</h2></hgroup><article  id="arrange-rows">
+
+<pre class = 'prettyprint lang-r'>head(with(df_flights, df_flights[order(year, month, day), ]))</pre>
+
+<pre >##   year month day dep_time dep_delay arr_time arr_delay carrier tailnum
+## 1 2013     1   1      517         2      830        11      UA  N14228
+## 2 2013     1   1      533         4      850        20      UA  N24211
+## 3 2013     1   1      542         2      923        33      AA  N619AA
+## 4 2013     1   1      544        -1     1004       -18      B6  N804JB
+## 5 2013     1   1      554        -6      812       -25      DL  N668DN
+## 6 2013     1   1      554        -4      740        12      UA  N39463
+##   flight origin dest air_time distance hour minute
+## 1   1545    EWR  IAH      227     1400    5     17
+## 2   1714    LGA  IAH      227     1416    5     33
+## 3   1141    JFK  MIA      160     1089    5     42
+## 4    725    JFK  BQN      183     1576    5     44
+## 5    461    LGA  ATL      116      762    5     54
+## 6   1696    EWR  ORD      150      719    5     54</pre>
+
+<pre class = 'prettyprint lang-r'>head(with(df_flights, df_flights[order(year, month, day), ]))
+arrange(dp_flights, year, month, day)
+dt_flights[order(year, month, day)]</pre>
+
+<pre class = 'prettyprint lang-r'>head(with(df_flights, df_flights[order(-arr_delay), ]))</pre>
+
+<pre >##        year month day dep_time dep_delay arr_time arr_delay carrier
+## 7073   2013     1   9      641      1301     1242      1272      HA
+## 235779 2013     6  15     1432      1137     1607      1127      MQ
+## 8240   2013     1  10     1121      1126     1239      1109      MQ
+## 327044 2013     9  20     1139      1014     1457      1007      AA
+## 270377 2013     7  22      845      1005     1044       989      MQ
+## 173993 2013     4  10     1100       960     1342       931      DL
+##        tailnum flight origin dest air_time distance hour minute
+## 7073    N384HA     51    JFK  HNL      640     4983    6     41
+## 235779  N504MQ   3535    JFK  CMH       74      483   14     32
+## 8240    N517MQ   3695    EWR  ORD      111      719   11     21
+## 327044  N338AA    177    JFK  SFO      354     2586   11     39
+## 270377  N665MQ   3075    JFK  CVG       96      589    8     45
+## 173993  N959DL   2391    JFK  TPA      139     1005   11      0</pre>
+
+<pre class = 'prettyprint lang-r'>head(with(df_flights, df_flights[order(-arr_delay), ]))
+arrange(flights, desc(arr_delay))
+dt_flights[order(-arr_delay)]</pre>
+
+</article></slide><slide class=''><hgroup><h2>Select columns</h2></hgroup><article  id="select-columns">
+
+<pre class = 'prettyprint lang-r'>head(select(df_flights, year, month, day))</pre>
+
+<pre >##   year month day
+## 1 2013     1   1
+## 2 2013     1   1
+## 3 2013     1   1
+## 4 2013     1   1
+## 5 2013     1   1
+## 6 2013     1   1</pre>
+
+</article></slide><slide class=''><hgroup><h2>Select columns</h2></hgroup><article  id="select-columns-1">
+
+<pre class = 'prettyprint lang-r'>head(select(df_flights, year, month, day))
+select(dp_flights, year, month, day)
+dt_flights[, .(year, month, day)]
+dt_flights[, list(year, month, day)]</pre>
+
+</article></slide><slide class=''><hgroup><h2>Select columns</h2></hgroup><article  id="select-columns-2">
+
+<pre class = 'prettyprint lang-r'>## Not as expected!
+dt_flights[, c(&quot;year&quot;, &quot;month&quot;, &quot;day&quot;)]</pre>
+
+<pre >## [1] &quot;year&quot;  &quot;month&quot; &quot;day&quot;</pre>
+
+<pre class = 'prettyprint lang-r'>dt_flights[, c(&quot;year&quot;, &quot;month&quot;, &quot;day&quot;), with = FALSE]</pre>
+
+<pre >##         year month day
+##      1: 2013     1   1
+##      2: 2013     1   1
+##      3: 2013     1   1
+##      4: 2013     1   1
+##      5: 2013     1   1
+##     ---               
+## 336772: 2013     9  30
+## 336773: 2013     9  30
+## 336774: 2013     9  30
+## 336775: 2013     9  30
+## 336776: 2013     9  30</pre>
+
+</article></slide><slide class=''><hgroup><h2>Extract distinct (unique) rows</h2></hgroup><article  id="extract-distinct-unique-rows">
+
+<pre class = 'prettyprint lang-r'>head(unique(df_flights, by = &quot;tailnum&quot;))</pre>
+
+<pre >##   year month day dep_time dep_delay arr_time arr_delay carrier tailnum
+## 1 2013     1   1      517         2      830        11      UA  N14228
+## 2 2013     1   1      533         4      850        20      UA  N24211
+## 3 2013     1   1      542         2      923        33      AA  N619AA
+## 4 2013     1   1      544        -1     1004       -18      B6  N804JB
+## 5 2013     1   1      554        -6      812       -25      DL  N668DN
+## 6 2013     1   1      554        -4      740        12      UA  N39463
+##   flight origin dest air_time distance hour minute
+## 1   1545    EWR  IAH      227     1400    5     17
+## 2   1714    LGA  IAH      227     1416    5     33
+## 3   1141    JFK  MIA      160     1089    5     42
+## 4    725    JFK  BQN      183     1576    5     44
+## 5    461    LGA  ATL      116      762    5     54
+## 6   1696    EWR  ORD      150      719    5     54</pre>
+
+</article></slide><slide class=''><hgroup><h2>Extract distinct (unique) rows</h2></hgroup><article  id="extract-distinct-unique-rows-1">
+
+<pre class = 'prettyprint lang-r'>head(unique(df_flights, by = &quot;tailnum&quot;))
+distinct(select(flights, tailnum))
+unique(dt_flights, by = &quot;tailnum&quot;)</pre>
+
+</article></slide><slide class=''><hgroup><h2>Add new columns</h2></hgroup><article  id="add-new-columns">
+
+<pre class = 'prettyprint lang-r'>## Copy
+df_flights$gain &lt;-
+  df_flights$arr_delay - df_flights$dep_delay
+df_flights$speed &lt;-
+  df_flights$distance / df_flights$air_time * 60</pre>
+
+</article></slide><slide class=''><hgroup><h2>Add new columns</h2></hgroup><article  id="add-new-columns-1">
+
+<pre class = 'prettyprint lang-r'>## Copy
+mutate(dp_flights,
+       gain = arr_delay - dep_delay,
+       speed = distance / air_time * 60)</pre>
+
+<pre >## Source: local data frame [336,776 x 18]
+## 
+##     year month   day dep_time dep_delay arr_time arr_delay carrier tailnum
+##    (int) (int) (int)    (int)     (dbl)    (int)     (dbl)   (chr)   (chr)
+## 1   2013     1     1      517         2      830        11      UA  N14228
+## 2   2013     1     1      533         4      850        20      UA  N24211
+## 3   2013     1     1      542         2      923        33      AA  N619AA
+## 4   2013     1     1      544        -1     1004       -18      B6  N804JB
+## 5   2013     1     1      554        -6      812       -25      DL  N668DN
+## 6   2013     1     1      554        -4      740        12      UA  N39463
+## 7   2013     1     1      555        -5      913        19      B6  N516JB
+## 8   2013     1     1      557        -3      709       -14      EV  N829AS
+## 9   2013     1     1      557        -3      838        -8      B6  N593JB
+## 10  2013     1     1      558        -2      753         8      AA  N3ALAA
+## ..   ...   ...   ...      ...       ...      ...       ...     ...     ...
+## Variables not shown: flight (int), origin (chr), dest (chr), air_time
+##   (dbl), distance (dbl), hour (dbl), minute (dbl), gain (dbl), speed (dbl)</pre>
+
+</article></slide><slide class=''><hgroup><h2>Add new columns</h2></hgroup><article  id="add-new-columns-2">
+
+<pre class = 'prettyprint lang-r'>## In-place
+dt_flights[, gain := arr_delay - dep_delay]
+dt_flights[, speed := arr_delay - dep_delay,
+           distance / air_time * 60]</pre>
+
+</article></slide><slide class=''><hgroup><h2>Create new dataset from columns</h2></hgroup><article  id="create-new-dataset-from-columns">
+
+<pre class = 'prettyprint lang-r'>df_flights_2 &lt;- data.frame(gain = df_flights$arr_delay - df_flights$dep_delay,
+                           speed = df_flights$distance / df_flights$air_time * 60)
+head(df_flights_2)</pre>
+
+<pre >##   gain    speed
+## 1    9 370.0441
+## 2   16 374.2731
+## 3   31 408.3750
+## 4  -17 516.7213
+## 5  -19 394.1379
+## 6   16 287.6000</pre>
+
+</article></slide><slide class=''><hgroup><h2>Create new dataset from columns</h2></hgroup><article  id="create-new-dataset-from-columns-1">
+
+<pre class = 'prettyprint lang-r'>transmute(dp_flights,
+          gain = arr_delay - dep_delay,
+          speed = distance / air_time * 60)</pre>
+
+<pre >## Source: local data frame [336,776 x 2]
+## 
+##     gain    speed
+##    (dbl)    (dbl)
+## 1      9 370.0441
+## 2     16 374.2731
+## 3     31 408.3750
+## 4    -17 516.7213
+## 5    -19 394.1379
+## 6     16 287.6000
+## 7     24 404.4304
+## 8    -11 259.2453
+## 9     -5 404.5714
+## 10    10 318.6957
+## ..   ...      ...</pre>
+
+</article></slide><slide class=''><hgroup><h2>Create new dataset from columns</h2></hgroup><article  id="create-new-dataset-from-columns-2">
+
+<pre class = 'prettyprint lang-r'>dt_flights[, .(gain = arr_delay - dep_delay,
+               gain_per_hour = gain / (air_time / 60))]</pre>
+
+<pre >##         gain gain_per_hour
+##      1:    9      2.378855
+##      2:   16      4.229075
+##      3:   31     11.625000
+##      4:  -17     -5.573770
+##      5:  -19     -9.827586
+##     ---                   
+## 336772:   NA            NA
+## 336773:   NA            NA
+## 336774:   NA            NA
+## 336775:   NA            NA
+## 336776:   NA            NA</pre>
+
+</article></slide><slide class=''><hgroup><h2>Summarize values</h2></hgroup><article  id="summarize-values">
+
+<pre class = 'prettyprint lang-r'>mean(df_flights$dep_delay, na.rm = TRUE)</pre>
+
+<pre >## [1] 12.63907</pre>
+
+</article></slide><slide class=''><hgroup><h2>Summarize values</h2></hgroup><article  id="summarize-values-1">
+
+<pre class = 'prettyprint lang-r'>summarise(dp_flights,
+          delay = mean(dep_delay, na.rm = TRUE))</pre>
+
+</article></slide><slide class=''><hgroup><h2>Summarize values</h2></hgroup><article  id="summarize-values-2">
+
+<pre class = 'prettyprint lang-r'>dt_flights[, .(delay = mean(dep_delay, na.rm = TRUE))]</pre>
+
+</article></slide><slide class=''><hgroup><h2>Randomly sample rows</h2></hgroup><article  id="randomly-sample-rows">
+
+<pre class = 'prettyprint lang-r'>set.seed(1234)
+head(df_flights[sample(nrow(df_flights), 10), ])
+sample_n(dp_flights, 10)
+dt_flights[sample(.N, 10)]</pre>
+
+<pre class = 'prettyprint lang-r'>head(df_flights[sample(round(.N * 0.01)), ])
+sample_frac(dp_flights, 0.01)
+dt_flights[sample(round(.N * 0.01))]</pre>
+
+</article></slide><slide class=''><hgroup><h2>Grouped operations (<code>dplyr</code> and <code>data.table</code>)</h2></hgroup><article  id="grouped-operations-dplyr-and-data.table">
+
+<pre class = 'prettyprint lang-r'>by_tailnum &lt;- group_by(dp_flights, tailnum)
+dp_delay &lt;- summarise(by_tailnum,
+                      count = n(),
+                      dist = mean(distance, na.rm = TRUE),
+                      delay = mean(arr_delay, na.rm = TRUE))
+dp_delay &lt;- filter(dp_delay, count &gt; 20, dist &lt; 2000)
+dp_delay</pre>
+
+<pre >## Source: local data frame [2,962 x 4]
+## 
+##    tailnum count     dist      delay
+##      (chr) (int)    (dbl)      (dbl)
+## 1           2512 710.2576        NaN
+## 2   N0EGMQ   371 676.1887  9.9829545
+## 3   N10156   153 757.9477 12.7172414
+## 4   N102UW    48 535.8750  2.9375000
+## 5   N103US    46 535.1957 -6.9347826
+## 6   N104UW    47 535.2553  1.8043478
+## 7   N10575   289 519.7024 20.6914498
+## 8   N105UW    45 524.8444 -0.2666667
+## 9   N107US    41 528.7073 -5.7317073
+## 10  N108UW    60 534.5000 -1.2500000
+## ..     ...   ...      ...        ...</pre>
+
+</article></slide><slide class=''><hgroup><h2>Grouped operations</h2></hgroup><article  id="grouped-operations">
+
+<pre class = 'prettyprint lang-r'>dt_delay &lt;-
+  dt_flights[, .(count = .N,
+                 dist = mean(distance, na.rm = TRUE),
+                 delay = mean(arr_delay, na.rm = TRUE)),
+             by = list(tailnum)][count &gt; 20 &amp;  dist &lt; 2000]
+dt_delay</pre>
+
+<pre >##       tailnum count      dist     delay
+##    1:  N14228   111 1546.9640  3.711712
+##    2:  N24211   130 1330.2615  7.700000
+##    3:  N619AA    24 1339.2083  7.652174
+##    4:  N804JB   219 1424.6210 -1.860465
+##    5:  N668DN    49 1027.5918  2.625000
+##   ---                                  
+## 2958:  N330NB    44  813.2045  3.409091
+## 2959:  N354NB    26  816.8077  7.615385
+## 2960:  N331NB    59  791.4576 12.593220
+## 2961:  N352NB    42  672.5952 15.536585
+## 2962:  N823MQ    38  315.7368  9.351351</pre>
+
+</article></slide><slide class=''><hgroup><h2>Chaining</h2></hgroup><article  id="chaining">
+
+<pre class = 'prettyprint lang-r'>a1 &lt;- group_by(flights, year, month, day)
+a2 &lt;- select(a1, arr_delay, dep_delay)
+a3 &lt;- summarise(a2,
+                arr = mean(arr_delay, na.rm = TRUE),
+                dep = mean(dep_delay, na.rm = TRUE))
+a4 &lt;- filter(a3, arr &gt; 30 | dep &gt; 30)
+a4</pre>
+
+<pre >## Source: local data frame [49 x 5]
+## Groups: year, month [11]
+## 
+##     year month   day      arr      dep
+##    (int) (int) (int)    (dbl)    (dbl)
+## 1   2013     1    16 34.24736 24.61287
+## 2   2013     1    31 32.60285 28.65836
+## 3   2013     2    11 36.29009 39.07360
+## 4   2013     2    27 31.25249 37.76327
+## 5   2013     3     8 85.86216 83.53692
+## 6   2013     3    18 41.29189 30.11796
+## 7   2013     4    10 38.41231 33.02368
+## 8   2013     4    12 36.04814 34.83843
+## 9   2013     4    18 36.02848 34.91536
+## 10  2013     4    19 47.91170 46.12783
+## ..   ...   ...   ...      ...      ...</pre>
+
+<pre class = 'prettyprint lang-r'>filter(
+  summarise(
+    select(
+      group_by(flights, year, month, day),
+      arr_delay, dep_delay
+      ),
+    arr = mean(arr_delay, na.rm = TRUE),
+    dep = mean(dep_delay, na.rm = TRUE)
+    ),
+  arr &gt; 30 | dep &gt; 30
+  )</pre>
+
+<pre >## Source: local data frame [49 x 5]
+## Groups: year, month [11]
+## 
+##     year month   day      arr      dep
+##    (int) (int) (int)    (dbl)    (dbl)
+## 1   2013     1    16 34.24736 24.61287
+## 2   2013     1    31 32.60285 28.65836
+## 3   2013     2    11 36.29009 39.07360
+## 4   2013     2    27 31.25249 37.76327
+## 5   2013     3     8 85.86216 83.53692
+## 6   2013     3    18 41.29189 30.11796
+## 7   2013     4    10 38.41231 33.02368
+## 8   2013     4    12 36.04814 34.83843
+## 9   2013     4    18 36.02848 34.91536
+## 10  2013     4    19 47.91170 46.12783
+## ..   ...   ...   ...      ...      ...</pre>
+
+</article></slide><slide class=''><hgroup><h2>Ceci n&#39;est pas une pipe (Magritte)</h2></hgroup><article  id="ceci-nest-pas-une-pipe-magritte">
+
+<div class="centered">
+<p><img src="https://upload.wikimedia.org/wikipedia/en/b/b9/MagrittePipe.jpg" width="50%"/></p></div>
+
+</article></slide><slide class=''><hgroup><h2>Ceci n&#39;est pas un pipe (<code>magrittr</code>)</h2></hgroup><article  id="ceci-nest-pas-un-pipe-magrittr">
+
+<p><em>To be pronounced with a sophisticated French accent&#8230;</em></p>
+
+<iframe src="https://cran.r-project.org/web/packages/magrittr/vignettes/magrittr.html">
+
+</iframe>
+
+</article></slide><slide class=''><hgroup><h2>Chaining</h2></hgroup><article  id="chaining-1">
+
+<pre class = 'prettyprint lang-r'>flights %&gt;%
+  group_by(year, month, day) %&gt;%
+  select(arr_delay, dep_delay) %&gt;%
+  summarise(
+    arr = mean(arr_delay, na.rm = TRUE),
+    dep = mean(dep_delay, na.rm = TRUE)
+    ) %&gt;%
+  filter(arr &gt; 30 | dep &gt; 30)</pre>
+
+<pre >## Source: local data frame [49 x 5]
+## Groups: year, month [11]
+## 
+##     year month   day      arr      dep
+##    (int) (int) (int)    (dbl)    (dbl)
+## 1   2013     1    16 34.24736 24.61287
+## 2   2013     1    31 32.60285 28.65836
+## 3   2013     2    11 36.29009 39.07360
+## 4   2013     2    27 31.25249 37.76327
+## 5   2013     3     8 85.86216 83.53692
+## 6   2013     3    18 41.29189 30.11796
+## 7   2013     4    10 38.41231 33.02368
+## 8   2013     4    12 36.04814 34.83843
+## 9   2013     4    18 36.02848 34.91536
+## 10  2013     4    19 47.91170 46.12783
+## ..   ...   ...   ...      ...      ...</pre>
+
+<pre class = 'prettyprint lang-r'>dt_delay &lt;- dt_flights[, .(count = .N,
+                           dist = mean(distance, na.rm = TRUE),
+                           delay = mean(arr_delay, na.rm = TRUE)),
+                       by = list(tailnum)][count &gt; 20 &amp;  dist &lt; 2000]
+dt_delay</pre>
+
+<pre >##       tailnum count      dist     delay
+##    1:  N14228   111 1546.9640  3.711712
+##    2:  N24211   130 1330.2615  7.700000
+##    3:  N619AA    24 1339.2083  7.652174
+##    4:  N804JB   219 1424.6210 -1.860465
+##    5:  N668DN    49 1027.5918  2.625000
+##   ---                                  
+## 2958:  N330NB    44  813.2045  3.409091
+## 2959:  N354NB    26  816.8077  7.615385
+## 2960:  N331NB    59  791.4576 12.593220
+## 2961:  N352NB    42  672.5952 15.536585
+## 2962:  N823MQ    38  315.7368  9.351351</pre>
+
+</article></slide><slide class=''><hgroup><h2>Pipes???</h2></hgroup><article  id="pipes">
+
+<p><code>magrittr</code> <a href='https://cran.r-project.org/web/packages/magrittr/vignettes/magrittr.html' title=''>vignette</a>:</p>
+
+<blockquote>
+<p>We start with a value, here mtcars (a data.frame). Based on this, we first extract a subset, then we aggregate the information based on the number of cylinders, and then we transform the dataset by adding a variable for kilometers per liter as supplement to miles per gallon. Finally we print the result before assigning it. Note how the code is arranged in the logical order of how you think about the task: data-&gt;transform-&gt;aggregate, which is also the same order as the code will execute. It&#39;s like a recipe – easy to read, easy to follow!</p>
+</blockquote>
+
+</article></slide><slide class=''><hgroup><h2>Pipes???</h2></hgroup><article  id="pipes-1">
+
+<pre class = 'prettyprint lang-r'>library(magrittr)
+car_data &lt;- 
+  mtcars %&gt;%
+  subset(hp &gt; 100) %&gt;%
+  aggregate(. ~ cyl, data = ., FUN = . %&gt;% mean %&gt;% round(2)) %&gt;%
+  transform(kpl = mpg %&gt;% multiply_by(0.4251)) %&gt;%
+  print</pre>
+
+<pre >##   cyl   mpg   disp     hp drat   wt  qsec   vs   am gear carb       kpl
+## 1   4 25.90 108.05 111.00 3.94 2.15 17.75 1.00 1.00 4.50 2.00 11.010090
+## 2   6 19.74 183.31 122.29 3.59 3.12 17.98 0.57 0.43 3.86 3.43  8.391474
+## 3   8 15.10 353.10 209.21 3.23 4.00 16.77 0.00 0.14 3.29 3.50  6.419010</pre>
+
+</article></slide><slide class=''><hgroup><h2>Pipes???</h2></hgroup><article  id="pipes-2">
+
+<pre class = 'prettyprint lang-r'>dt_mtcars &lt;- data.table(mtcars)
+dt_car_data &lt;- dt_mtcars[hp &gt; 100][, lapply(.SD, function(x) round(mean(x), 2)),
+                                   by = &quot;cyl&quot;][, kpl := mpg * 0.4251]
+print(dt_car_data)</pre>
+
+<pre >##    cyl   mpg   disp     hp drat   wt  qsec   vs   am gear carb       kpl
+## 1:   6 19.74 183.31 122.29 3.59 3.12 17.98 0.57 0.43 3.86 3.43  8.391474
+## 2:   8 15.10 353.10 209.21 3.23 4.00 16.77 0.00 0.14 3.29 3.50  6.419010
+## 3:   4 25.90 108.05 111.00 3.94 2.15 17.75 1.00 1.00 4.50 2.00 11.010090</pre>
+
+</article></slide><slide class=''><hgroup><h2>Not always as expected&#8230;</h2></hgroup><article  id="not-always-as-expected...">
+
+<p>No&#8230;</p>
+
+<pre class = 'prettyprint lang-r'>dt_mtcars &lt;- data.table(mtcars)
+names(dt_mtcars)</pre>
+
+<pre >##  [1] &quot;mpg&quot;  &quot;cyl&quot;  &quot;disp&quot; &quot;hp&quot;   &quot;drat&quot; &quot;wt&quot;   &quot;qsec&quot; &quot;vs&quot;   &quot;am&quot;   &quot;gear&quot;
+## [11] &quot;carb&quot;</pre>
+
+<pre class = 'prettyprint lang-r'>f &lt;- function(dt, selected_variables = c(&quot;gear&quot;, &quot;carb&quot;)) {
+  return(dt[, selected_variables])
+}
+
+f(dt_mtcars)</pre>
+
+<pre >## [1] &quot;gear&quot; &quot;carb&quot;</pre>
+
+</article></slide><slide class=''><hgroup><h2>Not always as expected&#8230;</h2></hgroup><article  id="not-always-as-expected...-1">
+
+<p>Yes!</p>
+
+<pre class = 'prettyprint lang-r'>f &lt;- function(dt, selected_variables = c(&quot;gear&quot;, &quot;carb&quot;)) {
+  return(dt[get(selected_variables)])
+}
+
+f(dt_mtcars)</pre>
+
+<pre >##      mpg cyl disp  hp drat    wt  qsec vs am gear carb
+##  1: 21.4   6  258 110 3.08 3.215 19.44  1  0    3    1
+##  2: 21.4   6  258 110 3.08 3.215 19.44  1  0    3    1
+##  3: 21.4   6  258 110 3.08 3.215 19.44  1  0    3    1
+##  4: 22.8   4  108  93 3.85 2.320 18.61  1  1    4    1
+##  5: 22.8   4  108  93 3.85 2.320 18.61  1  1    4    1
+##  6: 22.8   4  108  93 3.85 2.320 18.61  1  1    4    1
+##  7: 22.8   4  108  93 3.85 2.320 18.61  1  1    4    1
+##  8: 21.4   6  258 110 3.08 3.215 19.44  1  0    3    1
+##  9: 21.4   6  258 110 3.08 3.215 19.44  1  0    3    1
+## 10: 21.4   6  258 110 3.08 3.215 19.44  1  0    3    1
+## 11: 21.4   6  258 110 3.08 3.215 19.44  1  0    3    1
+## 12: 22.8   4  108  93 3.85 2.320 18.61  1  1    4    1
+## 13: 22.8   4  108  93 3.85 2.320 18.61  1  1    4    1
+## 14: 22.8   4  108  93 3.85 2.320 18.61  1  1    4    1
+## 15: 22.8   4  108  93 3.85 2.320 18.61  1  1    4    1
+## 16: 22.8   4  108  93 3.85 2.320 18.61  1  1    4    1
+## 17: 22.8   4  108  93 3.85 2.320 18.61  1  1    4    1
+## 18: 21.4   6  258 110 3.08 3.215 19.44  1  0    3    1
+## 19: 21.4   6  258 110 3.08 3.215 19.44  1  0    3    1
+## 20: 21.4   6  258 110 3.08 3.215 19.44  1  0    3    1
+## 21: 22.8   4  108  93 3.85 2.320 18.61  1  1    4    1
+## 22: 22.8   4  108  93 3.85 2.320 18.61  1  1    4    1
+## 23: 22.8   4  108  93 3.85 2.320 18.61  1  1    4    1
+## 24: 22.8   4  108  93 3.85 2.320 18.61  1  1    4    1
+## 25: 22.8   4  108  93 3.85 2.320 18.61  1  1    4    1
+## 26: 21.4   6  258 110 3.08 3.215 19.44  1  0    3    1
+## 27: 18.7   8  360 175 3.15 3.440 17.02  0  0    3    2
+## 28: 18.7   8  360 175 3.15 3.440 17.02  0  0    3    2
+## 29: 18.7   8  360 175 3.15 3.440 17.02  0  0    3    2
+## 30: 18.7   8  360 175 3.15 3.440 17.02  0  0    3    2
+## 31: 18.7   8  360 175 3.15 3.440 17.02  0  0    3    2
+## 32: 21.4   6  258 110 3.08 3.215 19.44  1  0    3    1
+##      mpg cyl disp  hp drat    wt  qsec vs am gear carb</pre>
+
+</article></slide><slide class=''><hgroup><h2><code>data.table</code> tricks</h2></hgroup><article  id="data.table-tricks">
+
+<ul>
+<li>very fast <code>fread</code></li>
+<li>very fast <code>merge</code></li>
+</ul>
+
+<p>Number of elements in a group:</p>
+
+<pre class = 'prettyprint lang-r'>dt_mtcars[, .N, by = &quot;cyl&quot;]</pre>
+
+<pre >##    cyl  N
+## 1:   6  7
+## 2:   4 11
+## 3:   8 14</pre>
+
+</article></slide><slide class=''><hgroup><h2><code>data.table</code> tricks</h2></hgroup><article  id="data.table-tricks-1">
+
+<p>All columns:</p>
+
+<pre class = 'prettyprint lang-r'>dt_mtcars[, .SD]</pre>
+
+<pre >##      mpg cyl  disp  hp drat    wt  qsec vs am gear carb
+##  1: 21.0   6 160.0 110 3.90 2.620 16.46  0  1    4    4
+##  2: 21.0   6 160.0 110 3.90 2.875 17.02  0  1    4    4
+##  3: 22.8   4 108.0  93 3.85 2.320 18.61  1  1    4    1
+##  4: 21.4   6 258.0 110 3.08 3.215 19.44  1  0    3    1
+##  5: 18.7   8 360.0 175 3.15 3.440 17.02  0  0    3    2
+##  6: 18.1   6 225.0 105 2.76 3.460 20.22  1  0    3    1
+##  7: 14.3   8 360.0 245 3.21 3.570 15.84  0  0    3    4
+##  8: 24.4   4 146.7  62 3.69 3.190 20.00  1  0    4    2
+##  9: 22.8   4 140.8  95 3.92 3.150 22.90  1  0    4    2
+## 10: 19.2   6 167.6 123 3.92 3.440 18.30  1  0    4    4
+## 11: 17.8   6 167.6 123 3.92 3.440 18.90  1  0    4    4
+## 12: 16.4   8 275.8 180 3.07 4.070 17.40  0  0    3    3
+## 13: 17.3   8 275.8 180 3.07 3.730 17.60  0  0    3    3
+## 14: 15.2   8 275.8 180 3.07 3.780 18.00  0  0    3    3
+## 15: 10.4   8 472.0 205 2.93 5.250 17.98  0  0    3    4
+## 16: 10.4   8 460.0 215 3.00 5.424 17.82  0  0    3    4
+## 17: 14.7   8 440.0 230 3.23 5.345 17.42  0  0    3    4
+## 18: 32.4   4  78.7  66 4.08 2.200 19.47  1  1    4    1
+## 19: 30.4   4  75.7  52 4.93 1.615 18.52  1  1    4    2
+## 20: 33.9   4  71.1  65 4.22 1.835 19.90  1  1    4    1
+## 21: 21.5   4 120.1  97 3.70 2.465 20.01  1  0    3    1
+## 22: 15.5   8 318.0 150 2.76 3.520 16.87  0  0    3    2
+## 23: 15.2   8 304.0 150 3.15 3.435 17.30  0  0    3    2
+## 24: 13.3   8 350.0 245 3.73 3.840 15.41  0  0    3    4
+## 25: 19.2   8 400.0 175 3.08 3.845 17.05  0  0    3    2
+## 26: 27.3   4  79.0  66 4.08 1.935 18.90  1  1    4    1
+## 27: 26.0   4 120.3  91 4.43 2.140 16.70  0  1    5    2
+## 28: 30.4   4  95.1 113 3.77 1.513 16.90  1  1    5    2
+## 29: 15.8   8 351.0 264 4.22 3.170 14.50  0  1    5    4
+## 30: 19.7   6 145.0 175 3.62 2.770 15.50  0  1    5    6
+## 31: 15.0   8 301.0 335 3.54 3.570 14.60  0  1    5    8
+## 32: 21.4   4 121.0 109 4.11 2.780 18.60  1  1    4    2
+##      mpg cyl  disp  hp drat    wt  qsec vs am gear carb</pre>
+
+</article></slide><slide class=''><hgroup><h2><code>data.table</code> tricks</h2></hgroup><article  id="data.table-tricks-2">
+
+<p>Using keys:</p>
+
+<pre class = 'prettyprint lang-r'>setkey(dt_mtcars, &quot;cyl&quot;)
+dt_mtcars</pre>
+
+<pre >##      mpg cyl  disp  hp drat    wt  qsec vs am gear carb
+##  1: 22.8   4 108.0  93 3.85 2.320 18.61  1  1    4    1
+##  2: 24.4   4 146.7  62 3.69 3.190 20.00  1  0    4    2
+##  3: 22.8   4 140.8  95 3.92 3.150 22.90  1  0    4    2
+##  4: 32.4   4  78.7  66 4.08 2.200 19.47  1  1    4    1
+##  5: 30.4   4  75.7  52 4.93 1.615 18.52  1  1    4    2
+##  6: 33.9   4  71.1  65 4.22 1.835 19.90  1  1    4    1
+##  7: 21.5   4 120.1  97 3.70 2.465 20.01  1  0    3    1
+##  8: 27.3   4  79.0  66 4.08 1.935 18.90  1  1    4    1
+##  9: 26.0   4 120.3  91 4.43 2.140 16.70  0  1    5    2
+## 10: 30.4   4  95.1 113 3.77 1.513 16.90  1  1    5    2
+## 11: 21.4   4 121.0 109 4.11 2.780 18.60  1  1    4    2
+## 12: 21.0   6 160.0 110 3.90 2.620 16.46  0  1    4    4
+## 13: 21.0   6 160.0 110 3.90 2.875 17.02  0  1    4    4
+## 14: 21.4   6 258.0 110 3.08 3.215 19.44  1  0    3    1
+## 15: 18.1   6 225.0 105 2.76 3.460 20.22  1  0    3    1
+## 16: 19.2   6 167.6 123 3.92 3.440 18.30  1  0    4    4
+## 17: 17.8   6 167.6 123 3.92 3.440 18.90  1  0    4    4
+## 18: 19.7   6 145.0 175 3.62 2.770 15.50  0  1    5    6
+## 19: 18.7   8 360.0 175 3.15 3.440 17.02  0  0    3    2
+## 20: 14.3   8 360.0 245 3.21 3.570 15.84  0  0    3    4
+## 21: 16.4   8 275.8 180 3.07 4.070 17.40  0  0    3    3
+## 22: 17.3   8 275.8 180 3.07 3.730 17.60  0  0    3    3
+## 23: 15.2   8 275.8 180 3.07 3.780 18.00  0  0    3    3
+## 24: 10.4   8 472.0 205 2.93 5.250 17.98  0  0    3    4
+## 25: 10.4   8 460.0 215 3.00 5.424 17.82  0  0    3    4
+## 26: 14.7   8 440.0 230 3.23 5.345 17.42  0  0    3    4
+## 27: 15.5   8 318.0 150 2.76 3.520 16.87  0  0    3    2
+## 28: 15.2   8 304.0 150 3.15 3.435 17.30  0  0    3    2
+## 29: 13.3   8 350.0 245 3.73 3.840 15.41  0  0    3    4
+## 30: 19.2   8 400.0 175 3.08 3.845 17.05  0  0    3    2
+## 31: 15.8   8 351.0 264 4.22 3.170 14.50  0  1    5    4
+## 32: 15.0   8 301.0 335 3.54 3.570 14.60  0  1    5    8
+##      mpg cyl  disp  hp drat    wt  qsec vs am gear carb</pre>
+
+</article></slide><slide class=''><hgroup><h2><code>data.table</code> tricks</h2></hgroup><article  id="data.table-tricks-3">
+
+<pre class = 'prettyprint lang-r'>setkeyv(dt_mtcars, c(&quot;cyl&quot;, &quot;gear&quot;))
+dt_mtcars</pre>
+
+<pre >##      mpg cyl  disp  hp drat    wt  qsec vs am gear carb
+##  1: 21.5   4 120.1  97 3.70 2.465 20.01  1  0    3    1
+##  2: 22.8   4 108.0  93 3.85 2.320 18.61  1  1    4    1
+##  3: 24.4   4 146.7  62 3.69 3.190 20.00  1  0    4    2
+##  4: 22.8   4 140.8  95 3.92 3.150 22.90  1  0    4    2
+##  5: 32.4   4  78.7  66 4.08 2.200 19.47  1  1    4    1
+##  6: 30.4   4  75.7  52 4.93 1.615 18.52  1  1    4    2
+##  7: 33.9   4  71.1  65 4.22 1.835 19.90  1  1    4    1
+##  8: 27.3   4  79.0  66 4.08 1.935 18.90  1  1    4    1
+##  9: 21.4   4 121.0 109 4.11 2.780 18.60  1  1    4    2
+## 10: 26.0   4 120.3  91 4.43 2.140 16.70  0  1    5    2
+## 11: 30.4   4  95.1 113 3.77 1.513 16.90  1  1    5    2
+## 12: 21.4   6 258.0 110 3.08 3.215 19.44  1  0    3    1
+## 13: 18.1   6 225.0 105 2.76 3.460 20.22  1  0    3    1
+## 14: 21.0   6 160.0 110 3.90 2.620 16.46  0  1    4    4
+## 15: 21.0   6 160.0 110 3.90 2.875 17.02  0  1    4    4
+## 16: 19.2   6 167.6 123 3.92 3.440 18.30  1  0    4    4
+## 17: 17.8   6 167.6 123 3.92 3.440 18.90  1  0    4    4
+## 18: 19.7   6 145.0 175 3.62 2.770 15.50  0  1    5    6
+## 19: 18.7   8 360.0 175 3.15 3.440 17.02  0  0    3    2
+## 20: 14.3   8 360.0 245 3.21 3.570 15.84  0  0    3    4
+## 21: 16.4   8 275.8 180 3.07 4.070 17.40  0  0    3    3
+## 22: 17.3   8 275.8 180 3.07 3.730 17.60  0  0    3    3
+## 23: 15.2   8 275.8 180 3.07 3.780 18.00  0  0    3    3
+## 24: 10.4   8 472.0 205 2.93 5.250 17.98  0  0    3    4
+## 25: 10.4   8 460.0 215 3.00 5.424 17.82  0  0    3    4
+## 26: 14.7   8 440.0 230 3.23 5.345 17.42  0  0    3    4
+## 27: 15.5   8 318.0 150 2.76 3.520 16.87  0  0    3    2
+## 28: 15.2   8 304.0 150 3.15 3.435 17.30  0  0    3    2
+## 29: 13.3   8 350.0 245 3.73 3.840 15.41  0  0    3    4
+## 30: 19.2   8 400.0 175 3.08 3.845 17.05  0  0    3    2
+## 31: 15.8   8 351.0 264 4.22 3.170 14.50  0  1    5    4
+## 32: 15.0   8 301.0 335 3.54 3.570 14.60  0  1    5    8
+##      mpg cyl  disp  hp drat    wt  qsec vs am gear carb</pre>
+
+<p>Using keys:</p>
+
+</article></slide><slide class=''><hgroup><h2><code>data.table</code> tricks</h2></hgroup><article  id="data.table-tricks-4">
+
+<p>All tables:</p>
+
+<pre class = 'prettyprint lang-r'>tables()</pre>
+
+<pre >##      NAME           NROW NCOL MB
+## [1,] authors           5    3  1
+## [2,] dt_authors        5    3  1
+## [3,] dt_books          7    3  1
+## [4,] dt_car_data       3   12  1
+## [5,] dt_delay      2,962    4  1
+## [6,] dt_flights  336,776   18 39
+## [7,] dt_mtcars        32   11  1
+##      COLS                                                                            
+## [1,] surname,nationality,deceased                                                    
+## [2,] surname,nationality,deceased                                                    
+## [3,] name,title,other.author                                                         
+## [4,] cyl,mpg,disp,hp,drat,wt,qsec,vs,am,gear,carb,kpl                                
+## [5,] tailnum,count,dist,delay                                                        
+## [6,] year,month,day,dep_time,dep_delay,arr_time,arr_delay,carrier,tailnum,flight,orig
+## [7,] mpg,cyl,disp,hp,drat,wt,qsec,vs,am,gear,carb                                    
+##      KEY     
+## [1,] surname 
+## [2,] surname 
+## [3,] name    
+## [4,]         
+## [5,]         
+## [6,]         
+## [7,] cyl,gear
+## Total: 45MB</pre>
+
+</article></slide><slide class=''><hgroup><h2><code>data.table</code> tricks</h2></hgroup><article  id="data.table-tricks-5">
+
+<p>Row-wise sum</p>
+
+<pre class = 'prettyprint lang-r'>dt_mtcars[, sum(disp)]</pre>
+
+<pre >## [1] 7383.1</pre>
+
+<p>Column-wise sum</p>
+
+<pre class = 'prettyprint lang-r'>dt_mtcars[, lapply(.SD, sum), .SDcols = names(dt_mtcars)]</pre>
+
+<pre >##      mpg cyl   disp   hp   drat      wt   qsec vs am gear carb
+## 1: 642.9 198 7383.1 4694 115.09 102.952 571.16 14 13  118   90</pre>
+
+</article></slide><slide class=''><hgroup><h2><code>data.table</code> tricks</h2></hgroup><article  id="data.table-tricks-6">
+
+<p>Fast row-selection on keyed data</p>
+
+<pre class = 'prettyprint lang-r'>dt_mtcars[list(6, 4)] # on &#39;cyl&#39; and &#39;gear&#39; resp.</pre>
+
+<pre >##     mpg cyl  disp  hp drat    wt  qsec vs am gear carb
+## 1: 21.0   6 160.0 110 3.90 2.620 16.46  0  1    4    4
+## 2: 21.0   6 160.0 110 3.90 2.875 17.02  0  1    4    4
+## 3: 19.2   6 167.6 123 3.92 3.440 18.30  1  0    4    4
+## 4: 17.8   6 167.6 123 3.92 3.440 18.90  1  0    4    4</pre>
+
+<p>Compare with</p>
+
+<pre class = 'prettyprint lang-r'>dt_mtcars[, list(6, 4)]</pre>
+
+<pre >##    V1 V2
+## 1:  6  4</pre>
+
+</article></slide><slide class='segue dark nobackground'><hgroup class = 'auto-fadein'><h2>Homework</h2></hgroup><article  id="homework">
+
+</article></slide><slide class=''><hgroup><h2>Homework</h2></hgroup><article  id="homework-1">
+
+<ul>
+<li><p>Doodle documents for labs</p></li>
+<li><p>1/2 page project description</p></li>
+<li><p>Makefile if you haven&#39;t already: <a href='http://kbroman.org/minimal_make/' title=''>http://kbroman.org/minimal_make/</a></p></li>
+<li><p><code>dplyr</code> and databases: <a href='https://cran.r-project.org/web/packages/dplyr/vignettes/databases.html' title=''>https://cran.r-project.org/web/packages/dplyr/vignettes/databases.html</a></p></li>
+</ul></article></slide>
 
 
   <slide class="backdrop"></slide>
