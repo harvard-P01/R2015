@@ -14,6 +14,6 @@ Creating R packages (October 26, 2015): [HTML](slides/02-packages.html)
 
 ### Lecture 03
 
-Data manipulation grammars (November 2, 2015)
+Data manipulation grammars (November 2, 2015) : [HTML](slides/03-data.html)
 
 ## Labs
