@@ -234,6 +234,12 @@ possibly combined with a SQL backend
     - left join
     - right join
     - full join
+    
+## SQL joins
+
+<div class="centered">
+<img src="http://i.stack.imgur.com/udQpD.jpg" width="70%"/>
+</div>
 
 ## Base R
 
@@ -301,7 +307,6 @@ dp_books <- tbl_df((books))
 inner_join(dp_books, dp_authors, by = c("name" = "surname"))
 ```
 
-
 ## `dplyr`
 
 ```{r}
@@ -346,8 +351,6 @@ setkey(dt_books, name); dt_books
 dt_authors[dt_books]
 dt_books[dt_authors]
 ```
-
-## SQL
 
 # Example `nycflights13`
 
