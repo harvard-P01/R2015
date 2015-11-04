@@ -1,0 +1,70 @@
+---
+title: "Data Science with R"
+subtitle: "Lecture 04: Illustration"
+author: "Christine Choirat, cchoirat@gmail.com"
+date: "November 09, 2015"
+output: ioslides_presentation
+---
+
+## Statistical learning
+
+<div class="centered">
+<img src="04_illustration/ISL.jpg" width="200px"/>
+</div>
+
+- http://www-bcf.usc.edu/~gareth/ISL/
+- http://www.dataschool.io/15-hours-of-expert-machine-learning-videos/
+
+# Retrieving data via API's
+
+## API's
+
+## By hand
+
+## R packages
+
+# Spatial data
+
+## Coordinate systems
+
+## File formats
+
+## GDAL
+
+## OGR
+
+## KML
+
+## R packages
+
+# R API clients
+
+## ArcGIS
+
+## QGIS
+
+## Google Maps
+
+# Databases
+
+## PostgreSQL and PostGIS
+
+## sqlite and spatialite
+
+# Visualization
+
+## ggplot2 and ggmap
+
+## leaflet (and grammars again!)
+
+## Interactivity: graphics
+
+- `ggvis`
+
+- `GoogleVis`
+
+## Interactivity: servers
+
+## Shiny 101
+
+## Deployment
