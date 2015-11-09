@@ -18,6 +18,6 @@ Data manipulation grammars (November 2, 2015) : [HTML](slides/03-data.html), [R 
 
 ### Lecture 04
 
-Workflow illustration (November 9, 2015) : [R code](slides/04-illustration.html), [HTML](slides/04-illustration.R)
+Workflow illustration (November 9, 2015) : [HTML](slides/04-illustration.html), [R code](slides/04-illustration.R)
 
 ## Labs
