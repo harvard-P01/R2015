@@ -1,0 +1,17 @@
+## File formats
+
+## GDAL
+
+## OGR
+
+## KML
+
+## R packages
+
+# R API clients
+
+## ArcGIS
+
+## QGIS
+
+## Google Maps

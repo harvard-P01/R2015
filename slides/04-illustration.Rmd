@@ -46,21 +46,23 @@ dat
 
 ## URL's
 
-- Find patterns in filenames
+Find patterns in filenames
 
 ```{r}
 years <- 2010:2015
-files <- paste0("http://aqsdr1.epa.gov/aqsweb/aqstmp/airdata/annual_all_", years, ".zip")
+files <- paste0("http://aqsdr1.epa.gov/aqsweb/aqstmp/airdata/annual_all_",
+                years, ".zip")
 files
 ```
 
 ## URL's
 
-- Create a small utility function
+Create a small utility function
 
 ```{r}
 download_epa_aqs <- function(years) {
-  files <- paste0("http://aqsdr1.epa.gov/aqsweb/aqstmp/airdata/annual_all_", years, ".zip")
+  files <- paste0("http://aqsdr1.epa.gov/aqsweb/aqstmp/airdata/annual_all_",
+                  years, ".zip")
   for (i in seq(years)) {
     tmp <- tempfile()
     download.file(files[i], tmp)
@@ -89,6 +91,8 @@ head(d)
 ```
 
 ## Scraping
+
+https://en.wikipedia.org/wiki/List_of_highest-grossing_films
 
 <iframe src="https://en.wikipedia.org/wiki/List_of_highest-grossing_films"></iframe>
 
@@ -146,69 +150,210 @@ http://www.crummy.com/software/BeautifulSoup/
 
 # Spatial data
 
-## Coordinate systems
+## Coordinate reference systems (CRS)
 
 ```{r warning=FALSE}
 d <- fread("annual_all_2015.csv")
 names(d)
+d <- d[! `State Name` %in% c("Hawaii", "Puerto Rico", "Alaska")]
+d <- d[`Parameter Code` == 88101]
 ```
 
-## Coordinate systems
+## Coordinate reference systems (CRS)
 
 ```{r}
 library(sp)
-spD <- copy(d[! `State Name` %in% c("Hawaii", "Puerto Rico", "Alaska")])
+spD <- copy(d)
 coordinates(spD) <- ~ Longitude + Latitude
 ```
 
-## Coordinate systems
+## Coordinate reference systems (CRS)
 
 ```{r}
 plot(spD)
 ```
 
-## File formats
+## Coordinate reference systems (CRS)
 
-## GDAL
+```{r}
+library(ggmap, quietly = TRUE)
+usa <- map_data("state")
+ggplot() + geom_point(data = d, aes(Longitude, Latitude))
+```
 
-## OGR
+## Coordinate reference systems (CRS)
 
-## KML
+```{r}
+ggplot() +
+  geom_polygon(data=usa, aes(x = long, y = lat, group = group),
+               color = "grey", fill = "white") + 
+  geom_point(data = d, aes(Longitude, Latitude))
+```
 
-## R packages
+## Coordinate reference systems (CRS)
 
-# R API clients
+```{r}
+ggplot() +
+  geom_polygon(data=usa, aes(x = long, y = lat, group = group),
+               color = "grey", fill = "white") + 
+  geom_point(data = d, aes(Longitude, Latitude)) +
+  coord_map("polyconic")
+```
 
-## ArcGIS
+## Coordinate reference systems (CRS)
 
-## QGIS
+```{r}
+ggplot() +
+  geom_polygon(data = usa, aes(x = long, y = lat, group = group),
+               color = "grey", fill = "white") + 
+  geom_point(data = d, aes(Longitude, Latitude)) +
+  coord_map("polyconic", orientation = c(141, -74, 0))
+```
 
-## Google Maps
+## Coordinate reference systems (CRS)
 
-# Databases
+<div align="center">
+<img src="04_illustration/geo.png" alt="La Dolce Vita" style="height: 500px;"/>
+</div>
 
-## PostgreSQL and PostGIS
+## Coordinate reference systems (CRS)
 
-## sqlite and spatialite
+- [Overview](https://www.nceas.ucsb.edu/~frazier/RSpatialGuides/OverviewCoordinateReferenceSystems.pdf)
+
+- EPSG (European Petroleum Survey Group): _EPSG was a scientific organization with ties to the European petroleum industry consisting of specialists working in applied geodesy, surveying, and cartography related to oil exploration._
+
+- CRS given by EPSG code
+    - Latitude/Longitude
+        - WGS84 (EPSG: 4326).  Google Earth.
+        - NAD83 (EPSG:4269).  U.S. federal agencies.  Previously NAD27 (EPSG: 4267).
+    - Projected
+        - Mercator (EPSG: 3857)
+
+```{r}
+spD <- copy(d)
+coordinates(spD) <- ~ Longitude + Latitude
+proj4string(spD) <- CRS("+init=epsg:4326")
+plot(spD)
+spD2 <- spTransform(spD, CRS("+proj=longlat +datum=NAD83 +no_defs +ellps=GRS80 +towgs84=0,0,0"))
+plot(spD2)
+```
 
 # Visualization
 
-## ggplot2 and ggmap
+## `leaflet` (and grammars again)
 
-## leaflet (and grammars again!)
-
-```{r}
-library(ggmap)
+```{r, warning=FALSE}
+set.seed(02138)
+small_d <- dplyr::sample_n(d, size = 100)
+small_d <- dplyr::mutate(small_d,
+                         popup_text = paste0(round(`Arithmetic Mean`, 2)))
+library(leaflet)
 ```
 
-## Interactivity: graphics
+## `leaflet` (and grammars again)
 
-- `ggvis`
+```{r, warning=FALSE}
+leaflet(data = small_d) %>%
+  addTiles() %>%  # Add default OpenStreetMap map tiles
+  addMarkers(~Longitude, ~Latitude, popup = ~popup_text)
+```
 
-- `GoogleVis`
+## `leaflet` (and grammars again)
 
-## Interactivity: servers
+```{r}
+leaflet(data = d) %>%
+  addTiles() %>%
+  addMarkers(clusterOptions = markerClusterOptions()
+)
+```
 
-## Shiny 101
+## `googleVis`
 
-## Deployment
+https://cran.r-project.org/web/packages/googleVis/vignettes/googleVis_examples.html
+
+```{r}
+library(googleVis)
+op <- options(gvis.plot.tag='chart')
+```
+
+## `googleVis`
+
+```{r warning=FALSE}
+D <- fread("annual_all_2015.csv")
+small_d <- dplyr::mutate(small_d,
+                         LatLong = paste(Latitude, Longitude, sep = ":"))
+```
+
+## `googleVis`
+
+```{r results='asis'}
+gvisGeoChart(small_d, "LatLong", options = list(region = "US"),
+             hovervar = "popup_text")
+```
+
+## `googleVis`
+
+```{r results='asis'}
+gvisMap(small_d, "LatLong", options = list(region = "US"),
+             tipvar = "popup_text")
+```
+
+## Interactivity: servers and Shiny 101
+
+- https://cchoirat.shinyapps.io/cluster
+
+<div align="center">
+<img src="04_illustration/shiny.png" alt="Shiny" style="height: 300px;"/>
+</div>
+
+## Structure
+
+- `ui.R`
+
+- `server.R`
+
+- Then application is deployed
+
+## `ui.R`
+
+```{r eval=FALSE}
+shinyUI(fluidPage(
+  leafletOutput('map1'),
+  actionButton('add', 'Add marker cluster'),
+  actionButton('clear', 'Clear marker cluster')
+))
+```
+
+## `server.R`
+
+```{r eval=FALSE}
+d <- fread("annual_all_2015.csv")
+
+shinyServer(function(input, output) {
+  output$map1 = renderLeaflet({
+    leaflet() %>% addTiles() %>% setView(-97, 41, 4)
+  })
+  observeEvent(input$add, {
+    leafletProxy('map1') %>% addMarkers(
+      data = d,
+      popup = ~sprintf('PM 2.5 = %s', round(`Arithmetic Mean`, 2)), layerId = rownames(d),
+      clusterOptions = markerClusterOptions(), clusterId = 'cluster1'
+    )
+  })
+  observeEvent(input$clear, {
+    leafletProxy('map1') %>% clearMarkerClusters()
+  })
+})
+```
+
+## Javascripts libraries
+
+http://rcharts.io/gallery/
+
+<iframe src="http://rcharts.io/gallery/"></iframe>
+
+## Javascripts libraries
+
+http://www.htmlwidgets.org/
+
+<iframe src="http://www.htmlwidgets.org/showcase_leaflet.html"></iframe>
