@@ -229,6 +229,8 @@ ggplot() +
     - Projected
         - Mercator (EPSG: 3857)
 
+## Coordinate reference systems (CRS)
+
 ```{r}
 spD <- copy(d)
 coordinates(spD) <- ~ Longitude + Latitude
