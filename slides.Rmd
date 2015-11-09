@@ -6,14 +6,18 @@ pagetitle: P01 - Introduction
 
 ### Lecture 01
 
-Introduction (October 19, 2015): [HTML](slides/01-introduction.html)
+Introduction (October 19, 2015): [HTML](slides/01-introduction.html), [R code](slides/01-introduction.R)
 
 ### Lecture 02
 
-Creating R packages (October 26, 2015): [HTML](slides/02-packages.html)
+Creating R packages (October 26, 2015): [HTML](slides/02-packages.html), [R code](slides/02-packages.R)
 
 ### Lecture 03
 
-Data manipulation grammars (November 2, 2015) : [HTML](slides/03-data.html)
+Data manipulation grammars (November 2, 2015) : [HTML](slides/03-data.html), [R code](slides/03-data.R)
+
+### Lecture 04
+
+Workflow illustration (November 9, 2015) : [R code](slides/04-illustration.html), [HTML](slides/04-illustration.R)
 
 ## Labs
