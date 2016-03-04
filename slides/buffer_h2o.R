@@ -14,3 +14,4 @@ summary(airlines.hex)
 airlinesURL2 = "/Users/cchoirat/Downloads/allyears.csv"
 airlines2.hex = h2o.importFile(path = airlinesURL2, destination_frame = "airlines2.hex")
 summary(airlines2.hex)
+
