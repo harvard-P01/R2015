@@ -60,7 +60,9 @@ x <- read.big.matrix(
 
 # Revolution R Open
 
-# H20
+# h2o
+
+http://www.r-bloggers.com/scalable-machine-learning-for-big-data-using-r-and-h2o/
 
 # AWS
 
