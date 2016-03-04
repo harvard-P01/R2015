@@ -120,9 +120,23 @@ https://s3.amazonaws.com/h2o-airlines-unpacked/allyears_10.csv (120 GB)
 Or if you want to play with something smaller collection of 2000 rows from all years airline data set. For this example we will be using this this data set:
 https://s3.amazonaws.com/h2o-airlines-unpacked/allyears2k.csv (4.5 MB)</pre>
 
-</article></slide><slide class='segue dark nobackground'><hgroup class = 'auto-fadein'><h2>Brute force (on a 4 Gb machine)</h2></hgroup><article  id="brute-force-on-a-4-gb-machine">
+</article></slide><slide class='segue dark nobackground'><hgroup class = 'auto-fadein'><h2>Brute force (with 4 Gb of RAM)</h2></hgroup><article  id="brute-force-with-4-gb-of-ram">
 
 <p><code>data.table</code></p>
+
+<pre class = 'prettyprint lang-r'>d &lt;- data.table::fread(&quot;~/Downloads/allyears2k.csv&quot;)</pre>
+
+<pre >## Warning in data.table::fread(&quot;~/Downloads/allyears2k.csv&quot;): Bumped column
+## 23 to type character on data row 33996, field contains &#39;B&#39;. Coercing
+## previously read values in this column from logical, integer or numeric back
+## to character which may not be lossless; e.g., if &#39;00&#39; and &#39;000&#39; occurred
+## before they will now be just &#39;0&#39;, and there may be inconsistencies with
+## treatment of &#39;,,&#39; and &#39;,NA,&#39; too (if they occurred in this column before
+## the bump). If this matters please rerun and set &#39;colClasses&#39; to &#39;character&#39;
+## for this column. Please note that column type detection uses the first
+## 5 rows, the middle 5 rows and the last 5 rows, so hopefully this message
+## should be very rare. If reporting to datatable-help, please rerun and
+## include the output from verbose=TRUE.</pre>
 
 <p>Congratulations!!! I just crashed my R session / computer.</p>
 
@@ -132,7 +146,7 @@ https://s3.amazonaws.com/h2o-airlines-unpacked/allyears2k.csv (4.5 MB)</pre>
 library(biganalytics)
 
 x &lt;- read.big.matrix(
-  &quot;~/Downloads/allyears.csv&quot;, type = &quot;integer&quot;, header = TRUE ,
+  &quot;~/Downloads/allyears.csv&quot;, header = TRUE ,
   backingfile = &quot;~/Downloads/airline.bin&quot;,
   descriptorfile = &quot;~/Downloads/airline.desc&quot;
   )</pre>
