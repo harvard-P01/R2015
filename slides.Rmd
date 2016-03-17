@@ -14,10 +14,14 @@ Creating R packages (October 26, 2015): [HTML](slides/02-packages.html), [R code
 
 ### Lecture 03
 
-Data manipulation grammars (November 2, 2015) : [HTML](slides/03-data.html), [R code](slides/03-data.R)
+Data manipulation grammars (November 2, 2015): [HTML](slides/03-data.html), [R code](slides/03-data.R)
 
 ### Lecture 04
 
-Workflow illustration (November 9, 2015) : [HTML](slides/04-illustration.html), [R code](slides/04-illustration.R)
+Workflow illustration (November 9, 2015): [HTML](slides/04-illustration.html), [R code](slides/04-illustration.R)
+
+#### Lecture 05
+
+Scalable statistics with h2o (March 21, 2016): [R code](slides/05-h20.R)
 
 ## Labs
