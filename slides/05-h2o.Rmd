@@ -48,23 +48,27 @@ https://www.aeaweb.org/articles.php?doi=10.1257/jep.28.2.3
 
 ## Canonical example: airline on-time performance
 
-http://www.transtats.bts.gov/OT_Delay/OT_DelayCause1.asp
+http://www.transtats.bts.gov/Fields.asp?Table_ID=236
+
+http://www.transtats.bts.gov/DL_SelectFields.asp?Table_ID=236&DB_Short_Name=On-Time
 
 https://github.com/h2oai/h2o-2/wiki/Hacking-Airline-DataSet-with-H2O
 
 ## Canonical example: airline on-time performance
 
 > Airlines all years 1987-2008:
+>
 > https://s3.amazonaws.com/h2o-airlines-unpacked/allyears.csv (12 GB)
-> 
-> Or if you want something bigger here is the 10x version:
+>
+> 10x version:
+>
 > https://s3.amazonaws.com/h2o-airlines-unpacked/allyears_10.csv (120 GB)
-> 
-> Or if you want to play with something smaller collection of 2000 rows from all years airline 
-> data set. For this example we will be using this this data set:
+>
+> Sample of 2000 rows:
+>
 > https://s3.amazonaws.com/h2o-airlines-unpacked/allyears2k.csv (4.5 MB)
 
-## Brute force (with 4 Gb of RAM)
+## Brute force (12 Gb dataset with 4 Gb of RAM)
 
 ### `data.table`
 
@@ -89,6 +93,8 @@ https://cran.r-project.org/web/packages/ff/index.html
 __ff__: memory-efficient storage of large data on disk and fast access functions
 
 The ff package provides data structures that are stored on disk but behave (almost) as if they were in RAM by transparently mapping only a section (pagesize) in main memory - the effective virtual memory consumption per ff object.
+
+## `ff`
 
 http://www.bnosac.be/index.php/blog/22-if-you-are-into-large-data-and-work-a-lot-package-ff
 http://hsinay.blogspot.com/p/big-data-analysis-using-ff-and-12-nov.html
@@ -394,20 +400,30 @@ Coefficients: glm coefficients
 2  Distance     0.000040
 ``` 
 
+## Closing the h2o session
+
+```{r eval=FALSE}
+h2o.shutdown()
+```
+
+<div class="centered">
+<img src="05_h2o/shutdown.png" width="80%"/>
+</div>
+
 ## Available algorithms
 
 - Deep learning
 - Distributed randon forest
 - Gradient boosting method
 - Generalized linear modeling
-- Generalized low ranl modeling
+- Generalized low rank modeling
 - K-means
 - Naive Bayes
 - Principal component analysis
 
 ## How to incorporate new models in h2o?
 
-__(+)__ Built-in models behave very much large R and are scalable.
+__(+)__ built-in models behave very much like R and are scalable
 
-__(-)__ Not easy to extend
+__(-)__ not easy to extend (*e.g*., GLM https://github.com/h2oai/h2o-3/blob/master/h2o-algos/src/main/java/hex/glm/GLM.java)
 
