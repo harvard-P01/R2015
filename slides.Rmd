@@ -20,7 +20,7 @@ Data manipulation grammars (November 2, 2015): [HTML](slides/03-data.html), [R c
 
 Workflow illustration (November 9, 2015): [HTML](slides/04-illustration.html), [R code](slides/04-illustration.R)
 
-#### Lecture 05
+### Lecture 05
 
 Scalable statistics with h2o (March 21, 2016): [HTML](slides/05-h2o.html), [R code](slides/05-h2o.R)
 
