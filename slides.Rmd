@@ -24,4 +24,8 @@ Workflow illustration (November 9, 2015): [HTML](slides/04-illustration.html), [
 
 Scalable statistics with h2o (March 21, 2016): [HTML](slides/05-h2o.html), [R code](slides/05-h2o.R)
 
+### Lecture 06
+
+Running R on AWS (March 28, 2016): [HTML](slides/06-aws.html), [R code](slides/06-aws.R)
+
 ## Labs

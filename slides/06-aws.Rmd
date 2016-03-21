@@ -1,0 +1,11 @@
+---
+title: "Data Science with R"
+subtitle: "Lecture 06: Running R on AWS"
+author: "Christine Choirat, cchoirat@gmail.com"
+date: "March 28, 2016"
+output: ioslides_presentation
+---
+
+## Amazon solutions
+
+https://blogs.aws.amazon.com/bigdata/post/Tx3IJSB6BMHWZE5/Running-R-on-AWS
