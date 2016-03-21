@@ -8,4 +8,20 @@ output: ioslides_presentation
 
 ## Amazon solutions
 
+Amazon Web Services (AWS)
+EC2 (Virtual Servers in the Cloud)
+Amazon Elastic Compute Cloud (EC2)
+http://www.r-statistics.com/2015/06/setting-rstudio-server-using-amazon-web-services-aws-a-step-by-step-screenshots-tutorial/
+
+https://aws.amazon.com/getting-started/launch-a-virtual-machine/
+
 https://blogs.aws.amazon.com/bigdata/post/Tx3IJSB6BMHWZE5/Running-R-on-AWS
+
+##  Array of system images (AMIs)
+
+http://www.louisaslett.com/RStudio_AMI/
+
+all instances support 64-bit
+
+
+## Amazon EMR

@@ -195,7 +195,7 @@ localH2O <- h2o.init(min_mem_size = "20g")
 
 (No persistence beyond the R session when h2O is started from R.)
 
-## H2O Java Virtual Marchine (JVM)
+## H2O Java Virtual Machine (JVM)
 
 ```{r eval=FALSE}
 java version "1.8.0_73"
