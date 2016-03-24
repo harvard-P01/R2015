@@ -6,11 +6,70 @@ date: "March 28, 2016"
 output: ioslides_presentation
 ---
 
+## Objective
+
+Analyze the airline on-time performance dataset on an Amazon instance
+
+1. Sign-up for an account
+2. Set up a machine
+3. Install R, Rstudio, ...
+4. Upload the data
+5. Run a basic logit model
+
+## Sign-up for a Free Tier account: https://aws.amazon.com/free/
+
+- Many free products.
+
+- Amazon EC2 "Amazon Elastic Compute Cloud"
+    - "Resizable compute capacity in the Cloud."
+    - 750 hours per month of Linux, RHEL, or SLES t2.micro instance usage
+    - 750 hours per month of Windows t2.micro instance usage
+    - For example, run 1 instance x 1 month or 2 instances x half a month
+    - Expires 12 months after sign-up.
+ 
+## Sign-up for a Free Tier account: https://aws.amazon.com/free/   
+
+- Amazon S3
+    - "Highly scalable, reliable, and low-latency data storage infrastructure."
+    - 5 GB of Standard Storage
+    - 20,000 Get Requests 
+    - 2,000 Put Requests
+    
+- Amazon DynamoDB
+    - "Fast and flexible NoSQL database with seamless scalability."
+
+## Sign-up for a Free Tier account
+
+## Sing-up for a Free Tier account
+
+## SSH and key pairing
+
+In a terminal:
+
+```{r eval=FALSE}
+chmod 600 Downloads/rstudio.pem
+ssh -i Downloads/rstudio.pem ubuntu@ec2-54-175-200-1.compute-1.amazonaws.com
+```
+
+## Importing data
+
+```{r eval=FALSE}
+library("RStudioAMI")
+linkDropbox()
+excludeSyncDropbox("*")
+includeSyncDropbox("Dropbox/DataAWS/")
+```
+
+## Running a model
+
+```{r}
+flights <- read.csv("Dropbox/DataAWS/allyears2k.csv")
+names(flights)
+glm(IsArrDelayed ~ Distance, data = flights, family = binomial("logit"))
+```
+
 ## Amazon solutions
 
-Amazon Web Services (AWS)
-EC2 (Virtual Servers in the Cloud)
-Amazon Elastic Compute Cloud (EC2)
 http://www.r-statistics.com/2015/06/setting-rstudio-server-using-amazon-web-services-aws-a-step-by-step-screenshots-tutorial/
 
 https://aws.amazon.com/getting-started/launch-a-virtual-machine/
@@ -22,6 +81,5 @@ https://blogs.aws.amazon.com/bigdata/post/Tx3IJSB6BMHWZE5/Running-R-on-AWS
 http://www.louisaslett.com/RStudio_AMI/
 
 all instances support 64-bit
-
 
 ## Amazon EMR
