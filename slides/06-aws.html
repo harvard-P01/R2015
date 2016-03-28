@@ -109,59 +109,90 @@
 </article></slide><slide class=''><hgroup><h2>Sign-up for a Free Tier account: <a href='https://aws.amazon.com/free/' title=''>https://aws.amazon.com/free/</a></h2></hgroup><article  id="sign-up-for-a-free-tier-account-httpsaws.amazon.comfree">
 
 <ul>
-<li><p>Many free products.</p></li>
+<li><p>Many Free Tier products.</p></li>
 <li>Amazon EC2 &quot;Amazon Elastic Compute Cloud&quot;
 
 <ul>
 <li>&quot;Resizable compute capacity in the Cloud.&quot;</li>
-<li>750 hours per month of Linux, RHEL, or SLES t2.micro instance usage</li>
-<li>750 hours per month of Windows t2.micro instance usage</li>
-<li>For example, run 1 instance x 1 month or 2 instances x half a month</li>
-<li>Expires 12 months after sign-up.</li>
+<li>750 hours per month. Expires 12 months after sign-up.</li>
 </ul></li>
-</ul>
-
-</article></slide><slide class=''><hgroup><h2>Sign-up for a Free Tier account: <a href='https://aws.amazon.com/free/' title=''>https://aws.amazon.com/free/</a></h2></hgroup><article  id="sign-up-for-a-free-tier-account-httpsaws.amazon.comfree-1">
-
-<ul>
 <li>Amazon S3
 
 <ul>
 <li>&quot;Highly scalable, reliable, and low-latency data storage infrastructure.&quot;</li>
 <li>5 GB of Standard Storage</li>
-<li>20,000 Get Requests</li>
-<li>2,000 Put Requests</li>
-</ul></li>
-<li>Amazon DynamoDB
-
-<ul>
-<li>&quot;Fast and flexible NoSQL database with seamless scalability.&quot;</li>
 </ul></li>
 </ul>
 
-</article></slide><slide class=''><hgroup><h2>Sign-up for a Free Tier account</h2></hgroup><article  id="sign-up-for-a-free-tier-account">
+</article></slide><slide class=''><hgroup><h2>Array of system images (AMIs)</h2></hgroup><article  id="array-of-system-images-amis">
 
-</article></slide><slide class=''><hgroup><h2>Sing-up for a Free Tier account</h2></hgroup><article  id="sing-up-for-a-free-tier-account">
+<ul>
+<li>Amazon Linux</li>
+<li>Red Hat Enterprise Linux</li>
+<li>SUSE Linux Enterprise Server</li>
+<li>Ubuntu Server 14.04 LTS</li>
+<li>Microsoft Windows Server</li>
+<li>&#8230;</li>
+</ul>
+
+</article></slide><slide class=''><hgroup><h2>Ports</h2></hgroup><article  id="ports">
+
+<ul>
+<li>SSH</li>
+<li>HTTP</li>
+<li>HTTPS</li>
+<li>Custom HTTP 8787 for Rstudio server</li>
+</ul>
 
 </article></slide><slide class=''><hgroup><h2>SSH and key pairing</h2></hgroup><article  id="ssh-and-key-pairing">
 
-<pre class = 'prettyprint lang-r'>ssh -i Downloads/rstudio.pem ubuntu@ec2-54-175-200-1.compute-1.amazonaws.com</pre>
+<p>In a terminal:</p>
 
-</article></slide><slide class=''><hgroup><h2>Amazon solutions</h2></hgroup><article  id="amazon-solutions">
+<pre class = 'prettyprint lang-r'>chmod 600 Downloads/rstudio.pem
+ssh -i Downloads/rstudio.pem ubuntu@ec2-54-175-200-1.compute-1.amazonaws.com</pre>
 
-<p><a href='http://www.r-statistics.com/2015/06/setting-rstudio-server-using-amazon-web-services-aws-a-step-by-step-screenshots-tutorial/' title=''>http://www.r-statistics.com/2015/06/setting-rstudio-server-using-amazon-web-services-aws-a-step-by-step-screenshots-tutorial/</a></p>
+<pre class = 'prettyprint lang-r'>sudo apt-get update
+sudo apt-get install r-base</pre>
 
-<p><a href='https://aws.amazon.com/getting-started/launch-a-virtual-machine/' title=''>https://aws.amazon.com/getting-started/launch-a-virtual-machine/</a></p>
+</article></slide><slide class=''><hgroup><h2>Installing Rstudio</h2></hgroup><article  id="installing-rstudio">
 
-<p><a href='https://blogs.aws.amazon.com/bigdata/post/Tx3IJSB6BMHWZE5/Running-R-on-AWS' title=''>https://blogs.aws.amazon.com/bigdata/post/Tx3IJSB6BMHWZE5/Running-R-on-AWS</a></p>
+<pre class = 'prettyprint lang-r'>sudo apt-get install gdebi-core
+wget https://download2.rstudio.org/rstudio-server-0.99.893-amd64.deb
+sudo gdebi rstudio-server-0.99.893-amd64.deb</pre>
 
-</article></slide><slide class=''><hgroup><h2>Array of system images (AMIs)</h2></hgroup><article  id="array-of-system-images-amis">
+<p>then add a user:</p>
 
-<p><a href='http://www.louisaslett.com/RStudio_AMI/' title=''>http://www.louisaslett.com/RStudio_AMI/</a></p>
+<pre class = 'prettyprint lang-r'>sudo adduser rstudio</pre>
 
-<p>all instances support 64-bit</p>
+<pre class = 'prettyprint lang-r'>www-port=80</pre>
 
-</article></slide><slide class=''><hgroup><h2>Amazon EMR</h2></hgroup><article  id="amazon-emr"></article></slide>
+</article></slide><slide class=''><hgroup><h2>Using a user-contributed AMI</h2></hgroup><article  id="using-a-user-contributed-ami">
+
+<ul>
+<li><a href='http://www.louisaslett.com/RStudio_AMI/' title=''>http://www.louisaslett.com/RStudio_AMI/</a></li>
+<li>Ubuntu with R, Rstudio, STAN, &#8230;</li>
+<li>Dropbox integration</li>
+</ul>
+
+</article></slide><slide class=''><hgroup><h2>Importing data</h2></hgroup><article  id="importing-data">
+
+<pre class = 'prettyprint lang-r'>library(&quot;RStudioAMI&quot;)
+linkDropbox()
+excludeSyncDropbox(&quot;*&quot;)
+includeSyncDropbox(&quot;Dropbox/DataAWS/&quot;)</pre>
+
+</article></slide><slide class=''><hgroup><h2>Running a model</h2></hgroup><article  id="running-a-model">
+
+<pre class = 'prettyprint lang-r'>flights &lt;- read.csv(&quot;Dropbox/DataAWS/allyears2k.csv&quot;)
+names(flights)
+glm(IsArrDelayed ~ Distance, data = flights, family = binomial(&quot;logit&quot;))</pre>
+
+</article></slide><slide class=''><hgroup><h2>More detailed workflow</h2></hgroup><article  id="more-detailed-workflow">
+
+<ul>
+<li><a href='https://blogs.aws.amazon.com/bigdata/post/Tx3IJSB6BMHWZE5/Running-R-on-AWS' title=''>https://blogs.aws.amazon.com/bigdata/post/Tx3IJSB6BMHWZE5/Running-R-on-AWS</a></li>
+<li>In particular S3 integration</li>
+</ul></article></slide>
 
 
   <slide class="backdrop"></slide>

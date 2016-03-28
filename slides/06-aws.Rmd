@@ -18,29 +18,31 @@ Analyze the airline on-time performance dataset on an Amazon instance
 
 ## Sign-up for a Free Tier account: https://aws.amazon.com/free/
 
-- Many free products.
+- Many Free Tier products.
 
 - Amazon EC2 "Amazon Elastic Compute Cloud"
     - "Resizable compute capacity in the Cloud."
-    - 750 hours per month of Linux, RHEL, or SLES t2.micro instance usage
-    - 750 hours per month of Windows t2.micro instance usage
-    - For example, run 1 instance x 1 month or 2 instances x half a month
-    - Expires 12 months after sign-up.
+    - 750 hours per month.  Expires 12 months after sign-up.
  
-## Sign-up for a Free Tier account: https://aws.amazon.com/free/   
-
 - Amazon S3
     - "Highly scalable, reliable, and low-latency data storage infrastructure."
     - 5 GB of Standard Storage
-    - 20,000 Get Requests 
-    - 2,000 Put Requests
     
-- Amazon DynamoDB
-    - "Fast and flexible NoSQL database with seamless scalability."
+##  Array of system images (AMIs)
 
-## Sign-up for a Free Tier account
+- Amazon Linux
+- Red Hat Enterprise Linux
+- SUSE Linux Enterprise Server
+- Ubuntu Server 14.04 LTS
+- Microsoft Windows Server
+- ...
 
-## Sing-up for a Free Tier account
+## Ports
+
+- SSH
+- HTTP
+- HTTPS
+- Custom HTTP 8787 for Rstudio server
 
 ## SSH and key pairing
 
@@ -50,6 +52,37 @@ In a terminal:
 chmod 600 Downloads/rstudio.pem
 ssh -i Downloads/rstudio.pem ubuntu@ec2-54-175-200-1.compute-1.amazonaws.com
 ```
+
+```{r eval=FALSE}
+sudo apt-get update
+sudo apt-get install r-base
+```
+
+## Installing Rstudio
+
+```{r eval=FALSE}
+sudo apt-get install gdebi-core
+wget https://download2.rstudio.org/rstudio-server-0.99.893-amd64.deb
+sudo gdebi rstudio-server-0.99.893-amd64.deb
+```
+
+then add a user:
+
+```{r eval=FALSE}
+sudo adduser rstudio
+```
+
+
+
+```{r eval=FALSE}
+www-port=80
+```
+
+## Using a user-contributed AMI
+
+- http://www.louisaslett.com/RStudio_AMI/
+- Ubuntu with R, Rstudio, STAN, ...
+- Dropbox integration
 
 ## Importing data
 
@@ -62,24 +95,14 @@ includeSyncDropbox("Dropbox/DataAWS/")
 
 ## Running a model
 
-```{r}
+```{r eval=FALSE}
 flights <- read.csv("Dropbox/DataAWS/allyears2k.csv")
 names(flights)
 glm(IsArrDelayed ~ Distance, data = flights, family = binomial("logit"))
 ```
 
-## Amazon solutions
+## More detailed workflow
 
-http://www.r-statistics.com/2015/06/setting-rstudio-server-using-amazon-web-services-aws-a-step-by-step-screenshots-tutorial/
+- https://blogs.aws.amazon.com/bigdata/post/Tx3IJSB6BMHWZE5/Running-R-on-AWS
+- In particular S3 integration
 
-https://aws.amazon.com/getting-started/launch-a-virtual-machine/
-
-https://blogs.aws.amazon.com/bigdata/post/Tx3IJSB6BMHWZE5/Running-R-on-AWS
-
-##  Array of system images (AMIs)
-
-http://www.louisaslett.com/RStudio_AMI/
-
-all instances support 64-bit
-
-## Amazon EMR
