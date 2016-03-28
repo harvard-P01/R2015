@@ -72,12 +72,6 @@ then add a user:
 sudo adduser rstudio
 ```
 
-
-
-```{r eval=FALSE}
-www-port=80
-```
-
 ## Using a user-contributed AMI
 
 - http://www.louisaslett.com/RStudio_AMI/

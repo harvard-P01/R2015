@@ -1,3 +1,0 @@
-# Data Science with R
-
-Webpage for the 2015/2016 course
